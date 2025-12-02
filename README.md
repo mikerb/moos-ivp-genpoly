@@ -126,6 +126,22 @@ to the clicked location.
 <img src="images/polyview_main.png" alt="polyview_app" width="500"/>
 
 [//]: #--------------------------------------------------------------------
+## Viewing Options
+
+By default, the GUI will render:
+
+* The individual points
+* The ordered list (XYSegList) of points
+* The convex hull of the set of points
+* The covering of convex polygons
+
+Each of these four draw routines can be toggled on/off with the corresponding
+buttons on the lower lefthand side of the GUI.
+
+
+
+
+[//]: #--------------------------------------------------------------------
 ## Pre-loaded Start Points
 
 The user can assemble their own start points, or use a number of pre-loaded
