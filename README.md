@@ -122,7 +122,7 @@ button.
 * alt-left click will insert a new vertex between the two vertices closest
 to the clicked location.
 
-!(images/polyview_main.png)
+![polyview app](images/polyview_main.png)
 
 
 
