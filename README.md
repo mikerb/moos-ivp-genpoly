@@ -1,4 +1,4 @@
-# moos-ivp-extend
+# moos-ivp-genpoly
 
 |              |                            |
 |:------------ |:-------------------------- |
@@ -39,10 +39,60 @@ directory:
    $ ./build.sh
 ```
 
-# Environment variables
+## Environment variables
 
 The moos-ivp-genpoly binaries files should be added to your path to allow them
 to be launched from pAntler.
+
+# Using the code
+
+
+The primary function of the moos-ivp-genpoly repo is contained within the
+lib_gen_poly library. It contains:
+
+(a) A data structure (C++ class) for representing a general polygon, and
+(b) An algorithm for creating an genpoly from a sequence of vertices
+
+An engineering GUI is also provided, app_polyview, for testing the creation
+of genpolys from example sets of points. 
+
+## Using the lib_genpoly library.
+
+A general polygon is comprise of an ordered sequence of points, within an implied
+line segment between each vertex, and such that no line segment crosses any other
+line segment. This could be a regular polygon, e.g., square, hexagon, or any
+convex polygon, or a non-convex polygon.
+
+A non-convex polygon can have a covering. A covering is a set of convex polygon
+that includes all vertices and space of of a nonconvex polygon. Generally, many
+MOOS-IvP geometry library functions are defined over convex polyons. For example
+rather than implmenting a function that computes the area of a general polygon,
+we instead convert the general polygon into a set of convex polyongs first. Then
+the area of the general polygon is just the sum of the areas of the covering
+convex polygon.
+
+The XYGenPolygon C++ class is comprised of two member variables. The ordered
+list of vertices defining the general polygon, and one or more convex polygons
+that cover the general polygon.
+
+The non-trivial step is the creation of a minimal covering with the
+lowest number of convex polyons. Finding the absolute minimal covering
+is the goal, but for general polygons with many vertices, this can be
+computationally expensive. A near minimal covering is often perfectly
+fine. In the example above, for finding the area of a general polygon,
+calculating the sum of say 20 convex polygons is exceptionally fast,
+and not noticeably slower than "better" covering with 18
+polygons. However, the search time between finding the covering of 20 vs.
+the covering of 18 may be very substantial.
+
+The C++ class, CoverEngine, is provided in this library for creating a
+covering of a general polygon, with the following steps:
+
+1. Create an instance of a CoverEngine
+2. Initialize with a set of vertices
+3. Invoke the genPolys() function
+4. Extract the list of convex polygons
+5. Return a XYGenPolygon instance with the vertices and polygons
 
 # END of README
 
