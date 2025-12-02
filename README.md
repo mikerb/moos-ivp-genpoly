@@ -45,8 +45,8 @@ The moos-ivp-genpoly binaries directory, **moos-ivp-genpoly/bin**
 should be added to your path to allow them to be launched from
 pAntler.
 
+[//]: #====================================================================
 # Using the code
-
 
 The primary function of the moos-ivp-genpoly repo is contained within the
 lib_gen_poly library. It contains:
@@ -95,6 +95,7 @@ covering of a general polygon, with the following steps:
 4. Extract the list of convex polygons
 5. Return a XYGenPolygon instance with the vertices and polygons
 
+[//]: #====================================================================
 # Using polyview engineering GUI
 
 The polyview app is an engineering GUI for devel/testing of the lib_genpoly
@@ -124,7 +125,6 @@ to the clicked location.
 
 <img src="images/polyview_main.png" alt="polyview_app" width="500"/>
 
-![polyview app](images/polyview_main.png) { width="200" }
 
 
 
