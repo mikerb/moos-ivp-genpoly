@@ -112,11 +112,13 @@ where this is being launched.
 
 The user can then add/delete/insert vertices with the mouse button as follows:
 
-a. left mouse click drops a new vertex at the clicked location
-b. right mouse click removes the vertex closest to the clicked location. Note
+* left mouse click drops a new vertex at the clicked location
+
+* right mouse click removes the vertex closest to the clicked location. Note
 this is ctrl-click on a Mac or on a system using a mouse with no right mouse
 button.
-c. alt-left click will insert a new vertex between the two vertices closest
+
+* alt-left click will insert a new vertex between the two vertices closest
 to the clicked location.
 
 
