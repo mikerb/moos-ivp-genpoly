@@ -107,7 +107,7 @@ own choosing, and relaunch with:
 
 $ polyview myfile.tif
 
-This assumes there is a myfile.tif and myfile.info file in the directory
+This assumes there is a **myfile.tif** and **myfile.info** file in the directory
 where this is being launched.
 
 The user can then add/delete/insert vertices with the mouse button as follows:
