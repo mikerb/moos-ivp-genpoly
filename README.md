@@ -125,6 +125,13 @@ to the clicked location.
 
 <img src="images/polyview_main.png" alt="polyview_app" width="500"/>
 
+[//]: #--------------------------------------------------------------------
+## Pre-loaded Start Points
+
+The user can assemble their own start points, or use a number of pre-loaded
+start configurations, through the Starts pull-down menu. Or the short-cut keys
+1-8 can be used to load the start configurations
+
 
 
 
