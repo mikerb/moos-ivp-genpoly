@@ -41,8 +41,9 @@ directory:
 
 ## Environment variables
 
-The moos-ivp-genpoly binaries files should be added to your path to allow them
-to be launched from pAntler.
+The moos-ivp-genpoly binaries directory, **moos-ivp-genpoly/bin**
+should be added to your path to allow them to be launched from
+pAntler.
 
 # Using the code
 
@@ -120,6 +121,8 @@ button.
 
 * alt-left click will insert a new vertex between the two vertices closest
 to the clicked location.
+
+!(images/polyview_main.png)
 
 
 
