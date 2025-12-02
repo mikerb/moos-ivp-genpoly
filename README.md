@@ -94,5 +94,32 @@ covering of a general polygon, with the following steps:
 4. Extract the list of convex polygons
 5. Return a XYGenPolygon instance with the vertices and polygons
 
+# Using polyview engineering GUI
+
+The polyview app is an engineering GUI for devel/testing of the lib_genpoly
+library. It can be launched simply with:
+
+$ polyview
+
+It should open a GUI with an empty waterspace at the MIT Sailing Pavilion.
+The user can replace the background image and info file to be one of their
+own choosing, and relaunch with:
+
+$ polyview myfile.tif
+
+This assumes there is a myfile.tif and myfile.info file in the directory
+where this is being launched.
+
+The user can then add/delete/insert vertices with the mouse button as follows:
+
+a. left mouse click drops a new vertex at the clicked location
+b. right mouse click removes the vertex closest to the clicked location. Note
+this is ctrl-click on a Mac or on a system using a mouse with no right mouse
+button.
+c. alt-left click will insert a new vertex between the two vertices closest
+to the clicked location.
+
+
+
 # END of README
 
