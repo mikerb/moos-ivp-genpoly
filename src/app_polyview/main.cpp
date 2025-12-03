@@ -18,8 +18,6 @@
 #include "XYPolygon.h"
 #include "XYSegList.h"
 #include "XYPoint.h"
-#include "XYGrid.h"
-#include "XYCircle.h"
 #include "LMV_Utils.h"
 #include "XYFormatUtilsPoly.h"
 #include "XYFormatUtilsPoint.h"
@@ -72,12 +70,7 @@ int main(int argc, char *argv[])
 
   vector<string>    all_poly_strings;
   vector<string>    all_segl_strings;
-  vector<string>    all_grid_strings;
   vector<string>    all_point_strings;
-  vector<string>    all_circle_strings;
-  vector<string>    all_markers;
-  vector<string>    all_opvertices;
-  vector<string>    all_geodesy;
 
   for(i=1; i<argc; i++) {
     string argi  = argv[i];
@@ -99,24 +92,6 @@ int main(int argc, char *argv[])
       svector = readEntriesFromFile(argi, "point");
       for(j=0; j<svector.size(); j++)
 	all_point_strings.push_back(svector[j]);
-
-      svector = readEntriesFromFile(argi, "circle");
-      for(j=0; j<svector.size(); j++)
-	all_circle_strings.push_back(svector[j]);
-
-      svector = readEntriesFromFile(argi, "grid:xygrid");
-      for(j=0; j<svector.size(); j++)
-	all_grid_strings.push_back(svector[j]);
-
-      vector<string> mvector = readEntriesFromFile(argi, "marker");
-      for(j=0; j<mvector.size(); j++)
-	all_markers.push_back(mvector[j]);
-      vector<string> ovector = readEntriesFromFile(argi, "op_vertex");
-      for(j=0; j<ovector.size(); j++)
-	all_opvertices.push_back(ovector[j]);
-      vector<string> dvector = readEntriesFromFile(argi, "geodesy");
-      for(j=0; j<dvector.size(); j++)
-	all_geodesy.push_back(dvector[j]);
     }
   }
  
@@ -134,50 +109,7 @@ int main(int argc, char *argv[])
   for(j=0; j<all_segl_strings.size(); j++)
     gui->pviewer->setParam("view_seglist", all_segl_strings[j]);
   
-  cout << "# of file grids: " << all_grid_strings.size() << endl;
-  for(j=0; j<all_grid_strings.size(); j++)
-    gui->pviewer->setParam("grid", all_grid_strings[j]);
-  
-  cout << "# of file circles: " << all_circle_strings.size() << endl;
-  for(j=0; j<all_circle_strings.size(); j++)
-    gui->pviewer->setParam("view_circle", all_circle_strings[j]);
-  
-  cout << "# of file marker entries: " << all_markers.size() << endl;
-  for(j=0; j<all_markers.size(); j++)
-    gui->pviewer->setParam("marker", all_markers[j]);
-
-  cout << "# of file op entries: " << all_opvertices.size() << endl;
-  for(j=0; j<all_opvertices.size(); j++)
-    gui->pviewer->setParam("op_vertex", all_opvertices[j]);
-
-  cout << "# of file geodesy entries: " << all_geodesy.size() << endl;
-  for(j=0; j<all_geodesy.size(); j++)
-    gui->pviewer->setParam("geodesy_init", all_geodesy[j]);
-
   gui->updateXY();
-
-  
-  for(j=0; j<all_poly_strings.size(); j++) {
-    cout << "poly #" << j << endl;
-    cout << all_poly_strings[j] << endl;;
-    XYPolygon poly = string2Poly(all_poly_strings[j]);
-    cout << "spec:  " << poly.get_spec() << endl;
-
-    unsigned int k;
-    for(k=0; k<all_point_strings.size(); k++) {
-      cout << "point #" << k << endl;
-      cout << all_point_strings[k] << endl;;
-      XYPoint point = string2Point(all_point_strings[k]);
-      cout << "spec:  " << point.get_spec() << endl;
-
-      bool contains = poly.contains(point.x(), point.y());
-      cout << "contains:" << contains << endl;
-    }
-    cout << "=====================================" << endl;
-
-  }
-  
-
 
   return Fl::run();
 }
