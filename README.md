@@ -46,7 +46,7 @@ should be added to your path to allow them to be launched from
 pAntler.
 
 [//]: #====================================================================
-# Using the code
+# Overview of the lib_gen_poly library
 
 The primary function of the moos-ivp-genpoly repo is contained within the
 lib_gen_poly library. It contains:
@@ -137,8 +137,6 @@ By default, the GUI will render:
 
 Each of these four draw routines can be toggled on/off with the corresponding
 buttons on the lower lefthand side of the GUI.
-
-
 
 
 [//]: #--------------------------------------------------------------------

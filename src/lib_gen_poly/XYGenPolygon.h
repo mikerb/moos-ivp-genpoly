@@ -22,6 +22,7 @@ class XYGenPolygon {
   XYGenPolygon() {}
   ~XYGenPolygon() {}
 
+  void   setGenPoly(XYSegList);
   void   setGenPoly(XYSegList, std::vector<XYPolygon> polys);
   
   bool   contains(double px, double py) const;
@@ -33,9 +34,14 @@ class XYGenPolygon {
   void   shift_horz(double amt);
   double area() const;
   void   clear();
+  void   clearCoverPolys();
+
+  unsigned int sizeSegl() const  {return(m_segl.size());}
+  unsigned int sizeCover() const {return(m_cover_polys.size());}
   
   std::vector<XYPolygon> getCoverPolys() const {return(m_cover_polys);}
-
+  XYSegList getSegList() const {return(m_segl);}
+  
   std::string get_spec() const;
   std::string get_spec_bdr() const;
 
@@ -44,7 +50,6 @@ class XYGenPolygon {
 
   unsigned int getSeglSize() const  {return(m_segl.size());}
   unsigned int getPolyCount() const {return(m_cover_polys.size());}
-
   
 protected:
   XYSegList m_segl;  // border

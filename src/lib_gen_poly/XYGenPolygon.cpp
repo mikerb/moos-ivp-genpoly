@@ -19,6 +19,15 @@ using namespace std;
 //---------------------------------------------------------------
 // Procedure: setGenPoly()
 
+void XYGenPolygon::setGenPoly(XYSegList segl)
+{
+  m_segl = segl;
+  m_cover_polys.clear();
+}
+
+//---------------------------------------------------------------
+// Procedure: setGenPoly()
+
 void XYGenPolygon::setGenPoly(XYSegList segl, vector<XYPolygon> polys)
 {
   m_segl = segl;
@@ -135,6 +144,15 @@ double XYGenPolygon::area() const
 void XYGenPolygon::clear() 
 {
   m_segl.clear();
+  m_cover_polys.clear();
+}
+
+
+//---------------------------------------------------------------
+// Procedure: clearCoverPolys()
+
+void XYGenPolygon::clearCoverPolys() 
+{
   m_cover_polys.clear();
 }
 
