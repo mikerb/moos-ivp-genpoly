@@ -67,15 +67,15 @@ int EPathViewer::handle(int event)
       else if((Fl::event_button() == FL_LEFT_MOUSE) &&
 	 (!Fl::event_state(FL_CTRL)) &&
 	 (!Fl::event_state(FL_SHIFT)))
-	handle_left_mouse(vx, vy);
+	handle_mouse_src(vx, vy);
       
       else if(Fl::event_button() == FL_RIGHT_MOUSE) {
-	handle_right_mouse(vx, vy);
+	handle_mouse_dest(vx, vy);
       }
       
       else if((Fl::event_button() == FL_LEFT_MOUSE) &&
 	 (Fl::event_state(FL_CTRL))) {
-	handle_right_mouse(vx, vy);
+	handle_mouse_dest(vx, vy);
       }
 
     }
@@ -97,6 +97,28 @@ void EPathViewer::draw()
   if(m_geo_settings.viewable("hash_viewable"))
     drawFastHash();
 
+  // ------------------------------------------------------
+  // Draw Source
+  // ------------------------------------------------------
+  double sx = m_pfield.getSrcX();
+  double sy = m_pfield.getSrcY();
+  XYPoint spt(sx,sy);
+  spt.set_vertex_size(15);
+  spt.set_vertex_color("white");
+  spt.set_label("s");
+  drawPoint(spt);
+  
+  // ------------------------------------------------------
+  // Draw Destination
+  // ------------------------------------------------------
+  double dx = m_pfield.getDestX();
+  double dy = m_pfield.getDestY();
+  XYPoint dpt(dx,dy);
+  dpt.set_vertex_size(15);
+  dpt.set_vertex_color("green");
+  dpt.set_label("d");
+  drawPoint(dpt);
+  
   // ------------------------------------------------------
   // Draw Points
   // ------------------------------------------------------
@@ -192,6 +214,34 @@ void EPathViewer::handle_right_mouse(int vx, int vy)
 
   updateConvexHull();
   updateGenPoly();
+  redraw();
+}
+
+//-------------------------------------------------------------
+// Procedure: handle_mouse_src()
+
+void EPathViewer::handle_mouse_src(int vx, int vy)
+{
+  double ix = view2img('x', vx);
+  double iy = view2img('y', vy);
+  double mx = img2meters('x', ix);
+  double my = img2meters('y', iy);
+  m_pfield.setSource(mx, my);
+
+  redraw();
+}
+
+//-------------------------------------------------------------
+// Procedure: handle_mouse_dest()
+
+void EPathViewer::handle_mouse_dest(int vx, int vy)
+{
+  double ix = view2img('x', vx);
+  double iy = view2img('y', vy);
+  double mx = img2meters('x', ix);
+  double my = img2meters('y', iy);
+  m_pfield.setDest(mx, my);
+
   redraw();
 }
 

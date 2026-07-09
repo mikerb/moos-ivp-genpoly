@@ -16,6 +16,7 @@
 #include "MarineViewer.h"
 #include "XYSegList.h"
 #include "XYGenPolygon.h"
+#include "PathField.h"
 
 class EPathViewer : public MarineViewer
 {
@@ -30,6 +31,10 @@ class EPathViewer : public MarineViewer
   bool  setParam(std::string param, std::string value);
   bool  setParam(std::string param, double value);
   void  clear();
+
+  void  handle_mouse_src(int, int);
+  void  handle_mouse_dest(int, int);
+
   
 public:
   std::string getBorderSpec();
@@ -72,6 +77,8 @@ private:
   XYGenPolygon m_gen_poly;
 
   double m_solve_time;
+
+  PathField m_pfield;
 };
 
 #endif 

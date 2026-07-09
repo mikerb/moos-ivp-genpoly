@@ -14,6 +14,7 @@ SET(SRC
   EPATH_GUI.cpp
   EPATH_GUI_Widgets.cpp
   EPathViewer.cpp
+  PathField.cpp
   main.cpp
 )
 
