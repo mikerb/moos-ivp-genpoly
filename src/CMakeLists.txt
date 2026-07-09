@@ -16,6 +16,7 @@ INCLUDE_DIRECTORIES(${LOCAL_LIBRARY_DIRS})
 #============================================================================
 ADD_SUBDIRECTORY(lib_gen_poly)
 ADD_SUBDIRECTORY(app_polyview)
+ADD_SUBDIRECTORY(app_epath)
 
 ##############################################################################
 #                           END of CMakeLists.txt
