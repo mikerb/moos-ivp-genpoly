@@ -262,57 +262,55 @@ void EPATH_GUI::cb_DrawGPoly(Fl_Widget* o) {
   ((EPATH_GUI*)(o->parent()->user_data()))->cb_DrawGPoly_i();
 }
 
-//----------------------------------------- Resolve
-void EPATH_GUI::cb_Resolve_i() {
-  pviewer->updateGenPoly();
+//----------------------------------------- Solve
+void EPATH_GUI::cb_Solve_i(int amt) {
+  //pviewer->updateGenPoly();
+  pviewer->solve(amt);
   pviewer->redraw();
   updateXY();
 }
-void EPATH_GUI::cb_Resolve(Fl_Widget* o) {
-  ((EPATH_GUI*)(o->parent()->user_data()))->cb_Resolve_i();
+void EPATH_GUI::cb_Solve(Fl_Widget* o, int amt) {
+  ((EPATH_GUI*)(o->parent()->user_data()))->cb_Solve_i(10);
 }
 
-//----------------------------------------- MethodToggle
-void EPATH_GUI::cb_MethodToggle_i() {
-  pviewer->setParam("method", "toggle");
-  pviewer->updateGenPoly();  
+//----------------------------------------- KeepFulls
+void EPATH_GUI::cb_KeepFulls_i() {
+  pviewer->keepFulls(true);
   pviewer->redraw();
   updateXY();
 }
-void EPATH_GUI::cb_MethodToggle(Fl_Widget* o) {
-  ((EPATH_GUI*)(o->parent()->user_data()))->cb_MethodToggle_i();
+void EPATH_GUI::cb_KeepFulls(Fl_Widget* o) {
+  ((EPATH_GUI*)(o->parent()->user_data()))->cb_KeepFulls_i();
 }
 
-//----------------------------------------- CollapseToggle
-void EPATH_GUI::cb_CollapseToggle_i() {
-  pviewer->setParam("collapse", "toggle");
-  pviewer->updateGenPoly();  
+//----------------------------------------- DropFulls
+void EPATH_GUI::cb_DropFulls_i() {
+  pviewer->keepFulls(false);
   pviewer->redraw();
   updateXY();
 }
-void EPATH_GUI::cb_CollapseToggle(Fl_Widget* o) {
-  ((EPATH_GUI*)(o->parent()->user_data()))->cb_CollapseToggle_i();
+void EPATH_GUI::cb_DropFulls(Fl_Widget* o) {
+  ((EPATH_GUI*)(o->parent()->user_data()))->cb_DropFulls_i();
 }
 
-//----------------------------------------- VerboseToggle
-void EPATH_GUI::cb_VerboseToggle_i() {
-  pviewer->setParam("verbose", "toggle");
-  pviewer->updateGenPoly();  
+//----------------------------------------- ClearPolys
+void EPATH_GUI::cb_ClearPolys_i() {
+  pviewer->clearPolys();
   pviewer->redraw();
   updateXY();
 }
-void EPATH_GUI::cb_VerboseToggle(Fl_Widget* o) {
-  ((EPATH_GUI*)(o->parent()->user_data()))->cb_VerboseToggle_i();
+void EPATH_GUI::cb_ClearPolys(Fl_Widget* o) {
+  ((EPATH_GUI*)(o->parent()->user_data()))->cb_ClearPolys_i();
 }
 
-//----------------------------------------- Clear
-void EPATH_GUI::cb_Clear_i() {
-  pviewer->clear();
+//----------------------------------------- ClearSolve
+void EPATH_GUI::cb_ClearSolve_i() {
+  pviewer->clearSolve();
   pviewer->redraw();
   updateXY();
 }
-void EPATH_GUI::cb_Clear(Fl_Widget* o) {
-  ((EPATH_GUI*)(o->parent()->user_data()))->cb_Clear_i();
+void EPATH_GUI::cb_ClearSolve(Fl_Widget* o) {
+  ((EPATH_GUI*)(o->parent()->user_data()))->cb_ClearSolve_i();
 }
 
 //----------------------------------------- StartPoints
@@ -342,20 +340,6 @@ void EPATH_GUI::updateXY()
   dval = pviewer->getSolveTime();
   sval = doubleToString(dval,2);
   m_fld_solve->value(sval.c_str());
-
-  // Solve Method
-  sval = pviewer->getSolveMethod();
-  m_fld_method->value(sval.c_str());
-
-  // Solve Collap
-  bool bval = pviewer->getSolveCollap();
-  sval = boolToString(bval);
-  m_fld_collap->value(sval.c_str());
-
-  // Verbosity
-  bval = pviewer->getVerbose();
-  sval = boolToString(bval);
-  m_fld_verbose->value(sval.c_str());
 
   // SegList string
   string str = pviewer->getBorderSpec();

@@ -45,33 +45,31 @@ void EPATH_GUI::initWidgets()
   m_but_draw_gpoly->shortcut('g');
   m_but_draw_gpoly->tooltip("Shortcut key is 'g'");
   
-  m_but_resolve = new Fl_Button(0, 0, 1, 1, "Resolve");
-  m_but_resolve->clear_visible_focus();
-  m_but_resolve->callback((Fl_Callback*)EPATH_GUI::cb_Resolve);
-  m_but_resolve->shortcut('s');
-  m_but_resolve->tooltip("Shortcut key is 's'");
+  m_but_solve10 = new Fl_Button(0, 0, 1, 1, "Solve10");
+  m_but_solve10->clear_visible_focus();
+  m_but_solve10->callback((Fl_Callback*)EPATH_GUI::cb_Solve);
+  m_but_solve10->shortcut('s');
+  m_but_solve10->tooltip("Shortcut key is 's'");
   
-  m_but_method = new Fl_Button(0, 0, 1, 1, "Method");
-  m_but_method->clear_visible_focus();
-  m_but_method->callback((Fl_Callback*)EPATH_GUI::cb_MethodToggle);
-  m_but_method->shortcut('m');
-  m_but_method->tooltip("Shortcut key is 'm'");
-  
-  m_but_collapse = new Fl_Button(0, 0, 1, 1, "Collapse");
-  m_but_collapse->clear_visible_focus();
-  m_but_collapse->callback((Fl_Callback*)EPATH_GUI::cb_CollapseToggle);
-  m_but_collapse->shortcut('c');
-  m_but_collapse->tooltip("Shortcut key is 'c'");
-  
-  m_but_verbose = new Fl_Button(0, 0, 1, 1, "Verbose");
-  m_but_verbose->clear_visible_focus();
-  m_but_verbose->callback((Fl_Callback*)EPATH_GUI::cb_VerboseToggle);
-  m_but_verbose->shortcut('v');
-  m_but_verbose->tooltip("Shortcut key is 'v'");
-  
-  m_but_clear = new Fl_Button(0, 0, 1, 1, "Clear");
-  m_but_clear->clear_visible_focus();
-  m_but_clear->callback((Fl_Callback*)EPATH_GUI::cb_Clear);
+  m_but_clear_polys = new Fl_Button(0, 0, 1, 1, "Clear Polys");
+  m_but_clear_polys->clear_visible_focus();
+  m_but_clear_polys->callback((Fl_Callback*)EPATH_GUI::cb_ClearPolys);
+
+  m_but_clear_solve = new Fl_Button(0, 0, 1, 1, "Clear Solve");
+  m_but_clear_solve->clear_visible_focus();
+  m_but_clear_solve->callback((Fl_Callback*)EPATH_GUI::cb_ClearSolve);
+
+  m_but_keep_fulls = new Fl_Button(0, 0, 1, 1, "Keep Fulls");
+  m_but_keep_fulls->clear_visible_focus();
+  m_but_keep_fulls->callback((Fl_Callback*)EPATH_GUI::cb_KeepFulls);
+
+  m_but_drop_fulls = new Fl_Button(0, 0, 1, 1, "Drop Fulls");
+  m_but_drop_fulls->clear_visible_focus();
+  m_but_drop_fulls->callback((Fl_Callback*)EPATH_GUI::cb_DropFulls);
+
+  m_but_drop_fulls = new Fl_Button(0, 0, 1, 1, "Drop Fulls");
+  m_but_drop_fulls->clear_visible_focus();
+  m_but_drop_fulls->callback((Fl_Callback*)EPATH_GUI::cb_DropFulls);
 
   m_fld_snap = new Fl_Output(0, 0, 1, 1, "snap:"); 
   m_fld_snap->set_output();
@@ -81,15 +79,6 @@ void EPATH_GUI::initWidgets()
 
   m_fld_solve = new Fl_Output(0, 0, 1, 1, "solve:"); 
   m_fld_solve->set_output();
-
-  m_fld_method = new Fl_Output(0, 0, 1, 1, "method:"); 
-  m_fld_method->set_output();
-
-  m_fld_collap = new Fl_Output(0, 0, 1, 1, "collaps:"); 
-  m_fld_collap->set_output();
-
-  m_fld_verbose = new Fl_Output(0, 0, 1, 1, "verbose:"); 
-  m_fld_verbose->set_output();
 
   //----------------------------------------------------------
   m_fld_segl = new Fl_Output(0, 0, 1, 1, "seglist:"); 
@@ -121,7 +110,7 @@ void EPATH_GUI::resizeWidgetsShape()
   int wid5 = 60;
   int wid6 = 60;
   int wid7 = 60;
-  int wid8 = 60;
+  int wid8 = 100;
   //int wid9 = 50;
   int sep = 10;
 
@@ -171,52 +160,35 @@ void EPATH_GUI::resizeWidgetsShape()
   int bso_x = col4;
   int bso_y = row1;
   int bso_wid = wid4;
-  m_but_resolve->resize(bso_x, bso_y, bso_wid, field_hgt);
+  m_but_solve10->resize(bso_x, bso_y, bso_wid, field_hgt);
 
   int sot_x = col4;
   int sot_y = row2;
   int sot_wid = wid4;
   m_fld_solve->resize(sot_x, sot_y, sot_wid, field_hgt);
 
-  //-------------------- Column 5
-  int bme_x = col5;
-  int bme_y = row1;
-  int bme_wid = wid5;
-  m_but_method->resize(bme_x, bme_y, bme_wid, field_hgt);
-
-  int met_x = col5;
-  int met_y = row2;
-  int met_wid = wid5;
-  m_fld_method->resize(met_x, met_y, met_wid, field_hgt);
-
   //-------------------- Column 6
-  int bco_x = col6;
-  int bco_y = row1;
-  int bco_wid = wid6;
-  m_but_collapse->resize(bco_x, bco_y, bco_wid, field_hgt);
+  int kfull_x = col6;
+  int kfull_y = row1;
+  int kfull_wid = wid6;
+  m_but_keep_fulls->resize(kfull_x, kfull_y, kfull_wid, field_hgt);
 
-  int clp_x = col6;
-  int clp_y = row2;
-  int clp_wid = wid6;
-  m_fld_collap->resize(clp_x, clp_y, clp_wid, field_hgt);
-
+  int dfull_x = col6;
+  int dfull_y = row2;
+  int dfull_wid = wid6;
+  m_but_drop_fulls->resize(dfull_x, dfull_y, dfull_wid, field_hgt);
+  
   //-------------------- Column 7
-  int ver_x = col7;
-  int ver_y = row1;
-  int ver_wid = wid7;
-  m_but_verbose->resize(ver_x, ver_y, ver_wid, field_hgt);
+  int clep_x = col7;
+  int clep_y = row1;
+  int clep_wid = wid8;
+  m_but_clear_polys->resize(clep_x, clep_y, clep_wid, field_hgt);
 
-  int fve_x = col7;
-  int fve_y = row2;
-  int fve_wid = wid7;
-  m_fld_verbose->resize(fve_x, fve_y, fve_wid, field_hgt);
-
-  //-------------------- Column 8
-  int cle_x = col8;
-  int cle_y = row1;
-  int cle_wid = wid8;
-  m_but_clear->resize(cle_x, cle_y, cle_wid, field_hgt);
-
+  int cles_x = col7;
+  int cles_y = row2;
+  int cles_wid = wid8;
+  m_but_clear_solve->resize(cles_x, cles_y, cles_wid, field_hgt);
+  
   //---------------------------------------------------------
   // Bottom Two ROWS
   //---------------------------------------------------------
@@ -246,11 +218,9 @@ void EPATH_GUI::resizeWidgetsText()
   m_but_draw_hull->labelsize(label_size);
   m_but_draw_gpoly->labelsize(label_size);
 
-  m_but_resolve->labelsize(label_size);
-  m_but_method->labelsize(label_size);
-  m_but_collapse->labelsize(label_size);
-  m_but_verbose->labelsize(label_size);
-  m_but_clear->labelsize(label_size);
+  m_but_solve10->labelsize(label_size);
+  m_but_clear_polys->labelsize(label_size);
+  m_but_clear_solve->labelsize(label_size);
   
   m_fld_snap->textsize(text_size);
   m_fld_snap->labelsize(label_size);
@@ -260,15 +230,6 @@ void EPATH_GUI::resizeWidgetsText()
 
   m_fld_solve->textsize(text_size);
   m_fld_solve->labelsize(label_size);
-
-  m_fld_method->textsize(text_size);
-  m_fld_method->labelsize(label_size);
-
-  m_fld_collap->textsize(text_size);
-  m_fld_collap->labelsize(label_size);
-
-  m_fld_verbose->textsize(text_size);
-  m_fld_verbose->labelsize(label_size);
 
   m_fld_segl->textsize(text_size);
   m_fld_segl->labelsize(label_size);

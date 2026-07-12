@@ -42,19 +42,16 @@ protected:
   Fl_Button  *m_but_draw_hull;
   Fl_Button  *m_but_draw_gpoly;
 
-  Fl_Button  *m_but_resolve;
-  Fl_Button  *m_but_method;
-  Fl_Button  *m_but_collapse;
-  Fl_Button  *m_but_clear;
-  Fl_Button  *m_but_verbose;
+  Fl_Button  *m_but_solve10;
+  Fl_Button  *m_but_clear_polys;
+  Fl_Button  *m_but_clear_solve;
 
+  Fl_Button  *m_but_keep_fulls;
+  Fl_Button  *m_but_drop_fulls;
+  
   Fl_Output  *m_fld_snap;
   Fl_Output  *m_fld_polys;
   Fl_Output  *m_fld_solve;
-
-  Fl_Output  *m_fld_method;
-  Fl_Output  *m_fld_collap;
-  Fl_Output  *m_fld_verbose;
 
   Fl_Output  *m_fld_segl;
   Fl_Output  *m_fld_gpoly;
@@ -78,21 +75,20 @@ private:
   inline void cb_DrawGPoly_i();
   static void cb_DrawGPoly(Fl_Widget*);
 
-  inline void cb_Resolve_i();
-  static void cb_Resolve(Fl_Widget*);
+  inline void cb_Solve_i(int);
+  static void cb_Solve(Fl_Widget*, int);
 
-  inline void cb_MethodToggle_i();
-  static void cb_MethodToggle(Fl_Widget*);
+  inline void cb_ClearPolys_i();
+  static void cb_ClearPolys(Fl_Widget*);
 
-  inline void cb_CollapseToggle_i();
-  static void cb_CollapseToggle(Fl_Widget*);
+  inline void cb_ClearSolve_i();
+  static void cb_ClearSolve(Fl_Widget*);
 
-  inline void cb_Clear_i();
-  static void cb_Clear(Fl_Widget*);
+  inline void cb_KeepFulls_i();
+  static void cb_KeepFulls(Fl_Widget*);
 
-  inline void cb_VerboseToggle_i();
-  static void cb_VerboseToggle(Fl_Widget*);
-
+  inline void cb_DropFulls_i();
+  static void cb_DropFulls(Fl_Widget*);
 
   inline void cb_Rotate_i(int);
   static void cb_Rotate(Fl_Widget*, int);

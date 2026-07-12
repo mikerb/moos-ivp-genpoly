@@ -17,6 +17,7 @@
 #include "GeomUtils.h"
 #include "AngleUtils.h"
 #include "XYFormatUtilsSegl.h"
+#include "XYFormatUtilsPoly.h"
 #include "ConvexHullGenerator.h"
 #include "XYGenPolygon.h"
 #include "CoverEngine.h"
@@ -44,6 +45,9 @@ EPathViewer::EPathViewer(int x, int y, int w, int h, const char *l)
   
   // State vars init
   m_solve_time = 0;
+
+  m_pfield.setSource(-50,-100);
+  m_pfield.setDest(110,-70);
 }
 
 //-------------------------------------------------------------
@@ -59,9 +63,9 @@ int EPathViewer::handle(int event)
     if(Fl_Window::handle(event) != 1) {
 
       if((Fl::event_button() == FL_LEFT_MOUSE) &&
-	 (Fl::event_state(FL_ALT))) {
-	cout << "Insert!!" << endl;
-	handle_left_mouse(vx, vy, false);
+	 (Fl::event_state(FL_SHIFT))) {
+	cout << "Poly!!" << endl;
+	handle_mouse_poly(vx, vy);
       }
 
       else if((Fl::event_button() == FL_LEFT_MOUSE) &&
@@ -120,6 +124,66 @@ void EPathViewer::draw()
   drawPoint(dpt);
   
   // ------------------------------------------------------
+  // Draw Polys
+  // ------------------------------------------------------
+  vector<XYPolygon> polys = m_pfield.getPolys();
+  for(unsigned int i=0; i<polys.size(); i++) {
+    XYPolygon poly = polys[i];
+    poly.set_color("fill", "gray50");
+    poly.set_edge_color("white");
+    poly.set_vertex_color("dodger_blue");
+    drawPolygon(poly);
+  }
+  
+  // ------------------------------------------------------
+  // Draw Segls
+  // ------------------------------------------------------
+  vector<XYSegList> segls;
+  segls = m_pfield.getSeglsDead();
+  for(unsigned int i=0; i<segls.size(); i++) {
+    XYSegList segl = segls[i];
+    segl.set_edge_color("red");
+    segl.set_vertex_color("white");
+    drawSegList(segl);
+  }
+
+  XYSegList segl_shortest = m_pfield.getSeglShortest();
+  if(segl_shortest.size() > 0) {
+    segl_shortest.set_edge_color("green");
+    segl_shortest.set_vertex_color("white");  
+    drawSegList(segl_shortest);
+  }
+  
+  return;
+
+  // ------------------------------------------------------
+  // Draw Segls
+  // ------------------------------------------------------
+  segls = m_pfield.getSeglsDrop();
+  for(unsigned int i=0; i<segls.size(); i++) {
+    XYSegList segl = segls[i];
+    segl.set_edge_color("red");
+    segl.set_vertex_color("white");
+    drawSegList(segl);
+  }
+  segls = m_pfield.getSeglsFull();
+  for(unsigned int i=0; i<segls.size(); i++) {
+    XYSegList segl = segls[i];
+    segl.set_edge_color("green");
+    segl.set_vertex_color("white");
+    drawSegList(segl);
+  }
+  segls = m_pfield.getSeglsPart();
+  for(unsigned int i=0; i<segls.size(); i++) {
+    XYSegList segl = segls[i];
+    segl.set_edge_color("yellow");
+    segl.set_vertex_color("white");
+    drawSegList(segl);
+  }
+
+  return;
+  
+  // ------------------------------------------------------
   // Draw Points
   // ------------------------------------------------------
   if(m_draw_pts) {
@@ -135,23 +199,6 @@ void EPathViewer::draw()
     drawPoints(pts);
   }
   
-  // ------------------------------------------------------
-  // Draw SegList
-  // ------------------------------------------------------
-  if(m_draw_segl) {
-    m_segl.set_vertex_size(10);
-
-    if(m_segl.segs_cross())
-      m_segl.set_edge_color("pink");
-    else
-      m_segl.set_edge_color("white");
-      
-    m_segl.set_vertex_color("dodger_blue");
-    m_segl.set_label_color("off");
-    m_segl.set_label("segl");
-    drawSegList(m_segl);
-  }
-
   // ------------------------------------------------------
   // Draw ConvexHull
   // ------------------------------------------------------
@@ -227,6 +274,7 @@ void EPathViewer::handle_mouse_src(int vx, int vy)
   double mx = img2meters('x', ix);
   double my = img2meters('y', iy);
   m_pfield.setSource(mx, my);
+  m_pfield.clearSolve();
 
   redraw();
 }
@@ -241,6 +289,28 @@ void EPathViewer::handle_mouse_dest(int vx, int vy)
   double mx = img2meters('x', ix);
   double my = img2meters('y', iy);
   m_pfield.setDest(mx, my);
+  m_pfield.clearSolve();
+
+  redraw();
+}
+
+//-------------------------------------------------------------
+// Procedure: handle_mouse_poly()
+
+void EPathViewer::handle_mouse_poly(int vx, int vy)
+{
+  double ix = view2img('x', vx);
+  double iy = view2img('y', vy);
+  double mx = img2meters('x', ix);
+  double my = img2meters('y', iy);
+
+  string polystr = "format=radial";
+  polystr += ",x=" + doubleToStringX(mx,2);
+  polystr += ",y=" + doubleToStringX(my,2);
+  polystr += ",radius=12, pts=6, snap=0.1";
+  XYPolygon poly = string2Poly(polystr);
+  
+  m_pfield.addPoly(poly);
 
   redraw();
 }
@@ -381,14 +451,46 @@ bool EPathViewer::setParam(string param, double pval)
 }
 
 // ----------------------------------------------------------
-// Procedure: clear()
+// Procedure: keepFulls()
 
-void EPathViewer::clear()
+void EPathViewer::keepFulls(bool bval)
 {  
-  m_segl.clear();
-  m_hull_poly.clear();
-  m_gen_poly.clear();
+  m_pfield.setKeepFulls(bval);
   m_solve_time = 0;
+}
+
+// ----------------------------------------------------------
+// Procedure: clearPolys()
+
+void EPathViewer::clearPolys()
+{  
+  m_pfield.clearPolys();
+  m_segl.clear();
+  //m_hull_poly.clear();
+  //m_gen_poly.clear();
+  m_solve_time = 0;
+}
+
+// ----------------------------------------------------------
+// Procedure: clearSolve()
+
+void EPathViewer::clearSolve()
+{  
+  m_pfield.clearSolve();
+  m_segl.clear();
+  //m_hull_poly.clear();
+  //m_gen_poly.clear();
+  m_solve_time = 0;
+}
+
+// ----------------------------------------------------------
+// Procedure: solve()
+
+void EPathViewer::solve(unsigned int amt)
+{
+  cout << "EPathViewer::solve() " << amt << endl;
+  m_pfield.solve2();
+  redraw();
 }
 
 // ----------------------------------------------------------
