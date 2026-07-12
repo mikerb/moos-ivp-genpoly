@@ -33,8 +33,8 @@ PathField::PathField()
   m_dist_shortest = -1; // -1 means no path found yet.
 
   // Init config vars
-  m_keep_fulls = true;
-  m_base_branches = 40;
+  m_branches   = 40;
+  m_focus_poly = -1;
 }
 
 //---------------------------------------------------------------
@@ -50,76 +50,68 @@ void PathField::addPoly(XYPolygon poly)
 }
 
 //---------------------------------------------------------------
+// Procedure: focusPoly()
+
+void PathField::focusPoly(double vx, double vy)
+{
+  int focus_poly = -1;
+
+  double closest_dist = -1;
+
+  for(unsigned int i=0; i<m_polys.size(); i++) {
+    if(m_polys[i].contains(vx,vy)) {
+      double dist = m_polys[i].dist_to_poly(vx,vy);
+      if((closest_dist < 0) || (dist < closest_dist)) {
+	focus_poly = i;
+	closest_dist = dist;
+      }
+    }
+  }
+
+  // If prior focus poly is selected, treat this as disabel request
+  if(focus_poly == m_focus_poly)
+    m_focus_poly = -1;
+  else if(focus_poly >= 0)
+    m_focus_poly = focus_poly;
+  
+  cout << "Focus_poly:" << focus_poly << endl;
+}
+
+//---------------------------------------------------------------
 // Procedure: clearSolve()
 
 void PathField::clearSolve()
 {
-  m_segls_drop.clear();
-  m_segls_full.clear();
-  m_segls_part.clear();
+  m_segls_dead.clear();
+  m_segl_shortest.clear();
+  m_dist_shortest = -1;
 }
 
 //---------------------------------------------------------------
 // Procedure: solve()
 
-void PathField::solve(unsigned int amt)
-{
-  m_segls_drop.clear();
-
-  cout << "PathField::solve()" << amt << endl;
-
-  // Part 1: maintain at least N working Segls  
-  XYSegList segl;
-  segl.add_vertex(m_sx,m_sy);
-  for(unsigned int i=0; i<amt; i++) {
-    double rx,ry;
-    genleg(m_sx,m_sy, m_dx,m_dy, 40, 40, rx,ry);    
-    XYSegList isegl = segl;
-    isegl.add_vertex(rx,ry);
-
-    if(!freeSegl(isegl))
-      m_segls_drop.push_back(isegl);
-    else if(fullSegl(isegl)) {
-      isegl.add_vertex(m_dx,m_dy);
-      m_segls_full.push_back(isegl);
-    }
-    else
-      m_segls_part.push_back(isegl);    
-  }
-
-  clearFulls();
-  clearPartials();
-}
-
-//---------------------------------------------------------------
-// Procedure: solve2()
-
-void PathField::solve2()
+void PathField::solve()
 {
   m_segls_dead.clear();
 
   XYSegList segl;
   segl.add_vertex(m_sx, m_sy);
-  solve2Aux(segl, 0);
+  solveAux(segl, 0);
 }
 
 //---------------------------------------------------------------
-// Procedure: solve2Aux()
+// Procedure: solveAux()
 
-void PathField::solve2Aux(XYSegList segl, int depth)
+void PathField::solveAux(XYSegList segl, int depth)
 {
   if(depth > 5)
     return;
-
   
-  
-  unsigned int branch_amt = 12;
-
   XYPoint pt = segl.get_last_point();
   double  sx = pt.x();
   double  sy = pt.y();
 
-  for(unsigned int i=0; i<branch_amt; i++) {
+  for(unsigned int i=0; i<m_branches; i++) {
     double rx,ry;
     genleg(m_sx,m_sy, m_dx,m_dy, 40, 40, rx,ry);    
     
@@ -141,66 +133,10 @@ void PathField::solve2Aux(XYSegList segl, int depth)
       m_dist_shortest = full_dist;
     }
     else {
-      solve2Aux(new_segl, depth+1);
+      solveAux(new_segl, depth+1);
     }
   }
 }
-
-
-//---------------------------------------------------------------
-// Procedure: clearFulls()
-//   Purpose: Drop all the full paths, except the shortest path
-
-void PathField::clearFulls()
-{
-  if(m_segls_full.size() == 0)
-    return;
-
-  XYSegList shortest_segl = m_segls_full[0];
-  double shortest_dist = shortest_segl.length();
-  for(unsigned int i=1; i<m_segls_full.size(); i++) {
-    double ilen = m_segls_full[i].length();
-    if(ilen < shortest_dist) {
-      shortest_segl = m_segls_full[i];
-      shortest_dist = ilen;
-    }
-  }
-  m_segl_shortest = shortest_segl;
-  m_dist_shortest = shortest_dist;
-  
-  if(!m_keep_fulls) {
-    m_segls_full.clear();
-    m_segls_full.push_back(shortest_segl);
-  }
-}
-
-//---------------------------------------------------------------
-// Procedure: clearPartials()
-//   Purpose: Drop all the partial paths that would be longer,
-//            even if there were a direct path to the destination
-//            from the current last point in the seglist.
-
-void PathField::clearPartials()
-{
-  // If no actual path has been found, cannot yet clear partials
-  if(m_dist_shortest < 0)
-    return;
-
-  vector<XYSegList> viable_segls;
-  for(unsigned int i=0; i<m_segls_part.size(); i++) {
-    XYSegList psegl = m_segls_part[i];
-    if(psegl.size() == 0)
-      continue;
-    XYPoint pt = psegl.get_last_point();
-    double dist = hypot(pt.x()-m_dx, pt.y()-m_dy);
-    // If best case, direct path, shorter than best full segl, then
-    // keep around for further testing
-    if((psegl.length() + dist) < m_dist_shortest) 
-      viable_segls.push_back(psegl);
-  }
-  m_segls_part = viable_segls;
-}
-
 
 //---------------------------------------------------------------
 // Procedure: genleg()
@@ -223,8 +159,6 @@ void PathField::genleg(double sx, double sy,
   double ang_to_dest = relAng(sx, sy, dx, dy);
   double dist_to_dest = hypot(sx-dx, sy-dy);
 
-  cout << "ang_to_dest:" << doubleToString(ang_to_dest,2) << endl;
-  
   int int_rand_hdg = rand() % ((int)(angrng * 2 * 100));
   double rand_hdg  = ((double)(int_rand_hdg)) / 100.0;
   
@@ -241,11 +175,9 @@ void PathField::genleg(double sx, double sy,
   rand_dist = (50-distrng) + rand_dist;
 
   double dist = (rand_dist / 100) * dist_to_dest;
-
   
   projectPoint(hdg, dist, sx,sy, rx,ry);
 }
-
 
 
 //---------------------------------------------------------------
@@ -271,7 +203,7 @@ bool PathField::freeSeg(double sx, double sy, double dx, double dy)
 //   Purpose: Determine if the given seglist intersects with any
 //            of the polygon obstacles
 
-bool PathField::freeSegl(XYSegList seglr)
+bool PathField::freeSegl(const XYSegList& seglr)
 {
   if(m_polys.size() == 0)
     return(true);
@@ -302,6 +234,10 @@ bool PathField::freeSegl(XYSegList seglr)
 
 //---------------------------------------------------------------
 // Procedure: fullSegl()
+//   Purpose: Determine if the given seglist, augmented with an
+//            additional leg from the last point to the dest, 
+//            represents a collision-free path from start to dest.
+
 
 bool PathField::fullSegl(XYSegList seglr)
 {
@@ -316,3 +252,101 @@ bool PathField::fullSegl(XYSegList seglr)
   return(freeSegl(seglr));
 }
 
+//---------------------------------------------------------------
+// Procedure: getPolyPassSide()
+
+string PathField::getPolyPassSide(unsigned int ix)
+{
+  // Sanity checks
+  if(ix >= m_polys.size())
+    return("");
+  if(m_segl_shortest.length() < 2)
+    return("");
+  if(m_dist_shortest < 0)
+    return("");
+
+  return(seglPassPoly(m_polys[ix], m_segl_shortest));
+}
+
+//---------------------------------------------------------------
+// Procedure: seglPassPoly()
+
+string PathField::seglPassPoly(XYPolygon poly, XYSegList segl)
+{
+  if(!poly.is_convex() || (segl.size() < 2))
+    return("");
+
+  double sx = segl.get_vx(0);
+  double sy = segl.get_vy(0);
+  
+  double pcx = poly.get_center_x();
+  double pcy = poly.get_center_y();
+  double ang_to_pcent = relAng(sx,sy, pcx,pcy);
+
+  double star_ang = angle360(ang_to_pcent + 90);
+  double port_ang = angle360(ang_to_pcent - 90);
+  
+  unsigned int xport = crossRaySegl(pcx,pcy,port_ang, segl);
+  unsigned int xstar = crossRaySegl(pcx,pcy,star_ang, segl);
+
+  if(xport > 0)
+    return("port");
+  else if(xstar > 0)
+    return("star");
+  else
+    return("");
+}
+
+  
+//---------------------------------------------------------------
+// Procedure: crossRaySegl()
+//   Purpose: Determine if the given ray crosses anywhere in the given
+//            SegList and count the number of crosses.
+
+unsigned int PathField::crossRaySegl(double px, double py, double ph,
+				     const XYSegList& segl)
+{
+  unsigned int vsize = segl.size();
+  if(vsize < 2)
+    return(0);
+  
+  unsigned int crosses = 0;
+  
+  // For each line segment
+  for(unsigned int i=0; i<vsize-1; i++) {
+
+    double x1 = segl.get_vx(i);
+    double y1 = segl.get_vy(i);
+    double x2 = segl.get_vx(i+1);
+    double y2 = segl.get_vy(i+1);
+
+    double ix, iy;
+    bool may_intersect = lineRayCross(px, py, ph, x1, y1, x2, y2, ix, iy);
+
+    if(may_intersect) {
+      bool x_intersect = false;
+      if((x1==x2) && (x1==ix))
+	x_intersect = true;
+      else if((x1>x2) && (ix>=x2) && (ix<=x1))
+	x_intersect = true;
+      else {
+	if((ix>=x1) && (ix<=x2))
+	  x_intersect = true;
+      }
+
+      bool y_intersect = false;
+      if((y1==y2) && (y1==iy))
+	y_intersect = true;
+      else if((y1>y2) && (iy>=y2) && (iy<=y1))
+	y_intersect = true;
+      else {
+	if((iy>=y1) && (iy<=y2))
+	  y_intersect = true;
+      }
+
+      if(x_intersect && y_intersect)
+	crosses++;
+    }
+  }
+  return(crosses);
+}  

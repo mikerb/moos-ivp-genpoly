@@ -21,30 +21,12 @@ using namespace std;
 
 void EPATH_GUI::initWidgets()
 {
-  m_but_draw_pts = new Fl_Button(0, 0, 1, 1, "Draw Pts");
-  m_but_draw_pts->clear_visible_focus();
-  m_but_draw_pts->callback((Fl_Callback*)EPATH_GUI::cb_DrawPts);
-  m_but_draw_pts->shortcut('p');
-			   m_but_draw_pts->tooltip("Shortcut key is 'p'");
+  m_but_draw_deads = new Fl_Button(0, 0, 1, 1, "Draw Deads");
+  m_but_draw_deads->clear_visible_focus();
+  m_but_draw_deads->callback((Fl_Callback*)EPATH_GUI::cb_DrawDeads);
+  m_but_draw_deads->shortcut('p');
+  m_but_draw_deads->tooltip("Shortcut key is 'p'");
 
-  m_but_draw_segl = new Fl_Button(0, 0, 1, 1, "Draw Segl");
-  m_but_draw_segl->clear_visible_focus();
-  m_but_draw_segl->callback((Fl_Callback*)EPATH_GUI::cb_DrawSegl);
-  m_but_draw_segl->shortcut('p');
-  m_but_draw_segl->tooltip("Shortcut key is 's'");
-
-  m_but_draw_hull = new Fl_Button(0, 0, 1, 1, "Draw Hull");
-  m_but_draw_hull->clear_visible_focus();
-  m_but_draw_hull->callback((Fl_Callback*)EPATH_GUI::cb_DrawHull);
-  m_but_draw_hull->shortcut('u');
-  m_but_draw_hull->tooltip("Shortcut key is 'u'");
-
-  m_but_draw_gpoly = new Fl_Button(0, 0, 1, 1, "Draw GPoly");
-  m_but_draw_gpoly->clear_visible_focus();
-  m_but_draw_gpoly->callback((Fl_Callback*)EPATH_GUI::cb_DrawGPoly);
-  m_but_draw_gpoly->shortcut('g');
-  m_but_draw_gpoly->tooltip("Shortcut key is 'g'");
-  
   m_but_solve10 = new Fl_Button(0, 0, 1, 1, "Solve10");
   m_but_solve10->clear_visible_focus();
   m_but_solve10->callback((Fl_Callback*)EPATH_GUI::cb_Solve);
@@ -58,18 +40,6 @@ void EPATH_GUI::initWidgets()
   m_but_clear_solve = new Fl_Button(0, 0, 1, 1, "Clear Solve");
   m_but_clear_solve->clear_visible_focus();
   m_but_clear_solve->callback((Fl_Callback*)EPATH_GUI::cb_ClearSolve);
-
-  m_but_keep_fulls = new Fl_Button(0, 0, 1, 1, "Keep Fulls");
-  m_but_keep_fulls->clear_visible_focus();
-  m_but_keep_fulls->callback((Fl_Callback*)EPATH_GUI::cb_KeepFulls);
-
-  m_but_drop_fulls = new Fl_Button(0, 0, 1, 1, "Drop Fulls");
-  m_but_drop_fulls->clear_visible_focus();
-  m_but_drop_fulls->callback((Fl_Callback*)EPATH_GUI::cb_DropFulls);
-
-  m_but_drop_fulls = new Fl_Button(0, 0, 1, 1, "Drop Fulls");
-  m_but_drop_fulls->clear_visible_focus();
-  m_but_drop_fulls->callback((Fl_Callback*)EPATH_GUI::cb_DropFulls);
 
   m_fld_snap = new Fl_Output(0, 0, 1, 1, "snap:"); 
   m_fld_snap->set_output();
@@ -103,7 +73,7 @@ void EPATH_GUI::resizeWidgetsShape()
   int row3 = row2 + 30;
   int row4 = row3 + 30;
 
-  int wid1 = 80;
+  int wid1 = 100;
   int wid2 = 90;
   int wid3 = 40;
   int wid4 = 60;
@@ -127,24 +97,8 @@ void EPATH_GUI::resizeWidgetsShape()
   int pts_x = col1;
   int pts_y = row1;
   int pts_wid = wid1;
-  m_but_draw_pts->resize(pts_x, pts_y, pts_wid, field_hgt);
+  m_but_draw_deads->resize(pts_x, pts_y, pts_wid, field_hgt);
   
-  int hul_x = col1;
-  int hul_y = row2;
-  int hul_wid = wid1;
-  m_but_draw_hull->resize(hul_x, hul_y, hul_wid, field_hgt);
-  
-  //-------------------- Column 2
-  int seg_x = col2;
-  int seg_y = row1;
-  int seg_wid = wid2;
-  m_but_draw_segl->resize(seg_x, seg_y, seg_wid, field_hgt);
-  
-  int gpo_x = col2;
-  int gpo_y = row2;
-  int gpo_wid = wid2;
-  m_but_draw_gpoly->resize(gpo_x, gpo_y, gpo_wid, field_hgt);
-
   //-------------------- Column 3
   int snp_x = col3;
   int snp_y = row1;
@@ -167,17 +121,6 @@ void EPATH_GUI::resizeWidgetsShape()
   int sot_wid = wid4;
   m_fld_solve->resize(sot_x, sot_y, sot_wid, field_hgt);
 
-  //-------------------- Column 6
-  int kfull_x = col6;
-  int kfull_y = row1;
-  int kfull_wid = wid6;
-  m_but_keep_fulls->resize(kfull_x, kfull_y, kfull_wid, field_hgt);
-
-  int dfull_x = col6;
-  int dfull_y = row2;
-  int dfull_wid = wid6;
-  m_but_drop_fulls->resize(dfull_x, dfull_y, dfull_wid, field_hgt);
-  
   //-------------------- Column 7
   int clep_x = col7;
   int clep_y = row1;
@@ -213,10 +156,7 @@ void EPATH_GUI::resizeWidgetsText()
   int text_size  = 12;
   int label_size = 12;
 
-  m_but_draw_pts->labelsize(label_size);
-  m_but_draw_segl->labelsize(label_size);
-  m_but_draw_hull->labelsize(label_size);
-  m_but_draw_gpoly->labelsize(label_size);
+  m_but_draw_deads->labelsize(label_size);
 
   m_but_solve10->labelsize(label_size);
   m_but_clear_polys->labelsize(label_size);

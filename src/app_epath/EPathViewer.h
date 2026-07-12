@@ -26,29 +26,22 @@ class EPathViewer : public MarineViewer
   // Virtual defined
   void  draw();
   int   handle(int);
-  void  handle_left_mouse(int, int, bool add=true);
-  void  handle_right_mouse(int, int);
   bool  setParam(std::string param, std::string value);
   bool  setParam(std::string param, double value);
   void  clearPolys();
   void  clearSolve();
-  void  keepFulls(bool);
   
   void  handle_mouse_src(int, int);
   void  handle_mouse_dest(int, int);
   void  handle_mouse_poly(int, int);
+  void  handle_mouse_focus_poly(int, int);
   
 public:
 
   void solve(unsigned int);
   
-  std::string getBorderSpec();
-  std::string getGPolySpec();
-
   bool getVerbose() const {return(m_verbose);}
   
-  void   reApplySnapToCurrent();   
-
   void   shiftHorzPoints(double);
   void   shiftVertPoints(double);
 
@@ -74,6 +67,8 @@ private: // Config vars
 
   bool        m_solve_collap;
   std::string m_solve_method;
+
+  bool   m_draw_deads;
   
 private:
   XYSegList m_segl;

@@ -67,42 +67,10 @@ void EPATH_GUI::augmentMenu()
   m_menubar->add("Polygons/Move Down (slow)",  FL_SHIFT + FL_ALT + FL_Down,
 		 (Fl_Callback*)EPATH_GUI::cb_ShiftY, (void*)-1, FL_MENU_DIVIDER);
 
-  m_menubar->add("Polygons/Rotate Right", '}',
-		 (Fl_Callback*)EPATH_GUI::cb_Rotate, (void*)1, 0);
-  m_menubar->add("Polygons/Rotate Left",  '{',
-		 (Fl_Callback*)EPATH_GUI::cb_Rotate, (void*)-1, 0);
-
   m_menubar->add("Polygons/Enlarge", ']',
 		 (Fl_Callback*)EPATH_GUI::cb_Grow, (void*)1, 0);
   m_menubar->add("Polygons/Shrink",  '[',
 		 (Fl_Callback*)EPATH_GUI::cb_Grow, (void*)-1, 0);
-
-  m_menubar->add("Polygons/Reverse", 'R',
-		 (Fl_Callback*)EPATH_GUI::cb_Reverse, (void*)0, 0);
-  
-  m_menubar->add("SnapValue/200.0 meters", 0,
-		 (Fl_Callback*)EPATH_GUI::cb_SnapVal, (void*)20000, FL_MENU_RADIO);
-  m_menubar->add("SnapValue/100.0 meters", 0,
-		 (Fl_Callback*)EPATH_GUI::cb_SnapVal, (void*)10000, FL_MENU_RADIO);
-  m_menubar->add("SnapValue/50.0 meters", 0,
-		 (Fl_Callback*)EPATH_GUI::cb_SnapVal, (void*)5000, FL_MENU_RADIO);
-  m_menubar->add("SnapValue/10.0 meters", 0,
-		 (Fl_Callback*)EPATH_GUI::cb_SnapVal, (void*)1000, FL_MENU_RADIO|FL_MENU_VALUE);
-  m_menubar->add("SnapValue/ 5.0 meters", 0,
-		 (Fl_Callback*)EPATH_GUI::cb_SnapVal, (void*)500, FL_MENU_RADIO);
-  m_menubar->add("SnapValue/ 2.0 meters", 0,
-		 (Fl_Callback*)EPATH_GUI::cb_SnapVal, (void*)200, FL_MENU_RADIO);
-  m_menubar->add("SnapValue/ 1.0 meters", 0,
-		 (Fl_Callback*)EPATH_GUI::cb_SnapVal, (void*)100, FL_MENU_RADIO);
-  m_menubar->add("SnapValue/ 0.1 meters", 0,
-		 (Fl_Callback*)EPATH_GUI::cb_SnapVal, (void*)10, FL_MENU_RADIO);
-  m_menubar->add("SnapValue/ 0.01 meters", 0,
-		 (Fl_Callback*)EPATH_GUI::cb_SnapVal, (void*)1, FL_MENU_RADIO);
-  m_menubar->add("SnapValue/ 0.00 meters", 0,
-		 (Fl_Callback*)EPATH_GUI::cb_SnapVal, (void*)0, FL_MENU_RADIO);
-  m_menubar->add("SnapValue/Re-Apply To Current", 0,
-		 (Fl_Callback*)EPATH_GUI::cb_ReApplySnapVal, (void*)0, 0);
-
 
   m_menubar->add("Starts/Start1", '1',
 		 (Fl_Callback*)EPATH_GUI::cb_StartPoints, (void*)1);
@@ -147,16 +115,6 @@ int EPATH_GUI::handle(int event)
   }
 }
 
-//----------------------------------------- Rotate
-inline void EPATH_GUI::cb_Rotate_i(int v) {
-  pviewer->rotatePoints(v);
-  updateXY();
-  pviewer->redraw();
-}
-void EPATH_GUI::cb_Rotate(Fl_Widget* o, int v) {
-  ((EPATH_GUI*)(o->parent()->user_data()))->cb_Rotate_i(v);
-}
-
 //----------------------------------------- ShiftX
 inline void EPATH_GUI::cb_ShiftX_i(int amt) {
   pviewer->shiftHorzPoints((float)(amt));
@@ -187,81 +145,23 @@ void EPATH_GUI::cb_Grow(Fl_Widget* o, int v) {
   ((EPATH_GUI*)(o->parent()->user_data()))->cb_Grow_i(v);
 }
 
-//----------------------------------------- Reverse
-inline void EPATH_GUI::cb_Reverse_i() {
-  pviewer->reversePoints();
-  updateXY();
-  pviewer->redraw();
-}
-void EPATH_GUI::cb_Reverse(Fl_Widget* o) {
-  ((EPATH_GUI*)(o->parent()->user_data()))->cb_Reverse_i();
-}
-
-//----------------------------------------- SnapVal
-inline void EPATH_GUI::cb_SnapVal_i(int v) {
-  pviewer->setParam("snap", v/100.0);
-  updateXY();
-  pviewer->redraw();
-}
-void EPATH_GUI::cb_SnapVal(Fl_Widget* o, int v) {
-  ((EPATH_GUI*)(o->parent()->user_data()))->cb_SnapVal_i(v);
-}
-
-//----------------------------------------- ReApplySnapVal
-inline void EPATH_GUI::cb_ReApplySnapVal_i() {
-  pviewer->reApplySnapToCurrent();
-  updateXY();
-  pviewer->redraw();
-}
-void EPATH_GUI::cb_ReApplySnapVal(Fl_Widget* o) {
-  ((EPATH_GUI*)(o->parent()->user_data()))->cb_ReApplySnapVal_i();
-}
-
 //----------------------------------------- DumpPolySpec
 void EPATH_GUI::cb_DumpPolySpec_i() {
-  cout << "BORDER: " << pviewer->getBorderSpec() << endl;
-  cout << "GEN_POLY: " << pviewer->getGPolySpec() << endl;
+
 }
 void EPATH_GUI::cb_DumpPolySpec(Fl_Widget* o) {
   ((EPATH_GUI*)(o->parent()->user_data()))->cb_DumpPolySpec_i();
 }
   
-//----------------------------------------- DrawPts
-void EPATH_GUI::cb_DrawPts_i() {
-  pviewer->setParam("draw_pts", "toggle");
+//----------------------------------------- DrawDeads
+void EPATH_GUI::cb_DrawDeads_i() {
+  pviewer->setParam("draw_deads", "toggle");
   pviewer->redraw();
 }
-void EPATH_GUI::cb_DrawPts(Fl_Widget* o) {
-  ((EPATH_GUI*)(o->parent()->user_data()))->cb_DrawPts_i();
+void EPATH_GUI::cb_DrawDeads(Fl_Widget* o) {
+  ((EPATH_GUI*)(o->parent()->user_data()))->cb_DrawDeads_i();
 }
   
-//----------------------------------------- DrawSegl
-void EPATH_GUI::cb_DrawSegl_i() {
-  pviewer->setParam("draw_segl", "toggle");
-  pviewer->redraw();
-}
-void EPATH_GUI::cb_DrawSegl(Fl_Widget* o) {
-  ((EPATH_GUI*)(o->parent()->user_data()))->cb_DrawSegl_i();
-}
-  
-//----------------------------------------- DrawHull
-void EPATH_GUI::cb_DrawHull_i() {
-  pviewer->setParam("draw_hull", "toggle");
-  pviewer->redraw();
-}
-void EPATH_GUI::cb_DrawHull(Fl_Widget* o) {
-  ((EPATH_GUI*)(o->parent()->user_data()))->cb_DrawHull_i();
-}
-  
-//----------------------------------------- DrawGPoly
-void EPATH_GUI::cb_DrawGPoly_i() {
-  pviewer->setParam("draw_gpoly", "toggle");
-  pviewer->redraw();
-}
-void EPATH_GUI::cb_DrawGPoly(Fl_Widget* o) {
-  ((EPATH_GUI*)(o->parent()->user_data()))->cb_DrawGPoly_i();
-}
-
 //----------------------------------------- Solve
 void EPATH_GUI::cb_Solve_i(int amt) {
   //pviewer->updateGenPoly();
@@ -271,26 +171,6 @@ void EPATH_GUI::cb_Solve_i(int amt) {
 }
 void EPATH_GUI::cb_Solve(Fl_Widget* o, int amt) {
   ((EPATH_GUI*)(o->parent()->user_data()))->cb_Solve_i(10);
-}
-
-//----------------------------------------- KeepFulls
-void EPATH_GUI::cb_KeepFulls_i() {
-  pviewer->keepFulls(true);
-  pviewer->redraw();
-  updateXY();
-}
-void EPATH_GUI::cb_KeepFulls(Fl_Widget* o) {
-  ((EPATH_GUI*)(o->parent()->user_data()))->cb_KeepFulls_i();
-}
-
-//----------------------------------------- DropFulls
-void EPATH_GUI::cb_DropFulls_i() {
-  pviewer->keepFulls(false);
-  pviewer->redraw();
-  updateXY();
-}
-void EPATH_GUI::cb_DropFulls(Fl_Widget* o) {
-  ((EPATH_GUI*)(o->parent()->user_data()))->cb_DropFulls_i();
 }
 
 //----------------------------------------- ClearPolys
@@ -340,12 +220,4 @@ void EPATH_GUI::updateXY()
   dval = pviewer->getSolveTime();
   sval = doubleToString(dval,2);
   m_fld_solve->value(sval.c_str());
-
-  // SegList string
-  string str = pviewer->getBorderSpec();
-  m_fld_segl->value(str.c_str());
-
-  // GenPoly string
-  str = pviewer->getGPolySpec();
-  m_fld_gpoly->value(str.c_str());
 }

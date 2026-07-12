@@ -37,18 +37,11 @@ public:
   EPathViewer *pviewer;
 
 protected:
-  Fl_Button  *m_but_draw_pts;
-  Fl_Button  *m_but_draw_segl;
-  Fl_Button  *m_but_draw_hull;
-  Fl_Button  *m_but_draw_gpoly;
-
+  Fl_Button  *m_but_draw_deads;
   Fl_Button  *m_but_solve10;
   Fl_Button  *m_but_clear_polys;
   Fl_Button  *m_but_clear_solve;
 
-  Fl_Button  *m_but_keep_fulls;
-  Fl_Button  *m_but_drop_fulls;
-  
   Fl_Output  *m_fld_snap;
   Fl_Output  *m_fld_polys;
   Fl_Output  *m_fld_solve;
@@ -63,17 +56,8 @@ protected:
   void augmentMenu();
  
 private:
-  inline void cb_DrawPts_i();
-  static void cb_DrawPts(Fl_Widget*);
-
-  inline void cb_DrawSegl_i();
-  static void cb_DrawSegl(Fl_Widget*);
-
-  inline void cb_DrawHull_i();
-  static void cb_DrawHull(Fl_Widget*);
-
-  inline void cb_DrawGPoly_i();
-  static void cb_DrawGPoly(Fl_Widget*);
+  inline void cb_DrawDeads_i();
+  static void cb_DrawDeads(Fl_Widget*);
 
   inline void cb_Solve_i(int);
   static void cb_Solve(Fl_Widget*, int);
@@ -84,15 +68,6 @@ private:
   inline void cb_ClearSolve_i();
   static void cb_ClearSolve(Fl_Widget*);
 
-  inline void cb_KeepFulls_i();
-  static void cb_KeepFulls(Fl_Widget*);
-
-  inline void cb_DropFulls_i();
-  static void cb_DropFulls(Fl_Widget*);
-
-  inline void cb_Rotate_i(int);
-  static void cb_Rotate(Fl_Widget*, int);
-
   inline void cb_ShiftX_i(int);
   static void cb_ShiftX(Fl_Widget*, int);
 
@@ -102,21 +77,8 @@ private:
   inline void cb_Grow_i(int);
   static void cb_Grow(Fl_Widget*, int);
 
-  inline void cb_Reverse_i();
-  static void cb_Reverse(Fl_Widget*);
-
-  inline void cb_SnapVal_i(int);
-  static void cb_SnapVal(Fl_Widget*, int);
-
-  inline void cb_SetColor_i(int);
-  static void cb_SetColor(Fl_Widget*, int);
-
-  inline void cb_ReApplySnapVal_i();
-  static void cb_ReApplySnapVal(Fl_Widget*);
-
   inline void cb_DumpPolySpec_i();
   static void cb_DumpPolySpec(Fl_Widget*);
-
 
   inline void cb_StartPoints_i(int);
   static void cb_StartPoints(Fl_Widget*, int);
