@@ -170,13 +170,28 @@ void EPathViewer::draw()
     }
   }
 
-  XYSegList segl_shortest = m_pfield.getSeglShortest();
-  if(segl_shortest.size() > 0) {
-    segl_shortest.set_edge_color("green");
-    segl_shortest.set_vertex_color("white");  
-    drawSegList(segl_shortest);
+  if(m_pfield.getFocusPoly() < 0) {
+    XYSegList segl_shortest = m_pfield.getSeglShortest();
+    if(segl_shortest.size() > 0) {
+      segl_shortest.set_edge_color("green");
+      segl_shortest.set_vertex_color("white");  
+      drawSegList(segl_shortest);
+    }
   }
-  
+  else {
+    XYSegList seglp = m_pfield.getSeglShortestPort();
+    if(seglp.size() > 0) {
+      seglp.set_edge_color("pink");
+      seglp.set_vertex_color("white");  
+      drawSegList(seglp);
+    }
+    XYSegList segls = m_pfield.getSeglShortestStar();
+    if(segls.size() > 0) {
+      segls.set_edge_color("green");
+      segls.set_vertex_color("white");  
+      drawSegList(segls);
+    }
+  }
 }
 
 //-------------------------------------------------------------
@@ -377,5 +392,25 @@ void EPathViewer::growPoints(int gval)
 {
   double dgval = (double)(gval) / 100.0;
   m_segl.grow_by_pct(dgval);
+}
+
+// ----------------------------------------------------------
+// Procedure: getSeglShortest()
+
+string EPathViewer::getSeglShortest()
+{
+  XYSegList segl = m_pfield.getSeglShortest();
+  string spec = segl.get_spec();
+  return(spec);
+}
+
+// ----------------------------------------------------------
+// Procedure: getSeglShortestStar()
+
+string EPathViewer::getSeglShortestStar()
+{
+  XYSegList segl = m_pfield.getSeglShortestStar();
+  string spec = segl.get_spec();
+  return(spec);
 }
 

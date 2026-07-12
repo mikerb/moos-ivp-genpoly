@@ -220,4 +220,10 @@ void EPATH_GUI::updateXY()
   dval = pviewer->getSolveTime();
   sval = doubleToString(dval,2);
   m_fld_solve->value(sval.c_str());
+
+  sval = pviewer->getSeglShortest();
+  m_fld_segl_shortest->value(sval.c_str());
+
+  sval = pviewer->getSeglShortestStar();
+  m_fld_segl_star->value(sval.c_str());
 }

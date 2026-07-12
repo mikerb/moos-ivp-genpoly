@@ -51,11 +51,11 @@ void EPATH_GUI::initWidgets()
   m_fld_solve->set_output();
 
   //----------------------------------------------------------
-  m_fld_segl = new Fl_Output(0, 0, 1, 1, "seglist:"); 
-  m_fld_segl->set_output();
+  m_fld_segl_shortest = new Fl_Output(0, 0, 1, 1, "shortest:"); 
+  m_fld_segl_shortest->set_output();
 
-  m_fld_gpoly = new Fl_Output(0, 0, 1, 1, "gpoly:"); 
-  m_fld_gpoly->set_output();
+  m_fld_segl_star = new Fl_Output(0, 0, 1, 1, "star:"); 
+  m_fld_segl_star->set_output();
 }
 
 //--------------------------------------------------------------------------- 
@@ -138,13 +138,13 @@ void EPATH_GUI::resizeWidgetsShape()
   int lst_x = 80;
   int lst_y = row3;
   int lst_wid = w()-90;
-  m_fld_segl->resize(lst_x, lst_y, lst_wid, field_hgt);
+  m_fld_segl_shortest->resize(lst_x, lst_y, lst_wid, field_hgt);
 
   //---------------------------------------------------------
   int gps_x = 80;
   int gps_y = row4;
   int gps_wid = w()-90;
-  m_fld_gpoly->resize(gps_x, gps_y, gps_wid, field_hgt);
+  m_fld_segl_star->resize(gps_x, gps_y, gps_wid, field_hgt);
   
  }
  
@@ -171,10 +171,10 @@ void EPATH_GUI::resizeWidgetsText()
   m_fld_solve->textsize(text_size);
   m_fld_solve->labelsize(label_size);
 
-  m_fld_segl->textsize(text_size);
-  m_fld_segl->labelsize(label_size);
+  m_fld_segl_shortest->textsize(text_size);
+  m_fld_segl_shortest->labelsize(label_size);
 
-  m_fld_gpoly->textsize(text_size);
-  m_fld_gpoly->labelsize(label_size);
+  m_fld_segl_star->textsize(text_size);
+  m_fld_segl_star->labelsize(label_size);
 }
 

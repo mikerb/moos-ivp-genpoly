@@ -32,21 +32,28 @@ class PathField {
   double getDestY() const {return(m_dy);}
   
   void   addPoly(XYPolygon);
+  void   focusPoly(int);
   void   focusPoly(double x, double y);
+  void   focusPolyOff();
+
   void   clearPolys() {m_polys.clear();}
   void   clearSolve();
   void   solve();
 
   std::vector<XYPolygon> getPolys() const {return(m_polys);}  
-  XYSegList              getSeglShortest() const {return(m_segl_shortest);}
   std::vector<XYSegList> getSeglsDead() const {return(m_segls_dead);}
+
+  XYSegList   getSeglShortest() const {return(m_segl_shortest);}
+  XYSegList   getSeglShortestPort() const {return(m_segl_shortest_port);}
+  XYSegList   getSeglShortestStar() const {return(m_segl_shortest_star);}
 
   std::string getPolyPassSide(unsigned int);
 
   int getFocusPoly() {return(m_focus_poly);}
   
 private: // Utility functions
-  void solveAux(XYSegList, int depth=0);
+  void solveAux(XYSegList, int depth);
+  void solveAuxSide(XYSegList, int depth, int side);
 
   void genleg(double sx, double sy,
 	      double dx, double dy,
@@ -75,6 +82,14 @@ protected: // state vars
   XYSegList m_segl_shortest;
   double    m_dist_shortest;
 
+  XYSegList m_segl_shortest_star;
+  double    m_dist_shortest_star;
+
+  XYSegList m_segl_shortest_port;
+  double    m_dist_shortest_port;
+
+  
+  
   std::vector<XYSegList> m_segls_dead;
 
   int m_focus_poly;

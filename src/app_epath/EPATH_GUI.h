@@ -46,8 +46,8 @@ protected:
   Fl_Output  *m_fld_polys;
   Fl_Output  *m_fld_solve;
 
-  Fl_Output  *m_fld_segl;
-  Fl_Output  *m_fld_gpoly;
+  Fl_Output  *m_fld_segl_shortest;
+  Fl_Output  *m_fld_segl_star;
 
   int m_start_hgt;
   int m_start_wid;

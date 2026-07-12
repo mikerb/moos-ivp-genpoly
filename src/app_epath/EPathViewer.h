@@ -52,8 +52,9 @@ public:
 
   unsigned int getPolyCount() const {return(m_gen_poly.getPolyCount());}
   double       getSolveTime() const {return(m_solve_time);}
-  std::string  getSolveMethod() const {return(m_solve_method);}
-  bool         getSolveCollap() const {return(m_solve_collap);}
+
+  std::string getSeglShortest();
+  std::string getSeglShortestStar();
   
   void   updateConvexHull();
   void   updateGenPoly();

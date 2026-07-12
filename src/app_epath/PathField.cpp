@@ -30,10 +30,12 @@ PathField::PathField()
   m_dx = 0;
   m_dy = 0;
 
-  m_dist_shortest = -1; // -1 means no path found yet.
+  m_dist_shortest = -1;      // -1 means no path found yet.
+  m_dist_shortest_star = -1; // -1 means no path found yet.
+  m_dist_shortest_port = -1; // -1 means no path found yet.
 
   // Init config vars
-  m_branches   = 40;
+  m_branches   = 30;
   m_focus_poly = -1;
 }
 
@@ -47,7 +49,36 @@ void PathField::addPoly(XYPolygon poly)
     poly.set_label(label);
   }
   m_polys.push_back(poly);
+  clearSolve();
 }
+
+//---------------------------------------------------------------
+// Procedure: focusPoly()
+
+void PathField::focusPoly(int ix)
+{
+  if(ix < 0) {
+    m_focus_poly = -1;
+    return;
+  }
+    
+  if((unsigned int)(ix) >= m_polys.size())
+    return;
+
+  m_focus_poly = ix;
+  clearSolve();
+}
+
+
+//---------------------------------------------------------------
+// Procedure: focusPolyOff()
+
+void PathField::focusPolyOff()
+{
+  m_focus_poly = -1;
+  clearSolve();
+}
+
 
 //---------------------------------------------------------------
 // Procedure: focusPoly()
@@ -73,8 +104,6 @@ void PathField::focusPoly(double vx, double vy)
     m_focus_poly = -1;
   else if(focus_poly >= 0)
     m_focus_poly = focus_poly;
-  
-  cout << "Focus_poly:" << focus_poly << endl;
 }
 
 //---------------------------------------------------------------
@@ -85,6 +114,12 @@ void PathField::clearSolve()
   m_segls_dead.clear();
   m_segl_shortest.clear();
   m_dist_shortest = -1;
+
+  m_segl_shortest_port.clear();
+  m_dist_shortest_port = -1;
+
+  m_segl_shortest_star.clear();
+  m_dist_shortest_star = -1;
 }
 
 //---------------------------------------------------------------
@@ -96,7 +131,22 @@ void PathField::solve()
 
   XYSegList segl;
   segl.add_vertex(m_sx, m_sy);
-  solveAux(segl, 0);
+
+  if(m_focus_poly < 0)
+    solveAux(segl, 0);
+  else {
+    solveAuxSide(segl, 0, 0);
+    solveAuxSide(segl, 0, 1);
+    
+    if(m_dist_shortest_star < m_dist_shortest_port) {
+      m_dist_shortest = m_dist_shortest_star;
+      m_segl_shortest = m_segl_shortest_star;
+    }
+    else {
+      m_dist_shortest = m_dist_shortest_port;
+      m_segl_shortest = m_segl_shortest_port;
+    }
+  }
 }
 
 //---------------------------------------------------------------
@@ -134,6 +184,82 @@ void PathField::solveAux(XYSegList segl, int depth)
     }
     else {
       solveAux(new_segl, depth+1);
+    }
+  }
+}
+
+//---------------------------------------------------------------
+// Procedure: solveAuxSide()
+//      Note: side=0 port, side=1 star
+
+void PathField::solveAuxSide(XYSegList segl, int depth, int side)
+{
+  if(m_focus_poly < 0)
+    return;
+  
+  if(depth > 5)
+    return;
+  
+  XYPoint pt = segl.get_last_point();
+  double  sx = pt.x();
+  double  sy = pt.y();
+
+  for(unsigned int i=0; i<m_branches; i++) {
+    double rx,ry;
+    genleg(m_sx,m_sy, m_dx,m_dy, 40, 40, rx,ry);    
+    
+    XYSegList new_segl = segl;
+    new_segl.add_vertex(rx,ry);
+
+    // If this partial segl hits an obstacle, we're done with this segl
+    if(!freeSegl(new_segl)) {
+      m_segls_dead.push_back(new_segl);
+      continue;
+    }
+
+    // If the partial segl already passes the focus poly on the wrong
+    // side, we're done with this segl.
+    string pside = seglPassPoly(m_polys[m_focus_poly], new_segl);
+    if((side == 0) && (pside == "star")) {
+      m_segls_dead.push_back(new_segl);
+      continue;
+    }	
+    if((side == 1) && (pside == "port")) {
+      m_segls_dead.push_back(new_segl);
+      continue;
+    }	
+
+    // If partial segl extended hypothetically from the end of the
+    // segl directly to the dest (not checking yet for hitting other
+    // obstacles), does not have a improved shortest distance, we're
+    // done with this segl.
+    double full_dist = new_segl.length() + hypot(rx-m_dx, ry-m_dy);
+    if(side == 0) {
+      if((m_dist_shortest_port >= 0) && (full_dist >= m_dist_shortest_port))
+	continue;
+    }
+    else {
+      if((m_dist_shortest_star >= 0) && (full_dist >= m_dist_shortest_star))
+	continue;
+    }    
+
+    // If the partial segl can be extended collision-free to the dest,
+    // check if it is an improvement and satisfies the side.
+    if(fullSegl(new_segl)) {
+      new_segl.add_vertex(m_dx,m_dy);      
+      string pside = seglPassPoly(m_polys[m_focus_poly], new_segl);
+      
+      if((side == 0) && (pside == "port")) {
+	m_segl_shortest_port = new_segl;
+	m_dist_shortest_port = full_dist;
+      }
+      else if(pside == "star") {
+	m_segl_shortest_star = new_segl;
+	m_dist_shortest_star = full_dist;
+      }
+    }
+    else {
+      solveAuxSide(new_segl, depth+1, side);
     }
   }
 }
