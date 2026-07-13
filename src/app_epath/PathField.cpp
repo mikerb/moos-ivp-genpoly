@@ -181,6 +181,7 @@ void PathField::solveAux(XYSegList segl, int depth)
       new_segl.add_vertex(m_dx,m_dy);      
       m_segl_shortest = new_segl;
       m_dist_shortest = full_dist;
+      hedgeBestSegl();
     }
     else {
       solveAux(new_segl, depth+1);
@@ -252,10 +253,12 @@ void PathField::solveAuxSide(XYSegList segl, int depth, int side)
       if((side == 0) && (pside == "port")) {
 	m_segl_shortest_port = new_segl;
 	m_dist_shortest_port = full_dist;
+	hedgeBestSeglPort();
       }
       else if(pside == "star") {
 	m_segl_shortest_star = new_segl;
 	m_dist_shortest_star = full_dist;
+	hedgeBestSeglStar();
       }
     }
     else {
@@ -396,6 +399,11 @@ string PathField::getPolyPassSide(unsigned int ix)
 
 //---------------------------------------------------------------
 // Procedure: seglPassPoly()
+//   Purpose: Determine if the given seglist passes the given poly,
+//            and if so, on which side.
+//            To pass a poly, the segl (at least one segment) must
+//            cross the line perpendicular to the line between the
+//            source point (sx,sy) and the center of the polygon. 
 
 string PathField::seglPassPoly(XYPolygon poly, XYSegList segl)
 {
@@ -476,3 +484,90 @@ unsigned int PathField::crossRaySegl(double px, double py, double ph,
   }
   return(crosses);
 }  
+
+
+//---------------------------------------------------------------
+// Procedure: hedgeBestSegl()
+
+void PathField::hedgeBestSegl()
+{
+  XYSegList new_segl = simplifySegl(m_segl_shortest);
+  if(new_segl.size() == 0)
+    return;
+  m_segl_shortest = new_segl;
+  m_dist_shortest = new_segl.length();
+}
+
+//---------------------------------------------------------------
+// Procedure: hedgeBestSeglStar()
+
+void PathField::hedgeBestSeglStar()
+{
+  XYSegList new_segl = simplifySegl(m_segl_shortest_star);
+  if(new_segl.size() == 0)
+    return;
+  
+  string pside = seglPassPoly(m_polys[m_focus_poly], new_segl);
+  if(pside != "star")
+    return;
+  
+  m_segl_shortest_star = new_segl;
+  m_dist_shortest_star = new_segl.length();
+}
+
+
+//---------------------------------------------------------------
+// Procedure: hedgeBestSeglPort()
+
+void PathField::hedgeBestSeglPort()
+{
+  XYSegList new_segl = simplifySegl(m_segl_shortest_port);
+  if(new_segl.size() == 0)
+    return;
+  
+  string pside = seglPassPoly(m_polys[m_focus_poly], new_segl);
+  if(pside != "port")
+    return;
+  
+  m_segl_shortest_port = new_segl;
+  m_dist_shortest_port = new_segl.length();
+}
+
+
+//---------------------------------------------------------------
+// Procedure: simplifySegl()
+
+XYSegList PathField::simplifySegl(XYSegList segl)
+{
+  bool done = false;
+  while(!done) {
+    XYSegList new_segl = simplifySeglAux(segl);
+    if(new_segl.size() == 0)
+      done = true;
+    else
+      segl = new_segl;
+  }
+  return(segl);
+}
+
+  
+//---------------------------------------------------------------
+// Procedure: simplifySeglAux()
+
+XYSegList PathField::simplifySeglAux(XYSegList orig_segl)
+{
+  XYSegList null_segl;
+
+  if(orig_segl.size() < 3) 
+    return(null_segl);
+
+  for(unsigned int i=1; i<orig_segl.size()-1; i++) {
+    XYSegList segl = orig_segl;
+    segl.delete_vertex(i);
+    if(freeSegl(segl))
+      return(segl);
+  }
+  return(null_segl);
+}
+
+  

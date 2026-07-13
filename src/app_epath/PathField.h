@@ -67,6 +67,14 @@ private: // Utility functions
   std::string seglPassPoly(XYPolygon poly, XYSegList segl); 
 
   unsigned int crossRaySegl(double, double, double, const XYSegList&);
+
+  XYSegList simplifySegl(XYSegList segl);
+  XYSegList simplifySeglAux(XYSegList segl);
+
+  void hedgeBestSegl();
+  void hedgeBestSeglStar();
+  void hedgeBestSeglPort();
+
   
 protected: // state vars
   double m_sx;
