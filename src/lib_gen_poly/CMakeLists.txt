@@ -1,22 +1,22 @@
 #--------------------------------------------------------
-# The CMakeLists.txt for:                     lib_genpoly
+# The CMakeLists.txt for:                       lib_cover
 # Author(s):                                Mike Benjamin
 #--------------------------------------------------------
 
 SET(SRC
   CoverEngine.cpp
-  XYGenPolygon.cpp
+//  XYGenPolygon.cpp
 )
 
 SET(HEADERS
-  XYCoverPolyUtils.h
-  XYGenPolygon.h
+  CoverEngine.h
+//  XYGenPolygon.h
 )
 
 # Build Library
-ADD_LIBRARY(genpoly ${SRC})
+ADD_LIBRARY(cover ${SRC})
 
-TARGET_LINK_LIBRARIES(genpoly
+TARGET_LINK_LIBRARIES(cover
    mbutil
 )
 

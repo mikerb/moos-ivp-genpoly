@@ -392,7 +392,7 @@ void PolyViewer::rotatePoints(int rval)
 
 // ----------------------------------------------------------
 // Procedure: growPoints()
-//   Purpose: Expand the point cluster by the tive percent.
+//   Purpose: Expand the point cluster by the givne percent.
 //            Each point in the cluster growsin distance from 
 //            calculated center of the cluster.
 
