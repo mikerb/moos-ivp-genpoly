@@ -14,7 +14,7 @@ INCLUDE_DIRECTORIES(${LOCAL_LIBRARY_DIRS})
 #============================================================================
 # List the subdirectories to build...
 #============================================================================
-ADD_SUBDIRECTORY(lib_gen_poly)
+ADD_SUBDIRECTORY(lib_cover)
 ADD_SUBDIRECTORY(app_polyview)
 ADD_SUBDIRECTORY(app_epath)
 

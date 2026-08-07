@@ -22,6 +22,8 @@ ADD_EXECUTABLE(polyview ${SRC})
 TARGET_LINK_LIBRARIES(polyview
   marineview
   ${MOOSGeodesy_LIBRARIES}
+  helmivp
+  cover
   genpoly
   contacts
   mbutil

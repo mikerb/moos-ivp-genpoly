@@ -16,6 +16,7 @@
 #include "MarineViewer.h"
 #include "XYSegList.h"
 #include "XYGenPolygon.h"
+#include "PMGen_Dubins.h"
 
 class PolyViewer : public MarineViewer
 {
@@ -26,6 +27,7 @@ class PolyViewer : public MarineViewer
   void  draw();
   int   handle(int);
   void  handle_left_mouse(int, int, bool add=true);
+  void  handle_left_ownship(int, int);
   void  handle_right_mouse(int, int);
   bool  setParam(std::string param, std::string value);
   bool  setParam(std::string param, double value);
@@ -47,14 +49,20 @@ public:
   void   reversePoints();
   double getSnap() const  {return(m_snap_val);}
 
-  unsigned int getPolyCount() const {return(m_gen_poly.getPolyCount());}
-  double       getSolveTime() const {return(m_solve_time);}
+  unsigned int getPolyCount() const   {return(m_gen_poly.getPolyCount());}
+  double       getSolveTime() const   {return(m_solve_time);}
   std::string  getSolveMethod() const {return(m_solve_method);}
   bool         getSolveCollap() const {return(m_solve_collap);}
+
+  double getSeglrDistToExit() const   {return(m_seglr_dist_to_exit);}
+  double getOSHDistToExit() const     {return(m_osh_dist_to_exit);}
+  double getSegDistToExit() const     {return(m_seg_dist_to_exit);}
+  double getRayDistToExit() const     {return(m_ray_dist_to_exit);}
   
   void   updateConvexHull();
   void   updateGenPoly();
-
+  void   updateSeglr();
+  
 private: // Config vars
   bool   m_draw_pts;
   bool   m_draw_segl;
@@ -71,6 +79,21 @@ private:
 
   XYGenPolygon m_gen_poly;
 
+  PMGen_Dubins m_pmgen;
+  double  m_osx;
+  double  m_osy;
+  double  m_osh;
+  double  m_osv;
+  double  m_osturn;
+  
+  double  m_rad;  
+  XYSeglr m_seglr;
+
+  double  m_seglr_dist_to_exit;
+  double  m_osh_dist_to_exit;
+  double  m_seg_dist_to_exit;
+  double  m_ray_dist_to_exit;
+  
   double m_solve_time;
 };
 

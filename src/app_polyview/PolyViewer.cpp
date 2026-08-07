@@ -44,6 +44,22 @@ PolyViewer::PolyViewer(int x, int y, int w, int h, const char *l)
   
   // State vars init
   m_solve_time = 0;
+
+  m_osx = 0;
+  m_osy = -50;
+  m_osh = 45;
+  m_osv = 2.5;
+  m_rad = 15;
+  m_osturn = 30;
+  
+  m_seglr_dist_to_exit = -1;
+  m_osh_dist_to_exit = -1;
+  m_seg_dist_to_exit = -1;
+  m_ray_dist_to_exit = -1;
+    
+  
+  m_pmgen.setParam("radius", "15");
+  m_pmgen.setParam("spoke_degs", "12");
 }
 
 //-------------------------------------------------------------
@@ -59,6 +75,12 @@ int PolyViewer::handle(int event)
     if(Fl_Window::handle(event) != 1) {
 
       if((Fl::event_button() == FL_LEFT_MOUSE) &&
+	 (Fl::event_state(FL_CTRL))) {
+	cout << "Ownship!!" << endl;
+	handle_left_ownship(vx, vy);
+      }
+
+      else if((Fl::event_button() == FL_LEFT_MOUSE) &&
 	 (Fl::event_state(FL_ALT))) {
 	cout << "Insert!!" << endl;
 	handle_left_mouse(vx, vy, false);
@@ -155,6 +177,17 @@ void PolyViewer::draw()
     }
   }
 
+  // ------------------------------------------------------
+  // Draw ownship path
+  // ------------------------------------------------------
+
+  PlatModel plat_model = m_pmgen.generate(m_osx, m_osy, m_osh, m_osv);
+  
+  XYSeglr seglr = plat_model.getTurnSeglr(m_osh+m_osturn);
+  seglr.set_vertex_size(4);
+  seglr.set_edge_color("yellow");
+  seglr.set_vertex_color("white");
+  drawSeglr(seglr);  
 }
 
 //-------------------------------------------------------------
@@ -191,6 +224,22 @@ void PolyViewer::handle_right_mouse(int vx, int vy)
   m_segl.delete_vertex(mx, my);
 
   updateConvexHull();
+  updateGenPoly();
+  redraw();
+}
+
+//-------------------------------------------------------------
+// Procedure: handle_left_ownship()
+
+void PolyViewer::handle_left_ownship(int vx, int vy)
+{
+  double ix = view2img('x', vx);
+  double iy = view2img('y', vy);
+  double mx = img2meters('x', ix);
+  double my = img2meters('y', iy);
+
+  m_osx = mx;
+  m_osy = my;
   updateGenPoly();
   redraw();
 }
@@ -261,6 +310,20 @@ bool PolyViewer::setParam(string param, double pval)
   if(MarineViewer::setParam(param, pval))
     return(true);
 
+  else if(param == "osh") {
+    m_osh += pval;
+    updateGenPoly();
+  } 
+  else if(param == "rad") {
+    m_rad += pval;
+    m_pmgen.setParam("radius", doubleToString(m_rad));
+    updateGenPoly();
+  }    
+  else if(param == "turn") {
+    m_osturn += pval;
+    updateGenPoly();
+  }
+    
   else if((param == "start") && (pval == 1)) {
     string s = "pts={-40,-50:-40,-100:-20,-100:-20,-60:0,-60:0,-100:20,-100:20,-50}";
     m_segl = string2SegList(s);
@@ -470,5 +533,31 @@ void PolyViewer::updateGenPoly()
   m_gen_poly = engine.getGenPoly();
   timer.stop();
   m_solve_time = timer.get_float_wall_time();
+
+  updateSeglr();
 }  
 
+// ----------------------------------------------------------
+// Procedure: updateSeglr()
+
+void PolyViewer::updateSeglr()
+{
+  PlatModel plat_model = m_pmgen.generate(m_osx, m_osy, m_osh, m_osv);
+  
+  m_seglr = plat_model.getTurnSeglr(m_osh+m_osturn);
+
+  double rx = m_seglr.getRayBaseX();
+  double ry = m_seglr.getRayBaseY();
+  double ray_angle = m_seglr.getRayAngle();
+
+  
+  m_seglr_dist_to_exit = m_gen_poly.distSeglrToExitGP(m_seglr);
+  m_osh_dist_to_exit = m_gen_poly.distRayToExitGP(m_osx,m_osy,m_osh); 
+
+  XYSegList m_base = m_seglr.getBaseSegList();
+  
+  m_seg_dist_to_exit = m_gen_poly.distSeglToExitGP(m_base); 
+
+  
+  m_ray_dist_to_exit = m_gen_poly.distRayToExitGP(rx,ry,ray_angle); 
+}

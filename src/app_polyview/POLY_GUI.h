@@ -59,6 +59,12 @@ protected:
   Fl_Output  *m_fld_segl;
   Fl_Output  *m_fld_gpoly;
 
+  Fl_Output  *m_fld_seglr_dist;
+  Fl_Output  *m_fld_osh_dist;
+  
+  Fl_Output  *m_fld_seg_dist;
+  Fl_Output  *m_fld_ray_dist;
+  
   int m_start_hgt;
   int m_start_wid;
   
@@ -124,6 +130,15 @@ private:
 
   inline void cb_StartPoints_i(int);
   static void cb_StartPoints(Fl_Widget*, int);
+
+  inline void cb_OwnshipHdg_i(int);
+  static void cb_OwnshipHdg(Fl_Widget*, int);
+
+  inline void cb_OwnshipRad_i(int);
+  static void cb_OwnshipRad(Fl_Widget*, int);
+
+  inline void cb_OwnshipTurn_i(int);
+  static void cb_OwnshipTurn(Fl_Widget*, int);
 
 };
 #endif

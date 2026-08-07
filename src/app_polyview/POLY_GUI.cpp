@@ -29,7 +29,7 @@ POLY_GUI::POLY_GUI(int wid, int hgt, const char *label)
   m_start_hgt = hgt;
   m_start_wid = wid;
   
-  pviewer   = new PolyViewer(0, 30, wid, hgt-160);
+  pviewer   = new PolyViewer(0, 30, wid, hgt-190);
   m_mviewer = pviewer;
 
   augmentMenu();
@@ -77,7 +77,7 @@ void POLY_GUI::augmentMenu()
   m_menubar->add("Polygons/Shrink",  '[',
 		 (Fl_Callback*)POLY_GUI::cb_Grow, (void*)-1, 0);
 
-  m_menubar->add("Polygons/Reverse", 'R',
+  m_menubar->add("Polygons/Reverse", FL_ALT + 'r',
 		 (Fl_Callback*)POLY_GUI::cb_Reverse, (void*)0, 0);
   
   m_menubar->add("SnapValue/200.0 meters", 0,
@@ -121,6 +121,18 @@ void POLY_GUI::augmentMenu()
   m_menubar->add("Starts/Start8", '8',
 		 (Fl_Callback*)POLY_GUI::cb_StartPoints, (void*)8);
 
+  m_menubar->add("Ownship/Hdg++", 'm',
+		 (Fl_Callback*)POLY_GUI::cb_OwnshipHdg, (void*)1);
+  m_menubar->add("Ownship/Hdg--", 'n',
+		 (Fl_Callback*)POLY_GUI::cb_OwnshipHdg, (void*)-1);
+  m_menubar->add("Ownship/Radius++", 'R',
+		 (Fl_Callback*)POLY_GUI::cb_OwnshipRad, (void*)1);
+  m_menubar->add("Ownship/Radius--", 'r',
+		 (Fl_Callback*)POLY_GUI::cb_OwnshipRad, (void*)-1);
+  m_menubar->add("Ownship/Turn++", 'T',
+		 (Fl_Callback*)POLY_GUI::cb_OwnshipTurn, (void*)1);
+  m_menubar->add("Ownship/Turn--", 't',
+		 (Fl_Callback*)POLY_GUI::cb_OwnshipTurn, (void*)-1);
 }
 
 //----------------------------------------------------------
@@ -325,6 +337,36 @@ void POLY_GUI::cb_StartPoints(Fl_Widget* o, int i) {
   ((POLY_GUI*)(o->parent()->user_data()))->cb_StartPoints_i(i);
 }
   
+//----------------------------------------- OwnshipHdg
+void POLY_GUI::cb_OwnshipHdg_i(int val) {
+  pviewer->setParam("osh", (double)(val));
+  pviewer->redraw();
+  updateXY();
+}
+void POLY_GUI::cb_OwnshipHdg(Fl_Widget* o, int i) {
+  ((POLY_GUI*)(o->parent()->user_data()))->cb_OwnshipHdg_i(i);
+}
+  
+//----------------------------------------- OwnshipRad
+void POLY_GUI::cb_OwnshipRad_i(int val) {
+  pviewer->setParam("rad", (double)(val));
+  pviewer->redraw();
+  updateXY();
+}
+void POLY_GUI::cb_OwnshipRad(Fl_Widget* o, int i) {
+  ((POLY_GUI*)(o->parent()->user_data()))->cb_OwnshipRad_i(i);
+}
+  
+//----------------------------------------- OwnshipTurn
+void POLY_GUI::cb_OwnshipTurn_i(int val) {
+  pviewer->setParam("turn", (double)(val));
+  pviewer->redraw();
+  updateXY();
+}
+void POLY_GUI::cb_OwnshipTurn(Fl_Widget* o, int i) {
+  ((POLY_GUI*)(o->parent()->user_data()))->cb_OwnshipTurn_i(i);
+}
+  
 //----------------------------------------- UpdateXY
 void POLY_GUI::updateXY()
 { 
@@ -364,4 +406,24 @@ void POLY_GUI::updateXY()
   // GenPoly string
   str = pviewer->getGPolySpec();
   m_fld_gpoly->value(str.c_str());
+
+  // Seglr dist_to_exit string
+  dval = pviewer->getSeglrDistToExit();
+  sval = doubleToStringX(dval,3);
+  m_fld_seglr_dist->value(sval.c_str());
+
+  // osh dist_to_exit string
+  dval = pviewer->getOSHDistToExit();
+  sval = doubleToStringX(dval,3);
+  m_fld_osh_dist->value(sval.c_str());
+
+  // osh seg_to_exit string
+  dval = pviewer->getSegDistToExit();
+  sval = doubleToStringX(dval,3);
+  m_fld_seg_dist->value(sval.c_str());
+
+  // osh ray_to_exit string
+  dval = pviewer->getRayDistToExit();
+  sval = doubleToStringX(dval,3);
+  m_fld_ray_dist->value(sval.c_str());
 }

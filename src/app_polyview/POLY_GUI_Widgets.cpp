@@ -54,8 +54,8 @@ void POLY_GUI::initWidgets()
   m_but_method = new Fl_Button(0, 0, 1, 1, "Method");
   m_but_method->clear_visible_focus();
   m_but_method->callback((Fl_Callback*)POLY_GUI::cb_MethodToggle);
-  m_but_method->shortcut('m');
-  m_but_method->tooltip("Shortcut key is 'm'");
+  m_but_method->shortcut('d');
+  m_but_method->tooltip("Shortcut key is 'd'");
   
   m_but_collapse = new Fl_Button(0, 0, 1, 1, "Collapse");
   m_but_collapse->clear_visible_focus();
@@ -97,9 +97,22 @@ void POLY_GUI::initWidgets()
 
   m_fld_gpoly = new Fl_Output(0, 0, 1, 1, "gpoly:"); 
   m_fld_gpoly->set_output();
+
+  //----------------------------------------------------------
+  m_fld_seglr_dist = new Fl_Output(0, 0, 1, 1, "seglr_dist:"); 
+  m_fld_seglr_dist->set_output();
+
+  m_fld_osh_dist = new Fl_Output(0, 0, 1, 1, "osh_dist:"); 
+  m_fld_osh_dist->set_output();
+
+  m_fld_seg_dist = new Fl_Output(0, 0, 1, 1, "seg_dist:"); 
+  m_fld_seg_dist->set_output();
+
+  m_fld_ray_dist = new Fl_Output(0, 0, 1, 1, "ray_dist:"); 
+  m_fld_ray_dist->set_output();
 }
 
-//--------------------------------------------------------------------------- 
+//--------------------------------------------------------------------- 
 // Procedure: resizeWidgetsShape()     
 
 void POLY_GUI::resizeWidgetsShape()
@@ -109,10 +122,11 @@ void POLY_GUI::resizeWidgetsShape()
     extra_wid = 0;
   int field_hgt = 20;
 
-  int row1 = h() - 120;
+  int row1 = h() - 150;
   int row2 = row1 + 30;
   int row3 = row2 + 30;
   int row4 = row3 + 30;
+  int row5 = row4 + 30;
 
   int wid1 = 80;
   int wid2 = 90;
@@ -218,7 +232,7 @@ void POLY_GUI::resizeWidgetsShape()
   m_but_clear->resize(cle_x, cle_y, cle_wid, field_hgt);
 
   //---------------------------------------------------------
-  // Bottom Two ROWS
+  // Bottom Long format ROWS
   //---------------------------------------------------------
   int lst_x = 80;
   int lst_y = row3;
@@ -231,9 +245,32 @@ void POLY_GUI::resizeWidgetsShape()
   int gps_wid = w()-90;
   m_fld_gpoly->resize(gps_x, gps_y, gps_wid, field_hgt);
   
+  //---------------------------------------------------------
+  // Bottom ROW
+  //---------------------------------------------------------
+  int sde_x = 80;
+  int sde_y = row5;
+  int sde_wid = 50;
+  m_fld_seglr_dist->resize(sde_x, sde_y, sde_wid, field_hgt);
+
+  int ode_x = sde_x + sde_wid + 60;
+  int ode_y = row5;
+  int ode_wid = 50;
+  m_fld_osh_dist->resize(ode_x, ode_y, ode_wid, field_hgt);
+
+  int sgg_x = ode_x + ode_wid + 60;
+  int sgg_y = row5;
+  int sgg_wid = 50;
+  m_fld_seg_dist->resize(sgg_x, sgg_y, sgg_wid, field_hgt);
+
+  int ray_x = sgg_x + sgg_wid + 60;
+  int ray_y = row5;
+  int ray_wid = 50;
+  m_fld_ray_dist->resize(ray_x, ray_y, ray_wid, field_hgt);
+
  }
  
-//--------------------------------------------------------------------------- 
+//---------------------------------------------------------------- 
 // Procedure: resizeWidgetsText()
 
 void POLY_GUI::resizeWidgetsText()
@@ -275,5 +312,17 @@ void POLY_GUI::resizeWidgetsText()
 
   m_fld_gpoly->textsize(text_size);
   m_fld_gpoly->labelsize(label_size);
+
+  m_fld_seglr_dist->textsize(text_size);
+  m_fld_seglr_dist->labelsize(label_size);
+
+  m_fld_osh_dist->textsize(text_size);
+  m_fld_osh_dist->labelsize(label_size);
+
+  m_fld_seg_dist->textsize(text_size);
+  m_fld_seg_dist->labelsize(label_size);
+
+  m_fld_ray_dist->textsize(text_size);
+  m_fld_ray_dist->labelsize(label_size);
 }
 
