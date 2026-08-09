@@ -531,7 +531,7 @@ void PolyViewer::updateGenPoly()
   MBTimer timer;
   timer.start();
   m_gen_poly = engine.getGenPoly();
-  timer.stop();
+  timer.stop(); 
   m_solve_time = timer.get_float_wall_time();
 
   updateSeglr();
@@ -542,22 +542,27 @@ void PolyViewer::updateGenPoly()
 
 void PolyViewer::updateSeglr()
 {
+  //cout  << "in updateSeglr()" << endl;
   PlatModel plat_model = m_pmgen.generate(m_osx, m_osy, m_osh, m_osv);
   
   m_seglr = plat_model.getTurnSeglr(m_osh+m_osturn);
-
+ 
   double rx = m_seglr.getRayBaseX();
   double ry = m_seglr.getRayBaseY();
   double ray_angle = m_seglr.getRayAngle();
 
-  
   m_seglr_dist_to_exit = m_gen_poly.distSeglrToExitGP(m_seglr);
   m_osh_dist_to_exit = m_gen_poly.distRayToExitGP(m_osx,m_osy,m_osh); 
 
   XYSegList m_base = m_seglr.getBaseSegList();
-  
-  m_seg_dist_to_exit = m_gen_poly.distSeglToExitGP(m_base); 
 
-  
-  m_ray_dist_to_exit = m_gen_poly.distRayToExitGP(rx,ry,ray_angle); 
+  //cout << "base size:" << m_base.size() << endl;
+
+  bool exited = false;
+  m_seg_dist_to_exit = m_gen_poly.distSeglToExitGP(m_base, exited); 
+
+  m_ray_dist_to_exit = 0;
+  if(!exited)
+    m_ray_dist_to_exit = m_gen_poly.distRayToExitGP(rx,ry,ray_angle); 
 }
+ 
