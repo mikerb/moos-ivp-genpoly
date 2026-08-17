@@ -376,9 +376,9 @@ inline void POLY_GUI::cb_IPF_GUI_i()
   if(m_ipf_gui)
     delete(m_ipf_gui);
 
-  //m_ipf_gui = new BNG_IPF_GUI(700, 700, "IPF-GUI");
-  //m_ipf_gui->setPairModels(&m_pair_model_og, &m_pair_model_pm);
-  //m_ipf_gui->setParentGUI(this);
+  m_ipf_gui = new BNG_IPF_GUI(700, 700, "IPF-GUI");
+  m_ipf_gui->setXModel(&m_xmodel);
+  m_ipf_gui->setParentGUI(this);
 }
 
 void POLY_GUI::cb_IPF_GUI(Fl_Widget* o) {

@@ -74,7 +74,7 @@ void POLY_GUI::initWidgets()
   m_but_clear->callback((Fl_Callback*)POLY_GUI::cb_Clear);
 
 
-  m_but_ipf_gui = new Fl_Button(0, 0, 1, 1, "Open IPF GUI");
+  m_but_ipf_gui = new Fl_Button(0, 0, 1, 1, "IPF GUI");
   m_but_ipf_gui->clear_visible_focus();
   m_but_ipf_gui->callback((Fl_Callback*)POLY_GUI::cb_IPF_GUI);
   m_but_ipf_gui->shortcut('g');
@@ -238,6 +238,11 @@ void POLY_GUI::resizeWidgetsShape()
   int cle_wid = wid8;
   m_but_clear->resize(cle_x, cle_y, cle_wid, field_hgt);
 
+  int ipf_x = col8;
+  int ipf_y = row2;
+  int ipf_wid = wid8;
+  m_but_ipf_gui->resize(ipf_x, ipf_y, ipf_wid, field_hgt);
+
   //---------------------------------------------------------
   // Bottom Long format ROWS
   //---------------------------------------------------------
@@ -295,6 +300,7 @@ void POLY_GUI::resizeWidgetsText()
   m_but_collapse->labelsize(label_size);
   m_but_verbose->labelsize(label_size);
   m_but_clear->labelsize(label_size);
+  m_but_ipf_gui->labelsize(label_size);
   
   m_fld_snap->textsize(text_size);
   m_fld_snap->labelsize(label_size);

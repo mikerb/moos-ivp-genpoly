@@ -36,9 +36,8 @@ BNG_IPFViewer::BNG_IPFViewer(int x, int y, int w, int h, const char *label)
 
 
   // Helm/Behavior mechanics
-  m_pair_model_og = 0;
-  m_pair_model_pm = 0;
   m_bhv           = 0;
+  m_xmodel        = 0;
   m_info_buffer   = new InfoBuffer(); 
   m_ledger_snap   = new LedgerSnap();
 
@@ -67,6 +66,17 @@ BNG_IPFViewer::BNG_IPFViewer(int x, int y, int w, int h, const char *label)
   m_polar_pad  = 0.42;
   m_radius_pad = 1.75;
 
+}
+
+//-------------------------------------------------------------
+// Procedure: setXModel()
+
+void BNG_IPFViewer::setXModel(XModel *xmo)
+{
+  if(m_xmodel)
+    delete(m_xmodel);
+
+  m_xmodel = xmo;
 }
 
 //-------------------------------------------------------------
@@ -117,6 +127,7 @@ void BNG_IPFViewer::draw()
     drawPolarFrame(m_radius_pad);
   }
 
+#if 0
   if(m_draw_pin && m_pair_model_pm)  {
     unsigned int pin_hdg = m_pair_model_pm->get_des_hdg();
 
@@ -141,6 +152,7 @@ void BNG_IPFViewer::draw()
     drawCenteredShip(heading);
 
   drawOwnPoint();
+#endif
   glPopMatrix();
    
   glFlush(); 
@@ -205,6 +217,7 @@ void BNG_IPFViewer::resetIPF()
     m_bhv = 0;
   }  
 
+#if 0
   // If the previous pair/IPF has the same timestamp, it will
   // be replaced by the one about to be calculated.
   if(m_pair_history.size() != 0) {
@@ -220,12 +233,13 @@ void BNG_IPFViewer::resetIPF()
     m_curr_bhv_mode    = m_pair_history.front().get_mode();
     m_curr_bhv_submode = m_pair_history.front().get_submode();
   }
+#endif
   
   updateInfoBuffer();  
   IvPFunction *ipf = 0;
   cout << "Dbb 4: BNG_IPFViewer -- bhv_type = [" << m_bhv_type << "]" << endl;
   if(m_bhv_type == "opreg")
-    ipf = buildIPF_Opreg();
+    ipf = buildIPF_OpRegion();
 
   if(!ipf) {
     QuadSet null_quadset;
@@ -388,9 +402,12 @@ IvPFunction *BNG_IPFViewer::buildIPF_OpRegion()
   m_bhv = spawnBehavior("BHV_AvdColregsV26");
   if(!m_bhv)
     return(0);
+
+  if(!m_xmodel)
+    return(0);
  
   // Part 2: Create the PlatModel and pass to the behavior
-  PlatModel plat_model = updatePlatModel();
+  PlatModel plat_model = m_xmodel->getPlatModel();
   m_bhv->setPlatModel(plat_model);
 
   // Part 3: Update the InfoBuffer
@@ -431,44 +448,20 @@ IvPFunction *BNG_IPFViewer::buildIPF_OpRegion()
 
 // ----------------------------------------------------------
 // Procedure: updateInfoBuffer()
+//   Purpose: Update the InfoBuffer to be used by the behavior
 
 void BNG_IPFViewer::updateInfoBuffer()
 {
-  // Part 2: Update the InfoBuffer to be used by the behavior
 #if 0
-  m_info_buffer->setValue("NAV_X",       m_pair_model_og->get_zosx());
-  m_info_buffer->setValue("NAV_Y",       m_pair_model_og->get_zosy());
-  m_info_buffer->setValue("NAV_HEADING", m_pair_model_og->get_zosh());
-  m_info_buffer->setValue("NAV_SPEED",   m_pair_model_og->get_zosv());
+  // Sanity Check
+  if(!m_xmodel)
+    return;
+  
+  m_info_buffer->setValue("NAV_X",       m_xmodel->getOSX());
+  m_info_buffer->setValue("NAV_Y",       m_xmodel->getOSY());
+  m_info_buffer->setValue("NAV_HEADING", m_xmodel->getOSH());
+  m_info_buffer->setValue("NAV_SPEED",   m_xmodel->getOSV());
 #endif
-}
-
-// ----------------------------------------------------------
-// Procedure: updatePlatModel()
-
-PlatModel BNG_IPFViewer::updatePlatModel()
-{
-  PlatModel plat_model("holonomic");
-
-  // Sanity check
-  if(!m_pair_model_pm)
-    return(plat_model);
-  
-  PlatModelGenerator pmgen;
-  m_plat_model_config = m_pair_model_pm->getPlatModelSpec();
-  
-  bool ok = pmgen.setParams(m_plat_model_config);
-  if(!ok)
-    return(plat_model);
-
-  // The platform model is based on ownship root position, since
-  // The rendered IPF is always anchored to the root positions.  
-  double zosx = m_pair_model_og->get_zosx();
-  double zosy = m_pair_model_og->get_zosy();
-  double zosh = m_pair_model_og->get_zosh();
-  double zosv = m_pair_model_og->get_zosv();
-  
-  return(pmgen.generate(zosx, zosy, zosh, zosv));
 }
 
 
@@ -522,7 +515,6 @@ void BNG_IPFViewer::clearBehaviorModes()
 {
   m_curr_bhv_mode = "";
   m_curr_bhv_submode = "";
-  m_pair_history.clear();
 
   if(m_bhv) {
     delete(m_bhv);

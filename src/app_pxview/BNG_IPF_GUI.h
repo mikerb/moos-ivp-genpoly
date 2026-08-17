@@ -25,7 +25,7 @@
 #include "Common_IPF_GUI.h"
 #include "XModel.h"
 
-class BNG_GUI;
+class POLY_GUI;
 
 class BNG_IPF_GUI : public Common_IPF_GUI {
 public:
@@ -33,7 +33,7 @@ public:
   virtual ~BNG_IPF_GUI();
   
   // void setPairModels(PairModelOG*, PairModelPM*);
-  void setParentGUI(BNG_GUI *pgui) {m_parent_gui=pgui;}
+  void setParentGUI(POLY_GUI *pgui) {m_parent_gui=pgui;}
   
   int  handle(int);
   void clearBehaviorModes();
@@ -49,7 +49,7 @@ public:
   void resize(int, int, int, int);
   
  public:
-  BNG_GUI       *m_parent_gui;
+  POLY_GUI      *m_parent_gui;
   BNG_IPFViewer *m_ipf_viewer1;
   BNG_IPFViewer *m_ipf_viewer2;
 

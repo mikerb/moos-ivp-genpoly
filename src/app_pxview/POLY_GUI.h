@@ -29,12 +29,13 @@ public:
   
   void updateXY();
   int  handle(int);
+  void handleActionSubGUI(int i) {};
 
 protected:
   void initWidgets();
   void resizeWidgetsShape();
   void resizeWidgetsText();
-
+  
 public: 
   PolyViewer *pviewer;
   BNG_IPF_GUI *m_ipf_gui;

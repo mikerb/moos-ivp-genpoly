@@ -31,7 +31,8 @@ class BNG_IPFViewer : public Common_IPFViewer
   void   resetIPF();
   void   resetIPFX();
   void   updateXY();
-
+  void   setXModel(XModel*);
+  
  public: // Helm/behavior mechanics
   bool   setBehaviorType(std::string);
   void   setDomain(IvPDomain dom) {m_domain=dom;}
@@ -84,7 +85,6 @@ class BNG_IPFViewer : public Common_IPFViewer
   IvPFunction*  buildIPF_OpRegion();
   
   void      updateInfoBuffer();
-  PlatModel updatePlatModel();
   
  private:
 

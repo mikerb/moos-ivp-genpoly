@@ -14,9 +14,9 @@ SET(SRC
   POLY_GUI.cpp
   POLY_GUI_Widgets.cpp
   PolyViewer.cpp
-#  BNG_IPF_GUI.cpp
-#  BNG_IPF_GUI_Widgets.cpp
-#  BNG_IPFViewer.cpp
+  BNG_IPF_GUI.cpp
+  BNG_IPF_GUI_Widgets.cpp
+  BNG_IPFViewer.cpp
  XModel.cpp
  main.cpp
 )
@@ -27,11 +27,25 @@ TARGET_LINK_LIBRARIES(pxview
   marineview
   ${MOOSGeodesy_LIBRARIES}
   helmivp
+  behaviors-marine
+  behaviors-colregs
+  behaviors
+  dep_behaviors
+  turngeo
   cover
+  helmivp
+  bhvutil
+  apputil
+  genutil
+  logic
+  logutils
   gen_poly
-  contacts
-  mbutil
   geometry
+  contacts
+  ipfview
+  ivpbuild
+  mbutil
+  ivpcore
   ${SYSTEM_LIBS}
   
   # Standard libraries used by this project's FLTK apps...

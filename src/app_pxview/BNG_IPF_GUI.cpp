@@ -13,7 +13,7 @@
 #include <cstdlib>
 #include <iostream>
 #include "BNG_IPF_GUI.h"
-#include "BNG_GUI.h"
+#include "POLY_GUI.h"
 #include "MBUtils.h"
 #include "FL/fl_ask.H"
 
@@ -234,31 +234,6 @@ void BNG_IPF_GUI::setXModel(XModel *xmo)
     m_ipf_viewer2->setXModel(xmo);
   updateXY();
 }
-
-//--------------------------------------------------------------------------- 
-// Procedure: setPairModels()
-//      Note: The GUI doesn't need the PairModels, but just passes it on to
-//            the viewers. The viewer uses the OG model to get ownship
-//            position, heading and speed. It uses the PM model to reconstruct
-//            the PlatModel to pass to behaviors.
-
-void BNG_IPF_GUI::setPairModels(PairModelOG* pmodel_og, PairModelPM* pmodel_pm)
-{ 
-  if(m_ipf_viewer1) {
-    m_ipf_viewer1->setPairModelOG(pmodel_og);
-    m_ipf_viewer1->setPairModelPM(pmodel_pm);
-    m_ipf_viewer1->resetIPF();
-    m_ipf_viewer1->redraw();
-  }
-  if(m_ipf_viewer2) {
-    m_ipf_viewer2->setPairModelOG(pmodel_og);
-    m_ipf_viewer2->setPairModelPM(pmodel_pm);
-    m_ipf_viewer2->resetIPF();
-    m_ipf_viewer2->redraw();
-  }
-  updateXY();
-}
-
 
 //-------------------------------------------------------------
 // Procedure: resize()
