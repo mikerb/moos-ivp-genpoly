@@ -24,7 +24,7 @@ TARGET_LINK_LIBRARIES(polyview
   ${MOOSGeodesy_LIBRARIES}
   helmivp
   cover
-  genpoly
+  gen_poly
   contacts
   mbutil
   geometry

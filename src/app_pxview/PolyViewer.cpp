@@ -46,21 +46,10 @@ PolyViewer::PolyViewer(int x, int y, int w, int h, const char *l)
   // State vars init
   m_solve_time = 0;
 
-  m_osx = 0;
-  m_osy = -50;
-  m_osh = 45;
-  m_osv = 2.5;
-  m_rad = 15;
-  m_osturn = 30;
-  
   m_seglr_dist_to_exit = -1;
   m_osh_dist_to_exit = -1;
   m_seg_dist_to_exit = -1;
   m_ray_dist_to_exit = -1;
-    
-  
-  m_pmgen.setParam("radius", "15");
-  m_pmgen.setParam("spoke_degs", "12");
 }
 
 //-------------------------------------------------------------
@@ -157,18 +146,20 @@ void PolyViewer::draw()
   // Draw ConvexHull
   // ------------------------------------------------------
   if(m_draw_hull) {
-    if(m_hull_poly.is_convex()) {
-      m_hull_poly.set_vertex_size(4);
-      m_hull_poly.set_vertex_color("yellow");
-      m_hull_poly.set_label("hull");
-      m_hull_poly.set_label_color("off");
-      m_hull_poly.set_edge_color("dodger_blue");
-      drawPolygon(m_hull_poly);
+    XYPolygon hull_poly = getConvexHull();
+    if(hull_poly.is_convex()) {
+      hull_poly.set_vertex_size(4);
+      hull_poly.set_vertex_color("yellow");
+      hull_poly.set_label("hull");
+      hull_poly.set_label_color("off");
+      hull_poly.set_edge_color("dodger_blue");
+      drawPolygon(hull_poly);
     }
   }
 
   if(m_draw_gpoly) {
-    vector<XYPolygon> polys = m_gen_poly.getCoverPolys();
+    XYGenPolygon gen_poly = m_xmodel.getGenPoly();
+    vector<XYPolygon> polys = gen_poly.getCoverPolys();
     //cout << "total polys:" << polys.size() << endl;
     for(unsigned int i=0; i<polys.size(); i++) {
       XYPolygon poly = polys[i];
@@ -179,12 +170,28 @@ void PolyViewer::draw()
   }
 
   // ------------------------------------------------------
+  // Draw ownship trajectory
+  // ------------------------------------------------------
+  double osx = m_xmodel.getOSX();
+  double osy = m_xmodel.getOSY();
+  double osh = m_xmodel.getOSH();
+  double osv = m_xmodel.getOSV();
+  XYVector vect(osx, osy, osv*4, osh);
+
+  vect.setHeadSize(2);
+  vect.set_edge_color("gray70");
+  vect.set_vertex_color("gray70");
+  vect.set_label("osvect");
+  vect.set_label_color("off");
+  vect.set_color("head", "light_blue");
+
+  drawVector(vect);
+    
+  
+  // ------------------------------------------------------
   // Draw ownship path
   // ------------------------------------------------------
-
-  PlatModel plat_model = m_pmgen.generate(m_osx, m_osy, m_osh, m_osv);
-  
-  XYSeglr seglr = plat_model.getTurnSeglr(m_osh+m_osturn);
+  XYSeglr seglr = m_xmodel.getTurnSeglr();
   seglr.set_vertex_size(4);
   seglr.set_edge_color("yellow");
   seglr.set_vertex_color("white");
@@ -208,7 +215,6 @@ void PolyViewer::handle_left_mouse(int vx, int vy, bool add_point)
   else
     m_segl.insert_vertex(sx, sy);
 
-  updateConvexHull();
   updateGenPoly();
   redraw();
 }
@@ -224,7 +230,6 @@ void PolyViewer::handle_right_mouse(int vx, int vy)
   double my = img2meters('y', iy);
   m_segl.delete_vertex(mx, my);
 
-  updateConvexHull();
   updateGenPoly();
   redraw();
 }
@@ -239,8 +244,9 @@ void PolyViewer::handle_left_ownship(int vx, int vy)
   double mx = img2meters('x', ix);
   double my = img2meters('y', iy);
 
-  m_osx = mx;
-  m_osy = my;
+  m_xmodel.setOSX(mx);
+  m_xmodel.setOSY(my);
+  
   updateGenPoly();
   redraw();
 }
@@ -314,23 +320,21 @@ bool PolyViewer::setParam(string param, double pval)
     return(true);
 
   else if(param == "osh") {
-    m_osh += pval;
+    m_xmodel.modOSH(pval);
     updateGenPoly();
   } 
   else if(param == "rad") {
-    m_rad += pval;
-    m_pmgen.setParam("radius", doubleToString(m_rad));
+    m_xmodel.modTurnRad(pval);
     updateGenPoly();
   }    
   else if(param == "turn") {
-    m_osturn += pval;
+    m_xmodel.modDesHdg(pval);
     updateGenPoly();
   }
     
   else if((param == "start") && (pval == 1)) {
     string s = "pts={-40,-50:-40,-100:-20,-100:-20,-60:0,-60:0,-100:20,-100:20,-50}";
     m_segl = string2SegList(s);
-    updateConvexHull();
     updateGenPoly();
   }
 
@@ -338,35 +342,30 @@ bool PolyViewer::setParam(string param, double pval)
     string s = "pts={-45,-100:-25,-85:0,-75:30,-75:50,-85:65,-100:40,-100:30,-85:";
     s += "0,-85:-15,-100}";
     m_segl = string2SegList(s);
-    updateConvexHull();
     updateGenPoly();
   }
   else if((param == "start") && (pval == 3)) {
     string s = "pts={-45,-65:-25,-45:-15,-65:0,-45:10,-65:25,-45:35,-65:";
     s += "50,-45:60,-65:60,-100:-45,-100}";
     m_segl = string2SegList(s);
-    updateConvexHull();
     updateGenPoly();
   }
   else if((param == "start") && (pval == 4)) {
     string s = "pts={2,-52:-16,-72:-8,-114:38,-126:82,-88:76,-54:64,-16:";
     s += "32,-2:-4,-8:-30,-22:-38,-32:-30,-42:-10,-42:14,-36:48,-46:52,-72:36,-94:16,-96}";
     m_segl = string2SegList(s);
-    updateConvexHull();
     updateGenPoly();
   }
   else if((param == "start") && (pval == 5)) {
     string s = "pts={18,-44:-2,-66:-4,-102:36,-118:62,-84:92,-66:86,-36:66,-4:36,2:";
     s += "-2,-10:-20,-34:4,-36:40,-26:72,-44:50,-64:46,-86:32,-98:18,-68:40,-44}";
     m_segl = string2SegList(s);
-    updateConvexHull();
     updateGenPoly();
   }
   else if((param == "start") && (pval == 6)) {
     string s = "pts={12,-18:24,-28:32,-18:44,-32:56,-32:58,-44:72,-42:70,-64:78,-78:";
     s += "56,-88:60,-100:34,-96:20,-108:26,-66:-2,-88:10,-58:-26,-60:30,-46:-34,-36}";
     m_segl = string2SegList(s);
-    updateConvexHull();
     updateGenPoly();
   }
   else if((param == "start") && (pval == 7)) {
@@ -374,14 +373,17 @@ bool PolyViewer::setParam(string param, double pval)
     s += "116,-38:112,-4:78,8:88,-24:86,-62:70,-86:48,-100:30,-94:42,-74:62,-60:";
     s += "68,-28:50,-4:-50,-40}";
     m_segl = string2SegList(s);
-    updateConvexHull();
     updateGenPoly();
   }
   else if((param == "start") && (pval == 8)) {
     string s = "pts={74,0:82,-30:90,-68:90,-102:66,-130:38,-132:6,-118:-12,-102:";
     s += "-26,-58:-6,-24:0,-56:10,-88:32,-106:58,-112:76,-98:74,-66:66,-44:58,-28}";
     m_segl = string2SegList(s);
-    updateConvexHull();
+    updateGenPoly();
+  }
+  else if((param == "start") && (pval == 9)) {
+    string s = "pts={2,-14:-42,-74:36,-130:96,-58:24,-72}";
+    m_segl = string2SegList(s);
     updateGenPoly();
   }
   
@@ -402,8 +404,6 @@ bool PolyViewer::setParam(string param, double pval)
 void PolyViewer::clear()
 {  
   m_segl.clear();
-  m_hull_poly.clear();
-  m_gen_poly.clear();
   m_solve_time = 0;
 }
 
@@ -419,8 +419,9 @@ string PolyViewer::getBorderSpec()
 // Procedure: getGPolySpec()
 
 string PolyViewer::getGPolySpec()
-{  
-  return(m_gen_poly.get_spec());
+{
+  XYGenPolygon gen_poly = m_xmodel.getGenPoly();
+  return(gen_poly.get_spec());
 }
 
 // ----------------------------------------------------------
@@ -429,7 +430,6 @@ string PolyViewer::getGPolySpec()
 void PolyViewer::shiftHorzPoints(double shift_val)
 {
   m_segl.shift_horz(shift_val);
-  updateConvexHull();
   updateGenPoly();
 }
 
@@ -439,20 +439,19 @@ void PolyViewer::shiftHorzPoints(double shift_val)
 void PolyViewer::shiftVertPoints(double shift_val)
 {
   m_segl.shift_vert(shift_val);
-  updateConvexHull();
   updateGenPoly();
 }
 
 // ----------------------------------------------------------
 // Procedure: rotatePoints()
-//   Purpose: Rotate the points around its center by the given
-//            number of degrees. Each point in the cluster is 
-//            rotated around the calculated center of the clsteru
+//   Purpose: Rotate the points around its center by the 
+//            given number of degrees. Each point in the 
+//            cluster is rotated around the calculated center
+//            of the cluster.
 
 void PolyViewer::rotatePoints(int rval)
 {
   m_segl.rotate(rval);
-  updateConvexHull();
   updateGenPoly();
 }
 
@@ -466,7 +465,6 @@ void PolyViewer::growPoints(int gval)
 {
   double dgval = (double)(gval) / 100.0;
   m_segl.grow_by_pct(dgval);
-  updateConvexHull();
   updateGenPoly();
 }
 
@@ -477,8 +475,16 @@ void PolyViewer::growPoints(int gval)
 void PolyViewer::reversePoints()
 {
   m_segl.reverse();
-  updateConvexHull();
   updateGenPoly();
+}
+
+// ----------------------------------------------------------
+// Procedure: getPolyCount()
+
+unsigned int PolyViewer::getPolyCount() const
+{
+  XYGenPolygon gen_poly = m_xmodel.getGenPoly();
+  return(gen_poly.getPolyCount());
 }
 
 // ----------------------------------------------------------
@@ -487,21 +493,21 @@ void PolyViewer::reversePoints()
 void PolyViewer::reApplySnapToCurrent()
 {
   m_segl.apply_snap(m_snap_val);
-  updateConvexHull();
   updateGenPoly();
 }
 
 
 // ----------------------------------------------------------
-// Procedure: updateConvexHull()
+// Procedure: getConvexHull()
 
-void PolyViewer::updateConvexHull()
+XYPolygon PolyViewer::getConvexHull()
 {
+  XYPolygon null_poly;
   if(!m_draw_hull)
-    return;
+    return(null_poly);
   
   if(m_segl.size() < 3)
-    return;
+    return(null_poly);
   
   ConvexHullGenerator generator;
 
@@ -511,7 +517,8 @@ void PolyViewer::updateConvexHull()
     generator.addPoint(vx, vy);
   }
 
-  m_hull_poly = generator.generateConvexHull();
+  XYPolygon convex_hull_poly = generator.generateConvexHull();
+  return(convex_hull_poly);
 }
 
 // ----------------------------------------------------------
@@ -533,7 +540,11 @@ void PolyViewer::updateGenPoly()
 
   MBTimer timer;
   timer.start();
-  m_gen_poly = engine.getGenPoly();
+
+  XYGenPolygon gen_poly = engine.getGenPoly();
+  m_xmodel.setGenPoly(gen_poly);
+  //m_gen_poly = engine.getGenPoly();
+
   timer.stop(); 
   m_solve_time = timer.get_float_wall_time();
 
@@ -546,27 +557,36 @@ void PolyViewer::updateGenPoly()
 void PolyViewer::updateSeglr()
 {
   //cout  << "in updateSeglr()" << endl;
-  PlatModel plat_model = m_pmgen.generate(m_osx, m_osy, m_osh, m_osv);
+  PlatModel plat_model = m_xmodel.getPlatModel();
+  double osx = m_xmodel.getOSX();
+  double osy = m_xmodel.getOSY();
+  double osh = m_xmodel.getOSH();
   
-  m_seglr = plat_model.getTurnSeglr(m_osh+m_osturn);
+  XYSeglr seglr = m_xmodel.getTurnSeglr();
  
-  double rx = m_seglr.getRayBaseX();
-  double ry = m_seglr.getRayBaseY();
-  double ray_angle = m_seglr.getRayAngle();
+  double rx = seglr.getRayBaseX();
+  double ry = seglr.getRayBaseY();
+  double ray_angle = seglr.getRayAngle();
 
-  m_seglr_dist_to_exit = m_gen_poly.distSeglrToExitGP(m_seglr);
-  m_osh_dist_to_exit = m_gen_poly.distRayToExitGP(m_osx,m_osy,m_osh); 
+  XYGenPolygon gen_poly = m_xmodel.getGenPoly();
+  
+  //m_seglr_dist_to_exit = m_gen_poly.distSeglrToExitGP(m_seglr);
+  //m_osh_dist_to_exit = m_gen_poly.distRayToExitGP(m_osx,m_osy,m_osh); 
+  m_seglr_dist_to_exit = gen_poly.distSeglrToExitGP(seglr);
+  m_osh_dist_to_exit = gen_poly.distRayToExitGP(osx,osy,osh); 
 
-  XYSegList m_base = m_seglr.getBaseSegList();
+  XYSegList m_base = seglr.getBaseSegList();
 
   //cout << "base size:" << m_base.size() << endl;
 
   bool exited = false;
-  m_seg_dist_to_exit = m_gen_poly.distSeglToExitGP(m_base, exited); 
+  //m_seg_dist_to_exit = m_gen_poly.distSeglToExitGP(m_base, exited); 
+  m_seg_dist_to_exit = gen_poly.distSeglToExitGP(m_base, exited); 
 
   m_ray_dist_to_exit = 0;
   if(!exited)
-    m_ray_dist_to_exit = m_gen_poly.distRayToExitGP(rx,ry,ray_angle); 
+    //m_ray_dist_to_exit = m_gen_poly.distRayToExitGP(rx,ry,ray_angle); 
+    m_ray_dist_to_exit = gen_poly.distRayToExitGP(rx,ry,ray_angle); 
 }
  
 // ----------------------------------------------------------

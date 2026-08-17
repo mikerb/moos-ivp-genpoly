@@ -1,5 +1,5 @@
 #--------------------------------------------------------
-# The CMakeLists.txt for:                           epath
+# The CMakeLists.txt for:                          pxview
 # Author(s):                                Mike Benjamin
 #--------------------------------------------------------
 
@@ -11,20 +11,25 @@ if(CMAKE_SYSTEM_NAME STREQUAL Linux)
 endif(CMAKE_SYSTEM_NAME STREQUAL Linux)
 
 SET(SRC
-  EPATH_GUI.cpp
-  EPATH_GUI_Widgets.cpp
-  EPathViewer.cpp
-  PathField.cpp
-  main.cpp
+  POLY_GUI.cpp
+  POLY_GUI_Widgets.cpp
+  PolyViewer.cpp
+#  BNG_IPF_GUI.cpp
+#  BNG_IPF_GUI_Widgets.cpp
+#  BNG_IPFViewer.cpp
+ XModel.cpp
+ main.cpp
 )
 
-ADD_EXECUTABLE(epath ${SRC})
+ADD_EXECUTABLE(pxview ${SRC})
 
-TARGET_LINK_LIBRARIES(epath
+TARGET_LINK_LIBRARIES(pxview
   marineview
   ${MOOSGeodesy_LIBRARIES}
-  contacts
+  helmivp
+  cover
   gen_poly
+  contacts
   mbutil
   geometry
   ${SYSTEM_LIBS}
@@ -37,7 +42,7 @@ TARGET_LINK_LIBRARIES(epath
 
 # http://developer.apple.com/qa/qa2007/qa1567.html
 IF (${APPLE})
-  SET_TARGET_PROPERTIES(epath PROPERTIES	  
+  SET_TARGET_PROPERTIES(pxview PROPERTIES	  
     LINK_FLAGS "-framework OpenGL -framework Cocoa"
     )
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-cast-function-type ")

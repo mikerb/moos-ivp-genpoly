@@ -5,12 +5,10 @@
 
 SET(SRC
   CoverEngine.cpp
-//  XYGenPolygon.cpp
 )
 
 SET(HEADERS
   CoverEngine.h
-//  XYGenPolygon.h
 )
 
 # Build Library
