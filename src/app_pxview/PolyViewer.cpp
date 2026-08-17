@@ -44,6 +44,7 @@ PolyViewer::PolyViewer(int x, int y, int w, int h, const char *l)
   m_solve_method = "shallow"; 
   
   // State vars init
+  m_xmodel = 0;
   m_solve_time = 0;
 
   m_seglr_dist_to_exit = -1;
@@ -142,6 +143,10 @@ void PolyViewer::draw()
     drawSegList(m_segl);
   }
 
+  // Sanity check
+  if(!m_xmodel)
+    return;
+
   // ------------------------------------------------------
   // Draw ConvexHull
   // ------------------------------------------------------
@@ -158,7 +163,7 @@ void PolyViewer::draw()
   }
 
   if(m_draw_gpoly) {
-    XYGenPolygon gen_poly = m_xmodel.getGenPoly();
+    XYGenPolygon gen_poly = m_xmodel->getGenPoly();
     vector<XYPolygon> polys = gen_poly.getCoverPolys();
     //cout << "total polys:" << polys.size() << endl;
     for(unsigned int i=0; i<polys.size(); i++) {
@@ -172,10 +177,10 @@ void PolyViewer::draw()
   // ------------------------------------------------------
   // Draw ownship trajectory
   // ------------------------------------------------------
-  double osx = m_xmodel.getOSX();
-  double osy = m_xmodel.getOSY();
-  double osh = m_xmodel.getOSH();
-  double osv = m_xmodel.getOSV();
+  double osx = m_xmodel->getOSX();
+  double osy = m_xmodel->getOSY();
+  double osh = m_xmodel->getOSH();
+  double osv = m_xmodel->getOSV();
   XYVector vect(osx, osy, osv*4, osh);
 
   vect.setHeadSize(2);
@@ -191,7 +196,7 @@ void PolyViewer::draw()
   // ------------------------------------------------------
   // Draw ownship path
   // ------------------------------------------------------
-  XYSeglr seglr = m_xmodel.getTurnSeglr();
+  XYSeglr seglr = m_xmodel->getTurnSeglr();
   seglr.set_vertex_size(4);
   seglr.set_edge_color("yellow");
   seglr.set_vertex_color("white");
@@ -239,13 +244,17 @@ void PolyViewer::handle_right_mouse(int vx, int vy)
 
 void PolyViewer::handle_left_ownship(int vx, int vy)
 {
+  // Sanity check
+  if(!m_xmodel)
+    return;
+
   double ix = view2img('x', vx);
   double iy = view2img('y', vy);
   double mx = img2meters('x', ix);
   double my = img2meters('y', iy);
 
-  m_xmodel.setOSX(mx);
-  m_xmodel.setOSY(my);
+  m_xmodel->setOSX(mx);
+  m_xmodel->setOSY(my);
   
   updateGenPoly();
   redraw();
@@ -274,8 +283,6 @@ bool PolyViewer::setParam(string param, string value)
     cout << "handled:" << handled << endl; 
   }
 
-  else if(param == "border_file") 
-    addBorderFile(value);
   else if(param == "draw_pts") 
     setBooleanOnString(m_draw_pts, value);
   else if(param == "draw_segl") 
@@ -316,19 +323,22 @@ bool PolyViewer::setParam(string param, string value)
 
 bool PolyViewer::setParam(string param, double pval)
 {
+  if(!m_xmodel)
+    return(false);
+
   if(MarineViewer::setParam(param, pval))
     return(true);
 
   else if(param == "osh") {
-    m_xmodel.modOSH(pval);
+    m_xmodel->modOSH(pval);
     updateGenPoly();
   } 
   else if(param == "rad") {
-    m_xmodel.modTurnRad(pval);
+    m_xmodel->modTurnRad(pval);
     updateGenPoly();
   }    
   else if(param == "turn") {
-    m_xmodel.modDesHdg(pval);
+    m_xmodel->modDesHdg(pval);
     updateGenPoly();
   }
     
@@ -387,7 +397,6 @@ bool PolyViewer::setParam(string param, double pval)
     updateGenPoly();
   }
   
-  
   else if(param == "snap") {
     m_snap_val = pval;
     return(true);
@@ -420,7 +429,11 @@ string PolyViewer::getBorderSpec()
 
 string PolyViewer::getGPolySpec()
 {
-  XYGenPolygon gen_poly = m_xmodel.getGenPoly();
+  // Sanity Check
+  if(!m_xmodel)
+    return("");
+
+  XYGenPolygon gen_poly = m_xmodel->getGenPoly();
   return(gen_poly.get_spec());
 }
 
@@ -483,7 +496,11 @@ void PolyViewer::reversePoints()
 
 unsigned int PolyViewer::getPolyCount() const
 {
-  XYGenPolygon gen_poly = m_xmodel.getGenPoly();
+  // Sanity Check
+  if(!m_xmodel)
+    return(0);
+
+  XYGenPolygon gen_poly = m_xmodel->getGenPoly();
   return(gen_poly.getPolyCount());
 }
 
@@ -526,6 +543,10 @@ XYPolygon PolyViewer::getConvexHull()
 
 void PolyViewer::updateGenPoly()
 {
+  // Sanity Check
+  if(!m_xmodel)
+    return;
+
   if(!m_draw_gpoly)
     return;
   
@@ -542,7 +563,7 @@ void PolyViewer::updateGenPoly()
   timer.start();
 
   XYGenPolygon gen_poly = engine.getGenPoly();
-  m_xmodel.setGenPoly(gen_poly);
+  m_xmodel->setGenPoly(gen_poly);
   //m_gen_poly = engine.getGenPoly();
 
   timer.stop(); 
@@ -556,19 +577,23 @@ void PolyViewer::updateGenPoly()
 
 void PolyViewer::updateSeglr()
 {
+  // Sanity Check
+  if(!m_xmodel)
+    return;
+
   //cout  << "in updateSeglr()" << endl;
-  PlatModel plat_model = m_xmodel.getPlatModel();
-  double osx = m_xmodel.getOSX();
-  double osy = m_xmodel.getOSY();
-  double osh = m_xmodel.getOSH();
+  PlatModel plat_model = m_xmodel->getPlatModel();
+  double osx = m_xmodel->getOSX();
+  double osy = m_xmodel->getOSY();
+  double osh = m_xmodel->getOSH();
   
-  XYSeglr seglr = m_xmodel.getTurnSeglr();
+  XYSeglr seglr = m_xmodel->getTurnSeglr();
  
   double rx = seglr.getRayBaseX();
   double ry = seglr.getRayBaseY();
   double ray_angle = seglr.getRayAngle();
 
-  XYGenPolygon gen_poly = m_xmodel.getGenPoly();
+  XYGenPolygon gen_poly = m_xmodel->getGenPoly();
   
   //m_seglr_dist_to_exit = m_gen_poly.distSeglrToExitGP(m_seglr);
   //m_osh_dist_to_exit = m_gen_poly.distRayToExitGP(m_osx,m_osy,m_osh); 
@@ -587,23 +612,5 @@ void PolyViewer::updateSeglr()
   if(!exited)
     //m_ray_dist_to_exit = m_gen_poly.distRayToExitGP(rx,ry,ray_angle); 
     m_ray_dist_to_exit = gen_poly.distRayToExitGP(rx,ry,ray_angle); 
-}
- 
-// ----------------------------------------------------------
-// Procedure: addBorderFile()
-
-void PolyViewer::addBorderFile(string filename)
-{
-  vector<string> lines = fileBuffer(filename);
-  for(unsigned int i=0; i<lines.size(); i++) {
-    //cout << "lines[" << i << "]:" << lines[i] << endl;               
-    string xstr = tokStringParse(lines[i], "x");
-    string ystr = tokStringParse(lines[i], "y");
-    if((xstr != "") && (ystr != "")) {
-      double px = atof(xstr.c_str());
-      double py = atof(ystr.c_str());
-      m_segl.add_vertex(px,py);
-    }
-  }
 }
  

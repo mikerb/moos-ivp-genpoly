@@ -31,7 +31,8 @@ POLY_GUI::POLY_GUI(int wid, int hgt, const char *label)
   
   pviewer   = new PolyViewer(0, 30, wid, hgt-190);
   m_mviewer = pviewer;
-
+  pviewer->setXModel(&m_xmodel);
+  
   augmentMenu();
   
   initWidgets();

@@ -38,6 +38,7 @@ protected:
 public: 
   PolyViewer *pviewer;
   BNG_IPF_GUI *m_ipf_gui;
+  XModel      m_xmodel;
   
 protected:
   Fl_Button  *m_but_draw_pts;

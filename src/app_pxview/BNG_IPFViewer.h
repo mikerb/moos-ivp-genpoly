@@ -19,6 +19,7 @@
 #include "PlatModel.h"
 #include "LedgerSnap.h"
 #include "Common_IPFViewer.h"
+#include "XModel.h"
 
 class BNG_IPFViewer : public Common_IPFViewer
 {
@@ -92,7 +93,8 @@ private: // Helm/Behavior mechanics
   IvPDomain     m_domain;
   InfoBuffer   *m_info_buffer;
   LedgerSnap   *m_ledger_snap;
-
+  XModel       *m_xmodel;
+  
 private: // Analysis of behavior and built IPF
   unsigned int  m_ipf_pieces;
   std::string   m_curr_bhv_mode;

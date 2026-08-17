@@ -211,7 +211,6 @@ BNG_IPF_GUI::~BNG_IPF_GUI()
 }
 
 
-
 //--------------------------------------------------------------------------- 
 // Procedure: setDomain()
 
@@ -221,6 +220,18 @@ void BNG_IPF_GUI::setDomain(IvPDomain domain)
     m_ipf_viewer1->setDomain(domain);
   if(m_ipf_viewer2)
     m_ipf_viewer2->setDomain(domain);
+  updateXY();
+}
+
+//--------------------------------------------------------------------------- 
+// Procedure: setXModel()
+
+void BNG_IPF_GUI::setXModel(XModel *xmo)
+{
+  if(m_ipf_viewer1) 
+    m_ipf_viewer1->setXModel(xmo);
+  if(m_ipf_viewer2)
+    m_ipf_viewer2->setXModel(xmo);
   updateXY();
 }
 

@@ -23,6 +23,7 @@
 #include "IvPDomain.h"
 #include "BNG_IPFViewer.h"
 #include "Common_IPF_GUI.h"
+#include "XModel.h"
 
 class BNG_GUI;
 
@@ -37,6 +38,7 @@ public:
   int  handle(int);
   void clearBehaviorModes();
   void setDomain(IvPDomain);
+  void setXModel(XModel*);
   
  protected:
   void augmentMenu();

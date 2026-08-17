@@ -37,12 +37,13 @@ public:
   std::string getBorderSpec();
   std::string getGPolySpec();
 
+  void   setXModel(XModel* xmo) {m_xmodel=xmo;}
+
+  
   bool   getVerbose() const {return(m_verbose);}
   
   void   reApplySnapToCurrent();   
 
-  void   addBorderFile(std::string filename);
-  
   void   shiftHorzPoints(double);
   void   shiftVertPoints(double);
 
@@ -76,7 +77,7 @@ private: // Config vars
   std::string m_solve_method;
   
 private:
-  XModel    m_xmodel;
+  XModel*  m_xmodel;
   XYSegList m_segl;
 
   double  m_seglr_dist_to_exit;
