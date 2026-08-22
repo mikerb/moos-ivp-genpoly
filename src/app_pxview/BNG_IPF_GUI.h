@@ -55,33 +55,41 @@ public:
   BNG_IPFViewer *m_ipf_viewer2;
 
   // Row 1 --------------------------
+  Fl_Check_Button *m_but_show_pcs1;
   Fl_Output       *m_fld_pieces1;
-  Fl_Output       *m_fld_tol1;
-  Fl_Check_Button *m_but_tol1;
-  Fl_Button       *m_but_tol_add1;
-  Fl_Button       *m_but_tol_sub1;
+
+  Fl_Input        *m_fld_minutil_eta1;
+  Fl_Button       *m_but_minutil_etap1;
+  Fl_Button       *m_but_minutil_etas1;
 
   // -------
+  Fl_Check_Button *m_but_show_pcs2;
   Fl_Output       *m_fld_pieces2;
-  Fl_Output       *m_fld_tol2;
-  Fl_Check_Button *m_but_tol2;
-  Fl_Button       *m_but_tol_add2;
-  Fl_Button       *m_but_tol_sub2;
+
+  Fl_Input        *m_fld_minutil_eta2;
+  Fl_Button       *m_but_minutil_etap2;
+  Fl_Button       *m_but_minutil_etas2;
 
   // Row 2 --------------------------
-  Fl_Check_Button *m_but_show_pcs1;
   Fl_Output       *m_fld_smart1;
   Fl_Check_Button *m_but_smart1;
   Fl_Button       *m_but_smart_add1;
   Fl_Button       *m_but_smart_sub1;
 
+  Fl_Input        *m_fld_maxutil_eta1;
+  Fl_Button       *m_but_maxutil_etap1;
+  Fl_Button       *m_but_maxutil_etas1;
+
   // -------
-  Fl_Check_Button *m_but_show_pcs2;
   Fl_Output       *m_fld_smart2;
   Fl_Check_Button *m_but_smart2;
   Fl_Button       *m_but_smart_add2;
   Fl_Button       *m_but_smart_sub2;
   
+  Fl_Input        *m_fld_maxutil_eta2;
+  Fl_Button       *m_but_maxutil_etap2;
+  Fl_Button       *m_but_maxutil_etas2;
+
   // Row 3 --------------------------
   Fl_Output  *m_fld_hdg_size1;
   Fl_Button  *m_but_hsz_add1;
@@ -119,10 +127,18 @@ public:
   Fl_Button  *m_but_maxutil_sub2;
   
   // Row 5 --------------------------
-  Fl_Output  *m_fld_plat_model1;
+  Fl_Output       *m_fld_plat_model1;
+  Fl_Check_Button *m_but_tol1;
+  Fl_Output       *m_fld_tol1;
+  Fl_Button       *m_but_tol_add1;
+  Fl_Button       *m_but_tol_sub1;
 
   // -------
-  Fl_Output  *m_fld_plat_model2;
+  Fl_Output       *m_fld_plat_model2;
+  Fl_Check_Button *m_but_tol2;
+  Fl_Output       *m_fld_tol2;
+  Fl_Button       *m_but_tol_add2;
+  Fl_Button       *m_but_tol_sub2;
 
   // Row 6 --------------------------
   Fl_Check_Button *m_but_platmod1;
