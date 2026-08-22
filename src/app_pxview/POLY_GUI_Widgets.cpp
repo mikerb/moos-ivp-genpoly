@@ -21,6 +21,24 @@ using namespace std;
 
 void POLY_GUI::initWidgets()
 {
+  Fl_Color fcolor_blue  = fl_rgb_color(140, 140, 220);
+  
+  m_fld_osx = new Fl_Output(0, 0, 1, 1, "osx:");
+  m_fld_osx->color(fcolor_blue);
+  m_fld_osx->clear_visible_focus();
+
+  m_fld_osy = new Fl_Output(0, 0, 1, 1, "osy:");
+  m_fld_osy->color(fcolor_blue);
+  m_fld_osy->clear_visible_focus();
+
+  m_fld_osh = new Fl_Output(0, 0, 1, 1, "osh:");
+  m_fld_osh->color(fcolor_blue);
+  m_fld_osh->clear_visible_focus();
+
+  m_fld_osv = new Fl_Output(0, 0, 1, 1, "osv:");
+  m_fld_osv->color(fcolor_blue);
+  m_fld_osv->clear_visible_focus();
+
   m_but_draw_pts = new Fl_Button(0, 0, 1, 1, "Draw Pts");
   m_but_draw_pts->clear_visible_focus();
   m_but_draw_pts->callback((Fl_Callback*)POLY_GUI::cb_DrawPts);
@@ -86,16 +104,16 @@ void POLY_GUI::initWidgets()
   m_fld_polys = new Fl_Output(0, 0, 1, 1, "polys:"); 
   m_fld_polys->set_output();
 
-  m_fld_solve = new Fl_Output(0, 0, 1, 1, "solve:"); 
+  m_fld_solve = new Fl_Output(0, 0, 1, 1, ""); 
   m_fld_solve->set_output();
 
-  m_fld_method = new Fl_Output(0, 0, 1, 1, "method:"); 
+  m_fld_method = new Fl_Output(0, 0, 1, 1, ""); 
   m_fld_method->set_output();
 
-  m_fld_collap = new Fl_Output(0, 0, 1, 1, "collaps:"); 
+  m_fld_collap = new Fl_Output(0, 0, 1, 1, ""); 
   m_fld_collap->set_output();
 
-  m_fld_verbose = new Fl_Output(0, 0, 1, 1, "verbose:"); 
+  m_fld_verbose = new Fl_Output(0, 0, 1, 1, ""); 
   m_fld_verbose->set_output();
 
   //----------------------------------------------------------
@@ -143,17 +161,21 @@ void POLY_GUI::resizeWidgetsShape()
   int wid6 = 60;
   int wid7 = 60;
   int wid8 = 60;
-  //int wid9 = 50;
+  int wid9 = 45;
+  int widA = 45;
+
   int sep = 10;
 
   int col1 = 10;
   int col2 = col1 + wid1 + sep;
-  int col3 = col2 + wid2 + sep + 50; 
-  int col4 = col3 + wid3 + sep + 40;
-  int col5 = col4 + wid4 + sep + 50;
-  int col6 = col5 + wid5 + sep + 50;
-  int col7 = col6 + wid6 + sep + 60;
-  int col8 = col7 + wid7 + sep + 30;
+  int col3 = col2 + wid2 + sep + 40;
+  int col4 = col3 + wid3 + sep + 10;
+  int col5 = col4 + wid4 + sep + 10;
+  int col6 = col5 + wid5 + sep + 10;
+  int col7 = col6 + wid6 + sep + 10;
+  int col8 = col7 + wid7 + sep + 10;
+  int col9 = col8 + wid8 + sep + 30;
+  int colA = col9 + wid9 + sep + 20;
 
   //-------------------- Column 1
   int pts_x = col1;
@@ -243,6 +265,30 @@ void POLY_GUI::resizeWidgetsShape()
   int ipf_wid = wid8;
   m_but_ipf_gui->resize(ipf_x, ipf_y, ipf_wid, field_hgt);
 
+  //-------------------- Column 9
+  int osx_x = col9;
+  int osx_y = row1;
+  int osx_wid = wid9;
+  m_fld_osx->resize(osx_x, osx_y, osx_wid, field_hgt);
+  
+  int osy_x = col9;
+  int osy_y = row2;
+  int osy_wid = wid9;
+  m_fld_osy->resize(osy_x, osy_y, osy_wid, field_hgt);
+  
+  //-------------------- Column 9
+  int osh_x = colA;
+  int osh_y = row1;
+  int osh_wid = widA;
+  m_fld_osh->resize(osh_x, osh_y, osh_wid, field_hgt);
+  
+  int osv_x = colA;
+  int osv_y = row2;
+  int osv_wid = widA;
+  m_fld_osv->resize(osv_x, osv_y, osv_wid, field_hgt);
+  
+
+
   //---------------------------------------------------------
   // Bottom Long format ROWS
   //---------------------------------------------------------
@@ -290,6 +336,18 @@ void POLY_GUI::resizeWidgetsText()
   int text_size  = 12;
   int label_size = 12;
 
+  m_fld_osx->textsize(text_size);
+  m_fld_osx->labelsize(label_size);
+  
+  m_fld_osy->textsize(text_size);
+  m_fld_osy->labelsize(label_size);
+ 
+  m_fld_osh->textsize(text_size);
+  m_fld_osh->labelsize(label_size);
+ 
+  m_fld_osv->textsize(text_size);
+  m_fld_osv->labelsize(label_size);
+ 
   m_but_draw_pts->labelsize(label_size);
   m_but_draw_segl->labelsize(label_size);
   m_but_draw_hull->labelsize(label_size);

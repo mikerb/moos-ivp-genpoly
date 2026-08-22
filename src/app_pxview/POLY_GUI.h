@@ -25,7 +25,7 @@
 class POLY_GUI : public MarineGUI {
 public:
   POLY_GUI(int w, int h, const char *l=0);
-  ~POLY_GUI() {}
+  ~POLY_GUI() {} 
   
   void updateXY();
   int  handle(int);
@@ -42,6 +42,11 @@ public:
   XModel      m_xmodel;
   
 protected:
+  Fl_Output  *m_fld_osx;
+  Fl_Output  *m_fld_osy;
+  Fl_Output  *m_fld_osh;
+  Fl_Output  *m_fld_osv;
+
   Fl_Button  *m_but_draw_pts;
   Fl_Button  *m_but_draw_segl;
   Fl_Button  *m_but_draw_hull;

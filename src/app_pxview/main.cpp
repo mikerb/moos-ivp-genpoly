@@ -66,7 +66,8 @@ int main(int argc, char *argv[])
 
   Fl::add_idle(idleProc);
   POLY_GUI* gui = new POLY_GUI(900, 800, "polyview");
-
+  gui->size_range(700,600, 0,0);
+  
   gui->pviewer->setParam("tiff_file", tif_file);  
   gui->pviewer->setParam("border_file", border_file);  
   gui->updateXY();

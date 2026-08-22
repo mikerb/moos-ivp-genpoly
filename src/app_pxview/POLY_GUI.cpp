@@ -417,6 +417,23 @@ void POLY_GUI::updateXY()
   sval = boolToString(bval);
   m_fld_verbose->value(sval.c_str());
 
+  // OSX, OSY, OSH, OSV
+  dval = m_xmodel.getOSX();
+  sval = doubleToStringX(dval,2);
+  m_fld_osx->value(sval.c_str());
+
+  dval = m_xmodel.getOSY();
+  sval = doubleToStringX(dval,2);
+  m_fld_osy->value(sval.c_str());
+  
+  dval = m_xmodel.getOSH();
+  sval = doubleToStringX(dval,2);
+  m_fld_osh->value(sval.c_str());
+  
+  dval = m_xmodel.getOSV();
+  sval = doubleToStringX(dval,2);
+  m_fld_osv->value(sval.c_str());
+  
   // SegList string
   string str = pviewer->getBorderSpec();
   m_fld_segl->value(str.c_str());
@@ -444,4 +461,7 @@ void POLY_GUI::updateXY()
   dval = pviewer->getRayDistToExit();
   sval = doubleToStringX(dval,3);
   m_fld_ray_dist->value(sval.c_str());
+
+  if(m_ipf_gui)
+    m_ipf_gui->updatedXModel();
 }

@@ -16,6 +16,14 @@
 
 void BNG_IPF_GUI::initWidgets()
 {
+
+  Fl_Color fcolor_aqua  = fl_rgb_color(197, 255, 232);
+  Fl_Color fcolor_blue  = fl_rgb_color(140, 140, 220);
+  Fl_Color fcolor_beige = fl_rgb_color(223, 219, 191);
+  Fl_Color fcolor_green = fl_rgb_color(200, 230, 190);                        
+  Fl_Color fcolor_dark_goldenrod  = fl_rgb_color(184, 136, 11);
+  Fl_Color fcolor_olive = fl_rgb_color(136, 136, 11);
+  
   m_ipf_viewer1 = new BNG_IPFViewer(0, 0, 1, 1);
   m_ipf_viewer2 = new BNG_IPFViewer(0, 0, 1, 1);
   m_viewer  = (Common_IPFViewer*)(m_ipf_viewer1);
@@ -43,74 +51,6 @@ void BNG_IPF_GUI::initWidgets()
   m_but_toggle_brw1->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButToggleModeBrowser,
 			     (void*)1);  
 
-  m_fld_bhv_type1 = new Fl_Output(0, 0, 1, 1, "bhv:");
-  m_fld_bhv_type1->clear_visible_focus();
-  
-  m_but_refinery1 = new Fl_Check_Button(0, 0, 1, 1, "refinery");
-  m_but_refinery1->clear_visible_focus();
-  m_but_refinery1->callback((Fl_Callback*)BNG_IPF_GUI::cb_ToggleRefineryAct,
-			    (void*)1);  
-
-  m_fld_tol1 = new Fl_Output(0, 0, 1, 1, "ostol:");
-  m_fld_tol1->clear_visible_focus();
-
-  m_but_tol1 = new Fl_Check_Button(0, 0, 1, 1, "");
-  m_but_tol1->clear_visible_focus();
-  m_but_tol1->callback((Fl_Callback*)BNG_IPF_GUI::cb_ToggleAutoTOL,
-			   (void*)1);  
-
-  m_but_tol_add1 = new Fl_Button(0, 0, 1, 1, "+"); 
-  m_but_tol_add1->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButTOLAdd1);
-  m_but_tol_add1->clear_visible_focus();
-  
-  m_but_tol_sub1 = new Fl_Button(0, 0, 1, 1, "-");
-  m_but_tol_sub1->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButTOLSub1);
-  m_but_tol_sub1->clear_visible_focus();
-  
-
-  // Viewer 2
-  m_but_toggle_brw2 = new Fl_Button(0, 0, 1, 1, "M");
-  m_but_toggle_brw2->clear_visible_focus();
-  m_but_toggle_brw2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButToggleModeBrowser,
-			     (void*)1);  
-
-  m_fld_bhv_type2 = new Fl_Output(0, 0, 1, 1, "bhv:");
-  m_fld_bhv_type2->clear_visible_focus();
-  
-  m_but_refinery2 = new Fl_Check_Button(0, 0, 1, 1, "refinery");
-  m_but_refinery2->clear_visible_focus();
-  m_but_refinery2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ToggleRefineryAct,
-			    (void*)2);  
-
-  m_fld_tol2 = new Fl_Output(0, 0, 1, 1, "tol:");
-  m_fld_tol2->clear_visible_focus();
-
-  m_but_tol2 = new Fl_Check_Button(0, 0, 1, 1, "");
-  m_but_tol2->clear_visible_focus();
-  m_but_tol2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ToggleAutoTOL,
-			   (void*)2);  
-
-  m_but_tol_add2 = new Fl_Button(0, 0, 1, 1, "+"); 
-  m_but_tol_add2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButTOLAdd2);
-  m_but_tol_add2->clear_visible_focus();
-  
-  m_but_tol_sub2 = new Fl_Button(0, 0, 1, 1, "-");
-  m_but_tol_sub2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButTOLSub2);
-  m_but_tol_sub2->clear_visible_focus();
-  
-
-  //============================================================
-  // Row 2
-  //============================================================
-  // Viewer 1
-  m_fld_pieces1 = new Fl_Output(0, 0, 1, 1, "pcs:");
-  m_fld_pieces1->clear_visible_focus();
-
-  m_but_show_pcs1 = new Fl_Check_Button(0, 0, 1, 1, "show pcs");
-  m_but_show_pcs1->clear_visible_focus();
-  m_but_show_pcs1->callback((Fl_Callback*)BNG_IPF_GUI::cb_ToggleDrawPcsAct,
-			   (void*)1);  
-
   m_fld_smart1 = new Fl_Output(0, 0, 1, 1, "smart:");
   m_fld_smart1->clear_visible_focus();
 
@@ -127,15 +67,11 @@ void BNG_IPF_GUI::initWidgets()
   m_but_smart_sub1->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButSmartSub1);
   m_but_smart_sub1->clear_visible_focus();
   
-
-  // Viewer 2 --------------------------------
-  m_fld_pieces2 = new Fl_Output(0, 0, 1, 1, "pcs:");
-  m_fld_pieces2->clear_visible_focus();
-
-  m_but_show_pcs2 = new Fl_Check_Button(0, 0, 1, 1, "show pcs");
-  m_but_show_pcs2->clear_visible_focus();
-  m_but_show_pcs2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ToggleDrawPcsAct,
-			   (void*)2);  
+  // Viewer 2
+  m_but_toggle_brw2 = new Fl_Button(0, 0, 1, 1, "M");
+  m_but_toggle_brw2->clear_visible_focus();
+  m_but_toggle_brw2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButToggleModeBrowser,
+			     (void*)1);  
 
   m_fld_smart2 = new Fl_Output(0, 0, 1, 1, "smart:");
   m_fld_smart2->clear_visible_focus();
@@ -152,6 +88,67 @@ void BNG_IPF_GUI::initWidgets()
   m_but_smart_sub2 = new Fl_Button(0, 0, 1, 1, "-");
   m_but_smart_sub2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButSmartSub2);
   m_but_smart_sub2->clear_visible_focus();
+  
+
+
+  //============================================================
+  // Row 2
+  //============================================================
+  // Viewer 1
+  m_fld_pieces1 = new Fl_Output(0, 0, 1, 1, "pcs:");
+  m_fld_pieces1->clear_visible_focus();
+
+  m_but_show_pcs1 = new Fl_Check_Button(0, 0, 1, 1, "show pcs");
+  m_but_show_pcs1->clear_visible_focus();
+  m_but_show_pcs1->callback((Fl_Callback*)BNG_IPF_GUI::cb_ToggleDrawPcsAct,
+			   (void*)1);  
+
+
+  m_fld_tol1 = new Fl_Output(0, 0, 1, 1, "ostol:");
+  m_fld_tol1->clear_visible_focus();
+  m_fld_tol1->color(fcolor_blue);
+
+  m_but_tol1 = new Fl_Check_Button(0, 0, 1, 1, "");
+  m_but_tol1->clear_visible_focus();
+  m_but_tol1->callback((Fl_Callback*)BNG_IPF_GUI::cb_ToggleAutoTOL,
+			   (void*)1);  
+
+  m_but_tol_add1 = new Fl_Button(0, 0, 1, 1, "+"); 
+  m_but_tol_add1->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButTOLAdd1);
+  m_but_tol_add1->clear_visible_focus();
+  
+  m_but_tol_sub1 = new Fl_Button(0, 0, 1, 1, "-");
+  m_but_tol_sub1->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButTOLSub1);
+  m_but_tol_sub1->clear_visible_focus();
+  
+
+  // Viewer 2 --------------------------------
+  m_fld_pieces2 = new Fl_Output(0, 0, 1, 1, "pcs:");
+  m_fld_pieces2->clear_visible_focus();
+
+  m_but_show_pcs2 = new Fl_Check_Button(0, 0, 1, 1, "show pcs");
+  m_but_show_pcs2->clear_visible_focus();
+  m_but_show_pcs2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ToggleDrawPcsAct,
+			   (void*)2);  
+
+
+  m_fld_tol2 = new Fl_Output(0, 0, 1, 1, "ostol:");
+  m_fld_tol2->clear_visible_focus();
+  m_fld_tol2->color(fcolor_blue);
+  
+  
+  m_but_tol2 = new Fl_Check_Button(0, 0, 1, 1, "");
+  m_but_tol2->clear_visible_focus();
+  m_but_tol2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ToggleAutoTOL,
+			   (void*)2);  
+
+  m_but_tol_add2 = new Fl_Button(0, 0, 1, 1, "+"); 
+  m_but_tol_add2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButTOLAdd2);
+  m_but_tol_add2->clear_visible_focus();
+  
+  m_but_tol_sub2 = new Fl_Button(0, 0, 1, 1, "-");
+  m_but_tol_sub2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButTOLSub2);
+  m_but_tol_sub2->clear_visible_focus();
   
 
   //============================================================
@@ -171,6 +168,7 @@ void BNG_IPF_GUI::initWidgets()
   
   m_fld_minutil_cpa1 = new Fl_Output(0, 0, 1, 1, "min_util_cpa:");
   m_fld_minutil_cpa1->clear_visible_focus();
+  m_fld_minutil_cpa1->color(fcolor_blue);
   
   m_but_minutil_add1 = new Fl_Button(0, 0, 1, 1, "+");
   m_but_minutil_add1->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButMinUtilAdd1);
@@ -194,6 +192,7 @@ void BNG_IPF_GUI::initWidgets()
   
   m_fld_minutil_cpa2 = new Fl_Output(0, 0, 1, 1, "min_util_cpa:");
   m_fld_minutil_cpa2->clear_visible_focus();
+  m_fld_minutil_cpa2->color(fcolor_blue);
   
   m_but_minutil_add2 = new Fl_Button(0, 0, 1, 1, "+");
   m_but_minutil_add2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButMinUtilAdd2);
@@ -221,6 +220,7 @@ void BNG_IPF_GUI::initWidgets()
   
   m_fld_maxutil_cpa1 = new Fl_Output(0, 0, 1, 1, "max_util_cpa:");
   m_fld_maxutil_cpa1->clear_visible_focus();
+  m_fld_maxutil_cpa1->color(fcolor_blue);
   
   m_but_maxutil_add1 = new Fl_Button(0, 0, 1, 1, "+");
   m_but_maxutil_add1->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButMaxUtilAdd1);
@@ -245,6 +245,7 @@ void BNG_IPF_GUI::initWidgets()
   
   m_fld_maxutil_cpa2 = new Fl_Output(0, 0, 1, 1, "max_util_cpa:");
   m_fld_maxutil_cpa2->clear_visible_focus();
+  m_fld_maxutil_cpa2->color(fcolor_blue);
   
   m_but_maxutil_add2 = new Fl_Button(0, 0, 1, 1, "+");
   m_but_maxutil_add2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButMaxUtilAdd2);
@@ -368,35 +369,25 @@ void BNG_IPF_GUI::resizeWidgetsShape()
   int bsh_w = 20;
   m_but_toggle_brw1->resize(bsh_x, bsh_y, bsh_w, fld_hgt);
 
-  int bhv_x = bsh_x + bsh_w + 45;
-  int bhv_y = row1;
-  int bhv_w = 50 + (extra_wid/4);
-  m_fld_bhv_type1->resize(bhv_x, bhv_y, bhv_w, fld_hgt);
+  int sm1_x = sx1 + 65;
+  int sm1_y = row1;
+  int sm1_w = 35 + (extra_wid/4);
+  m_fld_smart1->resize(sm1_x, sm1_y, sm1_w, fld_hgt);
 
-  int bpl_x = bhv_x + bhv_w + 10;
-  int bpl_y = row1;
-  int bpl_w = 20;
-  m_but_refinery1->resize(bpl_x, bpl_y, bpl_w, fld_hgt);
-
-  int ftol1_x = bpl_x + bpl_w + 85;
-  int ftol1_y = row1;
-  int ftol1_w = 35 + (extra_wid/4);
-  m_fld_tol1->resize(ftol1_x, ftol1_y, ftol1_w, fld_hgt);
+  int bs1_x = sm1_x + sm1_w + 5;
+  int bs1_y = row1;
+  int bs1_w = 15;
+  m_but_smart1->resize(bs1_x, bs1_y, bs1_w, fld_hgt);
   
-  int btol1_x = ftol1_x + ftol1_w + 5;
-  int btol1_y = row1;
-  int btol1_w = 15;
-  m_but_tol1->resize(btol1_x, btol1_y, btol1_w, fld_hgt);
-  
-  int btola1_x = btol1_x + btol1_w + 6;
-  int btola1_y = row1;
-  int btola1_w = 15;
-  m_but_tol_add1->resize(btola1_x, btola1_y, btola1_w, fld_hgt);
+  int bsa1_x = bs1_x + bs1_w + 6;
+  int bsa1_y = row1;
+  int bsa1_w = 15;
+  m_but_smart_add1->resize(bsa1_x, bsa1_y, bsa1_w, fld_hgt);
 
-  int btols1_x = btola1_x + btola1_w + 4;
-  int btols1_y = row1;
-  int btols1_w = 15;
-  m_but_tol_sub1->resize(btols1_x, btols1_y, btols1_w, fld_hgt);
+  int bss1_x = bsa1_x + bsa1_w + 4;
+  int bss1_y = row1;
+  int bss1_w = 15;
+  m_but_smart_sub1->resize(bss1_x, bss1_y, bss1_w, fld_hgt);
 
   // Viewer 2  -------------------------------
   int bsh2_x = sx2;
@@ -404,35 +395,25 @@ void BNG_IPF_GUI::resizeWidgetsShape()
   int bsh2_w = 20;
   m_but_toggle_brw2->resize(bsh2_x, bsh2_y, bsh2_w, fld_hgt);
 
-  int bhv2_x = bsh2_x + bsh2_w + 45;
-  int bhv2_y = row1;
-  int bhv2_w = 50 + (extra_wid/4);
-  m_fld_bhv_type2->resize(bhv2_x, bhv2_y, bhv2_w, fld_hgt);
+  int sm2_x = sx2 + 65;
+  int sm2_y = row1;
+  int sm2_w = 35 + (extra_wid/4);
+  m_fld_smart2->resize(sm2_x, sm2_y, sm2_w, fld_hgt);
 
-  int bpl2_x = bhv2_x + bhv2_w + 10;
-  int bpl2_y = row1;
-  int bpl2_w = 20;
-  m_but_refinery2->resize(bpl2_x, bpl2_y, bpl2_w, fld_hgt);
+  int bs2_x = sm2_x + sm2_w + 5;
+  int bs2_y = row1;
+  int bs2_w = 14;
+  m_but_smart2->resize(bs2_x, bs2_y, bs2_w, fld_hgt);
   
-  int ftol2_x = bpl2_x + bpl2_w + 85;
-  int ftol2_y = row1;
-  int ftol2_w = 35 + (extra_wid/4);
-  m_fld_tol2->resize(ftol2_x, ftol2_y, ftol2_w, fld_hgt);
-  
-  int btol2_x = ftol2_x + ftol2_w + 5;
-  int btol2_y = row1;
-  int btol2_w = 15;
-  m_but_tol2->resize(btol2_x, btol2_y, btol2_w, fld_hgt);
-  
-  int btola2_x = btol2_x + btol2_w + 6;
-  int btola2_y = row1;
-  int btola2_w = 15;
-  m_but_tol_add2->resize(btola2_x, btola2_y, btola2_w, fld_hgt);
+  int bsa2_x = bs2_x + bs2_w + 6;
+  int bsa2_y = row1;
+  int bsa2_w = 15;
+  m_but_smart_add2->resize(bsa2_x, bsa2_y, bsa2_w, fld_hgt);
 
-  int btols2_x = btola2_x + btola2_w + 4;
-  int btols2_y = row1;
-  int btols2_w = 15;
-  m_but_tol_sub2->resize(btols2_x, btols2_y, btols2_w, fld_hgt);
+  int bss2_x = bsa2_x + bsa2_w + 4;
+  int bss2_y = row1;
+  int bss2_w = 15;
+  m_but_smart_sub2->resize(bss2_x, bss2_y, bss2_w, fld_hgt);
 
   //============================================================
   // Row 2
@@ -448,25 +429,25 @@ void BNG_IPF_GUI::resizeWidgetsShape()
   int bpc_w = 20;
   m_but_show_pcs1->resize(bpc_x, bpc_y, bpc_w, fld_hgt);
 
-  int sm1_x = bpc_x + 120;
-  int sm1_y = row2;
-  int sm1_w = 35 + (extra_wid/4);
-  m_fld_smart1->resize(sm1_x, sm1_y, sm1_w, fld_hgt);
-
-  int bs1_x = sm1_x + sm1_w + 5;
-  int bs1_y = row2;
-  int bs1_w = 15;
-  m_but_smart1->resize(bs1_x, bs1_y, bs1_w, fld_hgt);
+  int ftol1_x = bpc_x + bpc_w + 100;
+  int ftol1_y = row2;
+  int ftol1_w = 35 + (extra_wid/4);
+  m_fld_tol1->resize(ftol1_x, ftol1_y, ftol1_w, fld_hgt);
   
-  int bsa1_x = bs1_x + bs1_w + 6;
-  int bsa1_y = row2;
-  int bsa1_w = 15;
-  m_but_smart_add1->resize(bsa1_x, bsa1_y, bsa1_w, fld_hgt);
+  int btol1_x = ftol1_x + ftol1_w + 5;
+  int btol1_y = row2;
+  int btol1_w = 15;
+  m_but_tol1->resize(btol1_x, btol1_y, btol1_w, fld_hgt);
+  
+  int btola1_x = btol1_x + btol1_w + 6;
+  int btola1_y = row2;
+  int btola1_w = 15;
+  m_but_tol_add1->resize(btola1_x, btola1_y, btola1_w, fld_hgt);
 
-  int bss1_x = bsa1_x + bsa1_w + 4;
-  int bss1_y = row2;
-  int bss1_w = 15;
-  m_but_smart_sub1->resize(bss1_x, bss1_y, bss1_w, fld_hgt);
+  int btols1_x = btola1_x + btola1_w + 4;
+  int btols1_y = row2;
+  int btols1_w = 15;
+  m_but_tol_sub1->resize(btols1_x, btols1_y, btols1_w, fld_hgt);
 
   // Viewer 2 -----------------------------
   int pcs2_x = sx2 + 65;
@@ -479,25 +460,25 @@ void BNG_IPF_GUI::resizeWidgetsShape()
   int bpc2_w = 20;
   m_but_show_pcs2->resize(bpc2_x, bpc2_y, bpc2_w, fld_hgt);
 
-  int sm2_x = bpc2_x + 120;
-  int sm2_y = row2;
-  int sm2_w = 35 + (extra_wid/4);
-  m_fld_smart2->resize(sm2_x, sm2_y, sm2_w, fld_hgt);
-
-  int bs2_x = sm2_x + sm2_w + 5;
-  int bs2_y = row2;
-  int bs2_w = 14;
-  m_but_smart2->resize(bs2_x, bs2_y, bs2_w, fld_hgt);
+  int ftol2_x = bpc2_x + bpc2_w + 100;
+  int ftol2_y = row2;
+  int ftol2_w = 35 + (extra_wid/4);
+  m_fld_tol2->resize(ftol2_x, ftol2_y, ftol2_w, fld_hgt);
   
-  int bsa2_x = bs2_x + bs2_w + 6;
-  int bsa2_y = row2;
-  int bsa2_w = 15;
-  m_but_smart_add2->resize(bsa2_x, bsa2_y, bsa2_w, fld_hgt);
+  int btol2_x = ftol2_x + ftol2_w + 5;
+  int btol2_y = row2;
+  int btol2_w = 15;
+  m_but_tol2->resize(btol2_x, btol2_y, btol2_w, fld_hgt);
+  
+  int btola2_x = btol2_x + btol2_w + 6;
+  int btola2_y = row2;
+  int btola2_w = 15;
+  m_but_tol_add2->resize(btola2_x, btola2_y, btola2_w, fld_hgt);
 
-  int bss2_x = bsa2_x + bsa2_w + 4;
-  int bss2_y = row2;
-  int bss2_w = 15;
-  m_but_smart_sub2->resize(bss2_x, bss2_y, bss2_w, fld_hgt);
+  int btols2_x = btola2_x + btola2_w + 4;
+  int btols2_y = row2;
+  int btols2_w = 15;
+  m_but_tol_sub2->resize(btols2_x, btols2_y, btols2_w, fld_hgt);
 
   //============================================================
   // Row 3
@@ -689,19 +670,20 @@ void BNG_IPF_GUI::resizeWidgetsText()
   // Viewer1
   m_but_toggle_brw1->labelsize(text_size);
 
-  m_fld_bhv_type1->textsize(text_size);
-  m_fld_bhv_type1->labelsize(text_size);
+  m_fld_smart1->textsize(text_size);
+  m_fld_smart1->labelsize(text_size);
 
-  m_but_refinery1->labelsize(text_size);
+  m_but_smart1->labelsize(text_size);
+
 
   // Viewer 2
   m_but_toggle_brw2->labelsize(text_size);
 
-  m_fld_bhv_type2->textsize(text_size);
-  m_fld_bhv_type2->labelsize(text_size);
+  m_fld_smart2->textsize(text_size);
+  m_fld_smart2->labelsize(text_size);
 
-  m_but_refinery2->labelsize(text_size);
-
+  m_but_smart2->labelsize(text_size);
+  
   //===========================================================
   // Row 2
   //===========================================================
@@ -711,22 +693,21 @@ void BNG_IPF_GUI::resizeWidgetsText()
 
   m_but_show_pcs1->labelsize(text_size);
 
-  m_fld_smart1->textsize(text_size);
-  m_fld_smart1->labelsize(text_size);
+  m_fld_tol1->textsize(text_size);
+  m_fld_tol1->labelsize(text_size);
 
-  m_but_smart1->labelsize(text_size);
-
+  m_but_tol1->labelsize(text_size);
+  
   // Viewer 2
   m_fld_pieces2->textsize(text_size);
   m_fld_pieces2->labelsize(text_size);
 
   m_but_show_pcs2->labelsize(text_size);
 
-  m_fld_smart2->textsize(text_size);
-  m_fld_smart2->labelsize(text_size);
+  m_fld_tol2->textsize(text_size);
+  m_fld_tol2->labelsize(text_size);
 
-  m_but_smart2->labelsize(text_size);
-  
+  m_but_tol2->labelsize(text_size);
   //===========================================================
   // Row 3
   //===========================================================

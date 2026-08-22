@@ -63,10 +63,6 @@ BNG_IPF_GUI::~BNG_IPF_GUI()
   // Viewer 1
   if(m_but_toggle_brw1)
     delete(m_but_toggle_brw1);
-  if(m_fld_bhv_type1)
-    delete(m_fld_bhv_type1);
-  if(m_but_refinery1)
-    delete(m_but_refinery1);
 
   if(m_fld_tol1)
     delete(m_fld_tol1);
@@ -80,10 +76,6 @@ BNG_IPF_GUI::~BNG_IPF_GUI()
   // Viewer 2 ----
   if(m_but_toggle_brw2)
     delete(m_but_toggle_brw2);
-  if(m_fld_bhv_type2)
-    delete(m_fld_bhv_type2);
-  if(m_but_refinery2)
-    delete(m_but_refinery2);
 
   if(m_fld_tol2)
     delete(m_fld_tol2);
@@ -232,6 +224,18 @@ void BNG_IPF_GUI::setXModel(XModel *xmo)
     m_ipf_viewer1->setXModel(xmo);
   if(m_ipf_viewer2)
     m_ipf_viewer2->setXModel(xmo);
+  updateXY();
+}
+
+//--------------------------------------------------------------------------- 
+// Procedure: updatedXModel()
+
+void BNG_IPF_GUI::updatedXModel()
+{
+  if(m_ipf_viewer1) 
+    m_ipf_viewer1->resetIPF();
+  if(m_ipf_viewer2)
+    m_ipf_viewer2->resetIPF();
   updateXY();
 }
 
@@ -927,12 +931,6 @@ void BNG_IPF_GUI::updateXY()
 {
   if(m_ipf_viewer1) {
     // Row 1
-    string bhv = m_ipf_viewer1->getInfo("bhv_type");
-    m_fld_bhv_type1->value(bhv.c_str());  
-  
-    bool ref = m_ipf_viewer1->getUseRefinery();
-    m_but_refinery1->value((int)(ref));
-
     bool pmo = m_ipf_viewer1->getUsePlatModel();
     m_but_platmod1->value((int)(pmo));
 
@@ -967,14 +965,9 @@ void BNG_IPF_GUI::updateXY()
     m_fld_maxutil_cpa1->value(maxutil_cpa1.c_str());  
   }
 
+  
   if(m_ipf_viewer2) {
     // Row 1  -------------
-    string bhv = m_ipf_viewer2->getInfo("bhv_type");
-    m_fld_bhv_type2->value(bhv.c_str());  
-  
-    bool ref = m_ipf_viewer2->getUseRefinery();
-    m_but_refinery2->value((int)(ref));
-
     bool pmo = m_ipf_viewer2->getUsePlatModel();
     m_but_platmod2->value((int)(pmo));
 

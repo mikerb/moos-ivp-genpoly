@@ -39,6 +39,7 @@ public:
   void clearBehaviorModes();
   void setDomain(IvPDomain);
   void setXModel(XModel*);
+  void updatedXModel();
   
  protected:
   void augmentMenu();
@@ -60,8 +61,6 @@ public:
 
   // Row 1 --------------------------
   Fl_Button       *m_but_toggle_brw1;
-  Fl_Output       *m_fld_bhv_type1;
-  Fl_Check_Button *m_but_refinery1;
 
   Fl_Output       *m_fld_tol1;
   Fl_Check_Button *m_but_tol1;
@@ -70,8 +69,6 @@ public:
 
   // -------
   Fl_Button       *m_but_toggle_brw2;
-  Fl_Output       *m_fld_bhv_type2;
-  Fl_Check_Button *m_but_refinery2;
 
   Fl_Output       *m_fld_tol2;
   Fl_Check_Button *m_but_tol2;

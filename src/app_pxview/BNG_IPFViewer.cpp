@@ -127,34 +127,11 @@ void BNG_IPFViewer::draw()
     drawPolarFrame(m_radius_pad);
   }
 
-#if 0
-  if(m_draw_pin && m_pair_model_pm)  {
-    unsigned int pin_hdg = m_pair_model_pm->get_des_hdg();
-
-    int domain_ix = m_domain.getIndex("speed");
-    
-    double osv = m_pair_model_pm->get_osv();
-
-    unsigned int spdint = m_domain.getDiscreteVal(domain_ix, osv, 0);
-    
-    //unsigned int pin_spd = (double)(spdint) * m_rad_ratio;     
-    unsigned int pin_spd = spdint * m_radius_pad;
-
-    Common_IPFViewer::drawMaxPoint(pin_hdg, pin_spd, 400, 12,
-				 "lime_green");
-  }
-  
-  double heading = 0;    
-  if(m_pair_model_og)
-    heading = m_pair_model_og->get_osh();  
-  
-  if(m_draw_ship && (m_polar==1)) 
-    drawCenteredShip(heading);
-
-  drawOwnPoint();
-#endif
   glPopMatrix();
-   
+
+  ColorPack cpack4("light_blue");
+  drawText2(10, 10, m_bhv_type, cpack4, 12);
+  
   glFlush(); 
 } 
 
@@ -217,33 +194,17 @@ void BNG_IPFViewer::resetIPF()
     m_bhv = 0;
   }  
 
-#if 0
-  // If the previous pair/IPF has the same timestamp, it will
-  // be replaced by the one about to be calculated.
-  if(m_pair_history.size() != 0) {
-    double last_timestamp = m_pair_history.front().get_timestamp();
-    double curr_timestamp = m_pair_model_og->get_timestamp();
-    if(last_timestamp == curr_timestamp)
-      m_pair_history.pop_front();
-  }
-
-  m_curr_bhv_mode = "none";
-  m_curr_bhv_submode = "none";
-  if(m_pair_history.size() != 0) {
-    m_curr_bhv_mode    = m_pair_history.front().get_mode();
-    m_curr_bhv_submode = m_pair_history.front().get_submode();
-  }
-#endif
-  
   updateInfoBuffer();  
   IvPFunction *ipf = 0;
   cout << "Dbb 4: BNG_IPFViewer -- bhv_type = [" << m_bhv_type << "]" << endl;
-  if(m_bhv_type == "opreg")
+  if(m_bhv_type == "opreg26")
     ipf = buildIPF_OpRegion();
 
   if(!ipf) {
     QuadSet null_quadset;
     m_quadset_ipf = null_quadset;
+    m_ipf_pieces = 0;
+    redraw();
     return;
   }
 
@@ -399,9 +360,9 @@ IvPBehavior* BNG_IPFViewer::spawnBehavior(string bhv)
 IvPFunction *BNG_IPFViewer::buildIPF_OpRegion()
 {
   // Part 1: Create the behavior or die trying
-  m_bhv = spawnBehavior("BHV_AvdColregsV26");
+  m_bhv = spawnBehavior("BHV_OpRegionV26");
   if(!m_bhv)
-    return(0);
+    return(0); 
 
   if(!m_xmodel)
     return(0);
@@ -413,6 +374,10 @@ IvPFunction *BNG_IPFViewer::buildIPF_OpRegion()
   // Part 3: Update the InfoBuffer
   m_bhv->setInfoBuffer(m_info_buffer);
 
+  XYGenPolygon core_poly = m_xmodel->getGenPoly();
+  string core_poly_str = core_poly.get_spec();
+
+  
   // Part 4: Set the Behavior parameters
   string piece = "discrete@course:";
   piece += uintToString(m_hdg_edge_size);
@@ -420,13 +385,14 @@ IvPFunction *BNG_IPFViewer::buildIPF_OpRegion()
   piece += uintToString(m_spd_edge_size);
 
   bool ok = true;
+  ok = ok && m_bhv->setParam("core_poly", core_poly_str);
   ok = ok && m_bhv->setParam("build_info", "clear");
   ok = ok && m_bhv->setParam("build_info", "uniform_piece=" + piece);
   ok = ok && m_bhv->setParam("build_info", "uniform_grid=" + piece);
 
-  ok = ok && m_bhv->setParam("min_util_cpa_dist", "10");
-  ok = ok && m_bhv->setParam("max_util_cpa_dist", "40");
-
+  ok = ok && m_bhv->setParam("min_util_eta", "10");
+  ok = ok && m_bhv->setParam("max_util_eta", "30");
+  
   if(m_use_smart_pcs) {
     string str = uintToString(m_smart_pcs);
     ok = ok && m_bhv->setParam("build_info", "smart_amount=" + str);
@@ -452,7 +418,6 @@ IvPFunction *BNG_IPFViewer::buildIPF_OpRegion()
 
 void BNG_IPFViewer::updateInfoBuffer()
 {
-#if 0
   // Sanity Check
   if(!m_xmodel)
     return;
@@ -461,7 +426,6 @@ void BNG_IPFViewer::updateInfoBuffer()
   m_info_buffer->setValue("NAV_Y",       m_xmodel->getOSY());
   m_info_buffer->setValue("NAV_HEADING", m_xmodel->getOSH());
   m_info_buffer->setValue("NAV_SPEED",   m_xmodel->getOSV());
-#endif
 }
 
 
