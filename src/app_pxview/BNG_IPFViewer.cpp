@@ -130,7 +130,7 @@ void BNG_IPFViewer::draw()
   glPopMatrix();
 
   ColorPack cpack4("light_blue");
-  drawText2(10, 10, m_bhv_type, cpack4, 12);
+  drawText2(10, 10, "bhv="+m_bhv_type, cpack4, 12);
   
   glFlush(); 
 } 

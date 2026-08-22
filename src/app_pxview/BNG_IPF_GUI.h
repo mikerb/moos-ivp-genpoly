@@ -54,29 +54,21 @@ public:
   BNG_IPFViewer *m_ipf_viewer1;
   BNG_IPFViewer *m_ipf_viewer2;
 
-  bool           m_show_mode_browser;
-  
-  // Browser (Left)
-  Fl_Browser *m_brw_modes;
-
   // Row 1 --------------------------
-  Fl_Button       *m_but_toggle_brw1;
-
+  Fl_Output       *m_fld_pieces1;
   Fl_Output       *m_fld_tol1;
   Fl_Check_Button *m_but_tol1;
   Fl_Button       *m_but_tol_add1;
   Fl_Button       *m_but_tol_sub1;
 
   // -------
-  Fl_Button       *m_but_toggle_brw2;
-
+  Fl_Output       *m_fld_pieces2;
   Fl_Output       *m_fld_tol2;
   Fl_Check_Button *m_but_tol2;
   Fl_Button       *m_but_tol_add2;
   Fl_Button       *m_but_tol_sub2;
 
   // Row 2 --------------------------
-  Fl_Output       *m_fld_pieces1;
   Fl_Check_Button *m_but_show_pcs1;
   Fl_Output       *m_fld_smart1;
   Fl_Check_Button *m_but_smart1;
@@ -84,7 +76,6 @@ public:
   Fl_Button       *m_but_smart_sub1;
 
   // -------
-  Fl_Output       *m_fld_pieces2;
   Fl_Check_Button *m_but_show_pcs2;
   Fl_Output       *m_fld_smart2;
   Fl_Check_Button *m_but_smart2;

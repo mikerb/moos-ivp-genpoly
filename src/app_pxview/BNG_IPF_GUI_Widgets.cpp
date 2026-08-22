@@ -32,24 +32,33 @@ void BNG_IPF_GUI::initWidgets()
   Fl_Color fcolor2 = fl_rgb_color(190, 255, 190); // green
 
   //============================================================
-  // Browser (Left)
-  //============================================================
-  m_brw_modes = new Fl_Browser(0, 0, 1, 1); 
-  m_brw_modes->align(FL_ALIGN_LEFT);
-  m_brw_modes->color(fcolor2);
-  m_brw_modes->tooltip("Behavior Modes/Sub-modes");
-
-  m_brw_modes->when(FL_WHEN_RELEASE);
-  m_brw_modes->textfont(FL_COURIER_BOLD);
-
-  //============================================================
   // Row 1
   //============================================================
   // Viewer 1
-  m_but_toggle_brw1 = new Fl_Button(0, 0, 1, 1, "M");
-  m_but_toggle_brw1->clear_visible_focus();
-  m_but_toggle_brw1->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButToggleModeBrowser,
-			     (void*)1);  
+  m_fld_pieces1 = new Fl_Output(0, 0, 1, 1, "pcs:");
+  m_fld_pieces1->clear_visible_focus();
+
+  m_but_show_pcs1 = new Fl_Check_Button(0, 0, 1, 1, "show pcs");
+  m_but_show_pcs1->clear_visible_focus();
+  m_but_show_pcs1->callback((Fl_Callback*)BNG_IPF_GUI::cb_ToggleDrawPcsAct,
+			   (void*)1);  
+
+  // Viewer 2
+  m_fld_pieces2 = new Fl_Output(0, 0, 1, 1, "pcs:");
+  m_fld_pieces2->clear_visible_focus();
+
+  m_but_show_pcs2 = new Fl_Check_Button(0, 0, 1, 1, "show pcs");
+  m_but_show_pcs2->clear_visible_focus();
+  m_but_show_pcs2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ToggleDrawPcsAct,
+			   (void*)2);  
+
+
+
+
+  //============================================================
+  // Row 2
+  //============================================================
+  // Viewer 1
 
   m_fld_smart1 = new Fl_Output(0, 0, 1, 1, "smart:");
   m_fld_smart1->clear_visible_focus();
@@ -67,43 +76,6 @@ void BNG_IPF_GUI::initWidgets()
   m_but_smart_sub1->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButSmartSub1);
   m_but_smart_sub1->clear_visible_focus();
   
-  // Viewer 2
-  m_but_toggle_brw2 = new Fl_Button(0, 0, 1, 1, "M");
-  m_but_toggle_brw2->clear_visible_focus();
-  m_but_toggle_brw2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButToggleModeBrowser,
-			     (void*)1);  
-
-  m_fld_smart2 = new Fl_Output(0, 0, 1, 1, "smart:");
-  m_fld_smart2->clear_visible_focus();
-
-  m_but_smart2 = new Fl_Check_Button(0, 0, 1, 1, "");
-  m_but_smart2->clear_visible_focus();
-  m_but_smart2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ToggleUseSmartPcs,
-			   (void*)2);  
-
-  m_but_smart_add2 = new Fl_Button(0, 0, 1, 1, "+"); 
-  m_but_smart_add2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButSmartAdd2);
-  m_but_smart_add2->clear_visible_focus();
-  
-  m_but_smart_sub2 = new Fl_Button(0, 0, 1, 1, "-");
-  m_but_smart_sub2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButSmartSub2);
-  m_but_smart_sub2->clear_visible_focus();
-  
-
-
-  //============================================================
-  // Row 2
-  //============================================================
-  // Viewer 1
-  m_fld_pieces1 = new Fl_Output(0, 0, 1, 1, "pcs:");
-  m_fld_pieces1->clear_visible_focus();
-
-  m_but_show_pcs1 = new Fl_Check_Button(0, 0, 1, 1, "show pcs");
-  m_but_show_pcs1->clear_visible_focus();
-  m_but_show_pcs1->callback((Fl_Callback*)BNG_IPF_GUI::cb_ToggleDrawPcsAct,
-			   (void*)1);  
-
-
   m_fld_tol1 = new Fl_Output(0, 0, 1, 1, "ostol:");
   m_fld_tol1->clear_visible_focus();
   m_fld_tol1->color(fcolor_blue);
@@ -123,15 +95,22 @@ void BNG_IPF_GUI::initWidgets()
   
 
   // Viewer 2 --------------------------------
-  m_fld_pieces2 = new Fl_Output(0, 0, 1, 1, "pcs:");
-  m_fld_pieces2->clear_visible_focus();
+  m_fld_smart2 = new Fl_Output(0, 0, 1, 1, "smart:");
+  m_fld_smart2->clear_visible_focus();
 
-  m_but_show_pcs2 = new Fl_Check_Button(0, 0, 1, 1, "show pcs");
-  m_but_show_pcs2->clear_visible_focus();
-  m_but_show_pcs2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ToggleDrawPcsAct,
+  m_but_smart2 = new Fl_Check_Button(0, 0, 1, 1, "");
+  m_but_smart2->clear_visible_focus();
+  m_but_smart2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ToggleUseSmartPcs,
 			   (void*)2);  
 
-
+  m_but_smart_add2 = new Fl_Button(0, 0, 1, 1, "+"); 
+  m_but_smart_add2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButSmartAdd2);
+  m_but_smart_add2->clear_visible_focus();
+  
+  m_but_smart_sub2 = new Fl_Button(0, 0, 1, 1, "-");
+  m_but_smart_sub2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButSmartSub2);
+  m_but_smart_sub2->clear_visible_focus();
+  
   m_fld_tol2 = new Fl_Output(0, 0, 1, 1, "ostol:");
   m_fld_tol2->clear_visible_focus();
   m_fld_tol2->color(fcolor_blue);
@@ -312,7 +291,8 @@ void BNG_IPF_GUI::resizeWidgetsShape()
   double wid1 = panel / 2;
   double wid2 = panel / 2;
   double sx2  = sx1 + wid1 + margin*2; 
-
+  double lmarg = 10;
+  
   if(m_ipf_viewer1)
     m_ipf_viewer1->resize(sx1, 30, wid1, h()-220);
   if(m_ipf_viewer2)
@@ -321,113 +301,57 @@ void BNG_IPF_GUI::resizeWidgetsShape()
   //============================================================
   // The Viewer Window
   //============================================================
-  if(m_show_mode_browser) {
-    int view_x = 10 + browser_wid + 10;
-    int view_y = 30;
-    int view_w = w() - browser_wid - 30;
-    int view_h = h() - 160;
-    m_ipf_viewer1->resize(view_x, view_y, view_w, view_h);
-    extra_wid = extra_wid - (browser_wid + 20);
-  }
-#if 0
-  else {
-    int view_x = 10;
-    int view_y = 30;
-    int view_w = w() - 20;
-    int view_h = h() - 160;
-    m_ipf_viewer1->resize(sx1, 30, wid1, h()-100);
-  }
-#endif
+  //m_ipf_viewer1->resize(margin, 30, wid1, h()-100);
   
-  //============================================================
-  // Browser (Left)
-  //============================================================
-  int lmarg;
-  if(m_show_mode_browser) {
-    int brw_x = 10;
-    int brw_y = 30;
-    int brw_w = browser_wid;
-    int brw_h = h() - 40;
-    m_brw_modes->resize(brw_x, brw_y, brw_w, brw_h);
-    lmarg = brw_x + brw_w + 20;
-  }
-  else {
-    int brw_x = 1;
-    int brw_y = 1;
-    int brw_w = 0;
-    int brw_h = 0;
-    m_brw_modes->resize(brw_x, brw_y, brw_w, brw_h);
-    lmarg = 10;
-  }
-
   //============================================================
   // Row 1
   //============================================================
   // Viewer 1
-  int bsh_x = sx1;
-  int bsh_y = row1;
-  int bsh_w = 20;
-  m_but_toggle_brw1->resize(bsh_x, bsh_y, bsh_w, fld_hgt);
+  int pcs_x = sx1 + 65;
+  int pcs_y = row1;
+  int pcs_w = 35 + (extra_wid/4);
+  m_fld_pieces1->resize(pcs_x, pcs_y, pcs_w, fld_hgt);
 
-  int sm1_x = sx1 + 65;
-  int sm1_y = row1;
-  int sm1_w = 35 + (extra_wid/4);
-  m_fld_smart1->resize(sm1_x, sm1_y, sm1_w, fld_hgt);
+  int bpc_x = pcs_x + pcs_w + 10;
+  int bpc_y = row1;
+  int bpc_w = 20;
+  m_but_show_pcs1->resize(bpc_x, bpc_y, bpc_w, fld_hgt);
 
-  int bs1_x = sm1_x + sm1_w + 5;
-  int bs1_y = row1;
-  int bs1_w = 15;
-  m_but_smart1->resize(bs1_x, bs1_y, bs1_w, fld_hgt);
-  
-  int bsa1_x = bs1_x + bs1_w + 6;
-  int bsa1_y = row1;
-  int bsa1_w = 15;
-  m_but_smart_add1->resize(bsa1_x, bsa1_y, bsa1_w, fld_hgt);
-
-  int bss1_x = bsa1_x + bsa1_w + 4;
-  int bss1_y = row1;
-  int bss1_w = 15;
-  m_but_smart_sub1->resize(bss1_x, bss1_y, bss1_w, fld_hgt);
 
   // Viewer 2  -------------------------------
-  int bsh2_x = sx2;
-  int bsh2_y = row1;
-  int bsh2_w = 20;
-  m_but_toggle_brw2->resize(bsh2_x, bsh2_y, bsh2_w, fld_hgt);
+  int pcs2_x = sx2 + 65;
+  int pcs2_y = row1;
+  int pcs2_w = 35 + (extra_wid/4);
+  m_fld_pieces2->resize(pcs2_x, pcs2_y, pcs2_w, fld_hgt);
 
-  int sm2_x = sx2 + 65;
-  int sm2_y = row1;
-  int sm2_w = 35 + (extra_wid/4);
-  m_fld_smart2->resize(sm2_x, sm2_y, sm2_w, fld_hgt);
-
-  int bs2_x = sm2_x + sm2_w + 5;
-  int bs2_y = row1;
-  int bs2_w = 14;
-  m_but_smart2->resize(bs2_x, bs2_y, bs2_w, fld_hgt);
-  
-  int bsa2_x = bs2_x + bs2_w + 6;
-  int bsa2_y = row1;
-  int bsa2_w = 15;
-  m_but_smart_add2->resize(bsa2_x, bsa2_y, bsa2_w, fld_hgt);
-
-  int bss2_x = bsa2_x + bsa2_w + 4;
-  int bss2_y = row1;
-  int bss2_w = 15;
-  m_but_smart_sub2->resize(bss2_x, bss2_y, bss2_w, fld_hgt);
+  int bpc2_x = pcs2_x + pcs2_w + 10;
+  int bpc2_y = row1;
+  int bpc2_w = 20;
+  m_but_show_pcs2->resize(bpc2_x, bpc2_y, bpc2_w, fld_hgt);
 
   //============================================================
   // Row 2
   //============================================================
   // Viewer 1
-  int pcs_x = sx1 + 65;
-  int pcs_y = row2;
-  int pcs_w = 35 + (extra_wid/4);
-  m_fld_pieces1->resize(pcs_x, pcs_y, pcs_w, fld_hgt);
+  int sm1_x = sx1 + 65;
+  int sm1_y = row2;
+  int sm1_w = 35 + (extra_wid/4);
+  m_fld_smart1->resize(sm1_x, sm1_y, sm1_w, fld_hgt);
 
-  int bpc_x = pcs_x + pcs_w + 10;
-  int bpc_y = row2;
-  int bpc_w = 20;
-  m_but_show_pcs1->resize(bpc_x, bpc_y, bpc_w, fld_hgt);
+  int bs1_x = sm1_x + sm1_w + 5;
+  int bs1_y = row2;
+  int bs1_w = 15;
+  m_but_smart1->resize(bs1_x, bs1_y, bs1_w, fld_hgt);
+  
+  int bsa1_x = bs1_x + bs1_w + 6;
+  int bsa1_y = row2;
+  int bsa1_w = 15;
+  m_but_smart_add1->resize(bsa1_x, bsa1_y, bsa1_w, fld_hgt);
+
+  int bss1_x = bsa1_x + bsa1_w + 4;
+  int bss1_y = row2;
+  int bss1_w = 15;
+  m_but_smart_sub1->resize(bss1_x, bss1_y, bss1_w, fld_hgt);
 
   int ftol1_x = bpc_x + bpc_w + 100;
   int ftol1_y = row2;
@@ -450,15 +374,25 @@ void BNG_IPF_GUI::resizeWidgetsShape()
   m_but_tol_sub1->resize(btols1_x, btols1_y, btols1_w, fld_hgt);
 
   // Viewer 2 -----------------------------
-  int pcs2_x = sx2 + 65;
-  int pcs2_y = row2;
-  int pcs2_w = 35 + (extra_wid/4);
-  m_fld_pieces2->resize(pcs2_x, pcs2_y, pcs2_w, fld_hgt);
+  int sm2_x = sx2 + 65;
+  int sm2_y = row2;
+  int sm2_w = 35 + (extra_wid/4);
+  m_fld_smart2->resize(sm2_x, sm2_y, sm2_w, fld_hgt);
 
-  int bpc2_x = pcs2_x + pcs2_w + 10;
-  int bpc2_y = row2;
-  int bpc2_w = 20;
-  m_but_show_pcs2->resize(bpc2_x, bpc2_y, bpc2_w, fld_hgt);
+  int bs2_x = sm2_x + sm2_w + 5;
+  int bs2_y = row2;
+  int bs2_w = 14;
+  m_but_smart2->resize(bs2_x, bs2_y, bs2_w, fld_hgt);
+  
+  int bsa2_x = bs2_x + bs2_w + 6;
+  int bsa2_y = row2;
+  int bsa2_w = 15;
+  m_but_smart_add2->resize(bsa2_x, bsa2_y, bsa2_w, fld_hgt);
+
+  int bss2_x = bsa2_x + bsa2_w + 4;
+  int bss2_y = row2;
+  int bss2_w = 15;
+  m_but_smart_sub2->resize(bss2_x, bss2_y, bss2_w, fld_hgt);
 
   int ftol2_x = bpc2_x + bpc2_w + 100;
   int ftol2_y = row2;
@@ -662,52 +596,41 @@ void BNG_IPF_GUI::resizeWidgetsText()
   //===========================================================
   // Browser (Left)
   //===========================================================
-  m_brw_modes->textsize(text_size);
 
   //===========================================================
   // Row 1
   //===========================================================
   // Viewer1
-  m_but_toggle_brw1->labelsize(text_size);
-
-  m_fld_smart1->textsize(text_size);
-  m_fld_smart1->labelsize(text_size);
-
-  m_but_smart1->labelsize(text_size);
-
+  m_fld_pieces1->textsize(text_size);
+  m_fld_pieces1->labelsize(text_size);
+  m_but_show_pcs1->labelsize(text_size);
 
   // Viewer 2
-  m_but_toggle_brw2->labelsize(text_size);
+  m_fld_pieces2->textsize(text_size);
+  m_fld_pieces2->labelsize(text_size);
+  m_but_show_pcs2->labelsize(text_size);
 
-  m_fld_smart2->textsize(text_size);
-  m_fld_smart2->labelsize(text_size);
-
-  m_but_smart2->labelsize(text_size);
-  
   //===========================================================
   // Row 2
   //===========================================================
   // Viewer 1
-  m_fld_pieces1->textsize(text_size);
-  m_fld_pieces1->labelsize(text_size);
-
-  m_but_show_pcs1->labelsize(text_size);
+  m_fld_smart1->textsize(text_size);
+  m_fld_smart1->labelsize(text_size);
+  m_but_smart1->labelsize(text_size);
 
   m_fld_tol1->textsize(text_size);
   m_fld_tol1->labelsize(text_size);
-
   m_but_tol1->labelsize(text_size);
   
   // Viewer 2
-  m_fld_pieces2->textsize(text_size);
-  m_fld_pieces2->labelsize(text_size);
-
-  m_but_show_pcs2->labelsize(text_size);
-
+  m_fld_smart2->textsize(text_size);
+  m_fld_smart2->labelsize(text_size);
+  m_but_smart2->labelsize(text_size);
+  
   m_fld_tol2->textsize(text_size);
   m_fld_tol2->labelsize(text_size);
-
   m_but_tol2->labelsize(text_size);
+
   //===========================================================
   // Row 3
   //===========================================================

@@ -32,8 +32,6 @@ BNG_IPF_GUI::BNG_IPF_GUI(int wid, int hgt, const char *label)
   // Set minimum size 800x800, maximum size 1800x1800  
   this->size_range(800,800, 3000,1800, 0,0, 1);
   
-  m_show_mode_browser = false;
-
   m_parent_gui = 0;
   augmentMenu();
     
@@ -56,14 +54,8 @@ BNG_IPF_GUI::BNG_IPF_GUI(int wid, int hgt, const char *label)
 
 BNG_IPF_GUI::~BNG_IPF_GUI()
 {
-  if(m_brw_modes)  
-    delete(m_brw_modes);
-
   // Row 1 --------------------------
   // Viewer 1
-  if(m_but_toggle_brw1)
-    delete(m_but_toggle_brw1);
-
   if(m_fld_tol1)
     delete(m_fld_tol1);
   if(m_but_tol1)
@@ -74,9 +66,6 @@ BNG_IPF_GUI::~BNG_IPF_GUI()
     delete(m_but_tol_sub1);
   
   // Viewer 2 ----
-  if(m_but_toggle_brw2)
-    delete(m_but_toggle_brw2);
-
   if(m_fld_tol2)
     delete(m_fld_tol2);
   if(m_but_tol2)
@@ -798,55 +787,6 @@ void BNG_IPF_GUI::cb_ButMaxUtilSub2(Fl_Widget* o) {
   ((BNG_IPF_GUI*)(o->parent()->user_data()))->cb_ButMaxUtilMod_i(2,-1);
 }
 
-
-//------------------------------------------ CB_ButToggleModeBrowser
-
-inline void BNG_IPF_GUI::cb_ButToggleModeBrowser_i()
-{
-  m_show_mode_browser = !m_show_mode_browser;
-  if(m_show_mode_browser)
-    m_but_toggle_brw1->label("MD");
-  else
-    m_but_toggle_brw1->label("MD");
-    
-  resizeWidgetsShape();
-  redraw();
-  updateXY();
-}
-void BNG_IPF_GUI::cb_ButToggleModeBrowser(Fl_Widget* o) {
-  ((BNG_IPF_GUI*)(o->parent()->user_data()))->cb_ButToggleModeBrowser_i();
-}
-
-//------------------------------------------ CB_ToggleRefineryAct
-
-inline void BNG_IPF_GUI::cb_ToggleRefineryAct_i(int vix)
-{
-  if(vix == 1) {
-    m_ipf_viewer1->setParam("use_refinery", "toggle");
-
-    // Disallow the platmodel if using the refinery (for now)
-    if(m_ipf_viewer1->getUseRefinery())
-      m_ipf_viewer1->setUsePlatModel("false");
-
-    m_ipf_viewer1->resetIPFX();
-  }
-  else if(vix == 2) {
-    m_ipf_viewer2->setParam("use_refinery", "toggle");
-
-    // Disallow the platmodel if using the refinery (for now)
-    if(m_ipf_viewer2->getUseRefinery())
-      m_ipf_viewer2->setUsePlatModel("false");
-
-    m_ipf_viewer2->resetIPFX();
-  }
-  else
-    return;
-  redraw();
-  updateXY();
-}
-void BNG_IPF_GUI::cb_ToggleRefineryAct(Fl_Widget* o, int val) {
-  ((BNG_IPF_GUI*)(o->parent()->user_data()))->cb_ToggleRefineryAct_i(val);
-}
 
 //------------------------------------------ CB_TogglePlatModel
 
