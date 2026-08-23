@@ -32,7 +32,9 @@ BNG_IPF_GUI::BNG_IPF_GUI(int wid, int hgt, const char *label)
   // Set minimum size 800x800, maximum size 1800x1800  
   this->size_range(800,800, 3000,1800, 0,0, 1);
   
-  m_parent_gui = 0;
+  m_parent_gui  = 0;
+  m_ipf_viewer1 = 0;
+  m_ipf_viewer2 = 0;
   augmentMenu();
     
   initWidgets();
@@ -908,6 +910,49 @@ void BNG_IPF_GUI::cb_ToggleDrawPcsAct(Fl_Widget* o, int val) {
 }
 
 
+//------------------------------------------ CB_ToggleUseETA
+
+inline void BNG_IPF_GUI::cb_ToggleUseETA_i(int vix)
+{
+  if(vix == 1) {
+    m_ipf_viewer1->setParam("eta_factored", "toggle");
+    m_ipf_viewer1->resetIPFX();
+  }
+  else if(vix == 2) {
+    m_ipf_viewer2->setParam("eta_factored", "toggle");
+    m_ipf_viewer2->resetIPFX();
+  }
+  else
+    return;
+  redraw();
+  updateXY();
+}
+void BNG_IPF_GUI::cb_ToggleUseETA(Fl_Widget* o, int val) {
+  ((BNG_IPF_GUI*)(o->parent()->user_data()))->cb_ToggleUseETA_i(val);
+}
+
+//------------------------------------------ CB_ToggleUseCPA
+
+inline void BNG_IPF_GUI::cb_ToggleUseCPA_i(int vix)
+{
+  if(vix == 1) {
+    m_ipf_viewer1->setParam("cpa_factored", "toggle");
+    m_ipf_viewer1->resetIPFX();
+  }
+  else if(vix == 2) {
+    m_ipf_viewer2->setParam("cpa_factored", "toggle");
+    m_ipf_viewer2->resetIPFX();
+  }
+  else
+    return;
+  redraw();
+  updateXY();
+}
+void BNG_IPF_GUI::cb_ToggleUseCPA(Fl_Widget* o, int val) {
+  ((BNG_IPF_GUI*)(o->parent()->user_data()))->cb_ToggleUseCPA_i(val);
+}
+
+
 //------------------------------------------ CB_ToggleUseSmartPcs
 
 inline void BNG_IPF_GUI::cb_ToggleUseSmartPcs_i(int vix)
@@ -947,6 +992,9 @@ void BNG_IPF_GUI::updateXY()
     string min_eta = m_ipf_viewer1->getInfo("minutil_eta");
     m_fld_minutil_eta1->value(min_eta.c_str());
 
+    bool eta1 = m_ipf_viewer1->getETAFactored();
+    m_but_use_eta1->value((int)(eta1));
+
     // Row 2 --------------
     bool sm1 = m_ipf_viewer1->getUseSmartPcs();
     m_but_smart1->value((int)(sm1));
@@ -964,6 +1012,9 @@ void BNG_IPF_GUI::updateXY()
     string minutil_cpa1 = m_ipf_viewer1->getInfo("minutil_cpa");
     m_fld_minutil_cpa1->value(minutil_cpa1.c_str());  
     
+    bool cpa1 = m_ipf_viewer1->getCPAFactored();
+    m_but_tol1->value((int)(cpa1));
+
     // Row 4
     string spd_size = m_ipf_viewer1->getInfo("spd_size");
     m_fld_spd_size1->value(spd_size.c_str());  
@@ -998,6 +1049,9 @@ void BNG_IPF_GUI::updateXY()
     string min_eta = m_ipf_viewer2->getInfo("minutil_eta");
     m_fld_minutil_eta2->value(min_eta.c_str());
 
+    bool eta1 = m_ipf_viewer2->getETAFactored();
+    m_but_use_eta2->value((int)(eta1));
+
     // Row 2  -------------
     bool sm2 = m_ipf_viewer2->getUseSmartPcs();
     m_but_smart2->value((int)(sm2));
@@ -1015,6 +1069,9 @@ void BNG_IPF_GUI::updateXY()
     string minutil_cpa2 = m_ipf_viewer2->getInfo("minutil_cpa");
     m_fld_minutil_cpa2->value(minutil_cpa2.c_str());  
     
+    bool cpa2 = m_ipf_viewer2->getCPAFactored();
+    m_but_tol2->value((int)(cpa2));
+
     // Row 4  -------------
     string spd_size = m_ipf_viewer2->getInfo("spd_size");
     m_fld_spd_size2->value(spd_size.c_str());  

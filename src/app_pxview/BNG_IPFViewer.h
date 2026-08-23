@@ -37,6 +37,8 @@ class BNG_IPFViewer : public Common_IPFViewer
   bool   setBehaviorType(std::string);
   void   setDomain(IvPDomain dom) {m_domain=dom;}
 
+  bool   setParam(std::string, std::string);
+  bool   setParam(std::string, double);
   void   clearBehaviorModes();
 
  public: // Analysis of behavior and built IPF
@@ -49,6 +51,8 @@ class BNG_IPFViewer : public Common_IPFViewer
   unsigned int getSpdEdgeSize() const {return(m_spd_edge_size);}
 
   std::string getBHVType() const {return(m_bhv_type);}
+  bool   getETAFactored() const  {return(m_eta_factored);}
+  bool   getCPAFactored() const  {return(m_cpa_factored);}
 
   double getMinUtilCPA() const {return(m_minutil_cpa);}
   double getMaxUtilCPA() const {return(m_maxutil_cpa);}
@@ -107,7 +111,8 @@ private: // Analysis of behavior and built IPF
   unsigned int  m_ipf_pieces;
   std::string   m_curr_bhv_mode;
   std::string   m_curr_bhv_submode;
-
+  std::string   m_debug1;
+  
 private: // Behavior Config
   std::string   m_bhv_type;
   std::string   m_plat_model_config;
@@ -118,6 +123,9 @@ private: // Behavior Config
   double        m_minutil_cpa;
   double        m_maxutil_cpa;
   double        m_cpa_window;
+
+  bool          m_eta_factored;
+  bool          m_cpa_factored;
   
 private: // IPF config params
   unsigned int  m_hdg_edge_size;

@@ -53,11 +53,14 @@ BNG_IPFViewer::BNG_IPFViewer(int x, int y, int w, int h, const char *label)
   m_use_plat_model = false;
   m_plat_model_config = "holonomic";
 
-  m_minutil_eta    = 11;
-  m_maxutil_eta    = 29;
-  m_minutil_cpa    = 4;
-  m_maxutil_cpa    = 10;
-  m_cpa_window     = 15.5;
+  m_minutil_eta  = 11;
+  m_maxutil_eta  = 29;
+  m_minutil_cpa  = 4;
+  m_maxutil_cpa  = 10;
+  m_cpa_window   = 15.5;
+
+  m_eta_factored = true;
+  m_cpa_factored = true;
   
   // IPF config params
   m_hdg_edge_size = 5;
@@ -104,6 +107,27 @@ bool BNG_IPFViewer::setBehaviorType(string bhv_type)
   m_refresh_quadset_aof_pending = false;
   m_refresh_quadset_ipf_pending = false;
   return(false);
+}
+
+//-------------------------------------------------------------
+// Procedure: setParam()
+
+bool BNG_IPFViewer::setParam(string param, string value)
+{
+  if(param == "eta_factored")
+    return(setBooleanOnString(m_eta_factored, value));
+  if(param == "cpa_factored")
+    return(setBooleanOnString(m_cpa_factored, value));
+
+  return(Common_IPFViewer::setParam(param, value));
+}
+
+//-------------------------------------------------------------
+// Procedure: setParam()
+
+bool BNG_IPFViewer::setParam(string param, double value)
+{
+  return(Common_IPFViewer::setParam(param, value));
 }
 
 //-------------------------------------------------------------
@@ -170,6 +194,8 @@ string BNG_IPFViewer::getInfo(string param)
     return(m_plat_model_config);
   if(param == "time_on_leg") 
     return(doubleToStringX(m_time_on_leg));
+  if(param == "debug1") 
+    return(m_debug1);
   
   if(m_bhv)
     return(m_bhv->getInfo(param));
@@ -465,25 +491,33 @@ IvPFunction *BNG_IPFViewer::buildIPF_OpRegion()
   ok = ok && m_bhv->setParam("build_info", "uniform_piece=" + piece);
   ok = ok && m_bhv->setParam("build_info", "uniform_grid=" + piece);
 
-  string s_minutil_eta = doubleToStringX(m_minutil_eta,2);
-  string s_maxutil_eta = doubleToStringX(m_maxutil_eta,2);
-  string s_minutil_cpa = doubleToStringX(m_minutil_cpa,2);
-  string s_maxutil_cpa = doubleToStringX(m_maxutil_cpa,2);
-  string s_cpa_window  = doubleToStringX(m_cpa_window,2);
+  string s_minutil_eta  = doubleToStringX(m_minutil_eta,2);
+  string s_maxutil_eta  = doubleToStringX(m_maxutil_eta,2);
+  string s_minutil_cpa  = doubleToStringX(m_minutil_cpa,2);
+  string s_maxutil_cpa  = doubleToStringX(m_maxutil_cpa,2); 
+  string s_cpa_window   = doubleToStringX(m_cpa_window,2);
+  string s_eta_factored = boolToString(m_eta_factored);
+  string s_cpa_factored = boolToString(m_cpa_factored);
 
+  cout << "ETA Factored:" << s_eta_factored << endl;
+  
   ok = ok && m_bhv->setParam("min_util_eta", s_minutil_eta);
   ok = ok && m_bhv->setParam("max_util_eta", s_maxutil_eta);
   ok = ok && m_bhv->setParam("min_util_cpa", s_minutil_cpa);
   ok = ok && m_bhv->setParam("max_util_cpa", s_maxutil_cpa);
   ok = ok && m_bhv->setParam("cpa_window", s_cpa_window);
+  ok = ok && m_bhv->setParam("eta_factored", s_eta_factored);
+  ok = ok && m_bhv->setParam("cpa_factored", s_cpa_factored);
   
   if(m_use_smart_pcs) {
     string str = uintToString(m_smart_pcs);
     ok = ok && m_bhv->setParam("build_info", "smart_amount=" + str);
   }
   
+  m_debug1 = "BHV_OpRegionV26 Init OK ";
   if(!ok) {
     cout << "BHV_OpRegionV26 Init Failure" << endl;
+    m_debug1 = "BHV_OpRegionV26 Init Failure";
     return(0);
   }
 

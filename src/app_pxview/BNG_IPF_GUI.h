@@ -61,6 +61,7 @@ public:
   Fl_Input        *m_fld_minutil_eta1;
   Fl_Button       *m_but_minutil_etap1;
   Fl_Button       *m_but_minutil_etas1;
+  Fl_Check_Button *m_but_use_eta1;
 
   // -------
   Fl_Check_Button *m_but_show_pcs2;
@@ -69,6 +70,7 @@ public:
   Fl_Input        *m_fld_minutil_eta2;
   Fl_Button       *m_but_minutil_etap2;
   Fl_Button       *m_but_minutil_etas2;
+  Fl_Check_Button *m_but_use_eta2;
 
   // Row 2 --------------------------
   Fl_Output       *m_fld_smart1;
@@ -99,6 +101,8 @@ public:
   Fl_Button  *m_but_minutil_add1;
   Fl_Button  *m_but_minutil_sub1;
 
+  Fl_Check_Button *m_but_tol1;
+
   // -------
   Fl_Output  *m_fld_hdg_size2;
   Fl_Button  *m_but_hsz_add2;
@@ -107,6 +111,8 @@ public:
   Fl_Input   *m_fld_minutil_cpa2;
   Fl_Button  *m_but_minutil_add2;
   Fl_Button  *m_but_minutil_sub2;
+
+  Fl_Check_Button *m_but_tol2;
 
   // Row 4 --------------------------
   Fl_Output  *m_fld_spd_size1;
@@ -128,14 +134,12 @@ public:
   
   // Row 5 --------------------------
   Fl_Output       *m_fld_plat_model1;
-  Fl_Check_Button *m_but_tol1;
   Fl_Output       *m_fld_tol1;
   Fl_Button       *m_but_tol_add1;
   Fl_Button       *m_but_tol_sub1;
 
   // -------
   Fl_Output       *m_fld_plat_model2;
-  Fl_Check_Button *m_but_tol2;
   Fl_Output       *m_fld_tol2;
   Fl_Button       *m_but_tol_add2;
   Fl_Button       *m_but_tol_sub2;
@@ -168,6 +172,9 @@ public:
 
 
   // Row 1 -------------------------------------
+  inline void cb_ToggleDrawPcsAct_i(int);
+  static void cb_ToggleDrawPcsAct(Fl_Widget*, int);
+
   inline void cb_ToggleAutoTOL_i(int);
   static void cb_ToggleAutoTOL(Fl_Widget*, int);
 
@@ -183,10 +190,10 @@ public:
   static void cb_ButMinUtilETAAdd2(Fl_Widget*);
   static void cb_ButMinUtilETASub2(Fl_Widget*);
 
-  // Row 2 -------------------------------------
-  inline void cb_ToggleDrawPcsAct_i(int);
-  static void cb_ToggleDrawPcsAct(Fl_Widget*, int);
+  inline void cb_ToggleUseETA_i(int);
+  static void cb_ToggleUseETA(Fl_Widget*, int);
 
+  // Row 2 -------------------------------------
   inline void cb_ToggleUseSmartPcs_i(int);
   static void cb_ToggleUseSmartPcs(Fl_Widget*, int);
 
@@ -214,6 +221,9 @@ public:
   static void cb_ButMinUtilSub1(Fl_Widget*);
   static void cb_ButMinUtilAdd2(Fl_Widget*);
   static void cb_ButMinUtilSub2(Fl_Widget*);
+
+  inline void cb_ToggleUseCPA_i(int);
+  static void cb_ToggleUseCPA(Fl_Widget*, int);
 
   // Row 4  -------------------------------------
   inline void cb_SpeedEdgeMod_i(int, int);
