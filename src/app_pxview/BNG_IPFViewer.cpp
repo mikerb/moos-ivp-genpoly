@@ -51,10 +51,14 @@ BNG_IPFViewer::BNG_IPFViewer(int x, int y, int w, int h, const char *label)
   m_bhv_type       = "opreg26";
   m_rad_ratio      = 1.70;
   m_use_plat_model = false;
-  m_minutil_cpa    = 8;
-  m_maxutil_cpa    = 15;
   m_plat_model_config = "holonomic";
 
+  m_minutil_eta    = 11;
+  m_maxutil_eta    = 29;
+  m_minutil_cpa    = 4;
+  m_maxutil_cpa    = 10;
+  m_cpa_window     = 15.5;
+  
   // IPF config params
   m_hdg_edge_size = 5;
   m_spd_edge_size = 4;
@@ -148,10 +152,18 @@ string BNG_IPFViewer::getInfo(string param)
     return(uintToString(m_spd_edge_size));
   if(param == "bhv_type") 
     return(m_bhv_type);
+  if(param == "minutil_eta") 
+    return(doubleToStringX(m_minutil_eta,2));
+  if(param == "maxutil_eta") 
+    return(doubleToStringX(m_maxutil_eta,2));
+
   if(param == "minutil_cpa") 
     return(doubleToStringX(m_minutil_cpa,2));
   if(param == "maxutil_cpa") 
     return(doubleToStringX(m_maxutil_cpa,2));
+  if(param == "cpa_window") 
+    return(doubleToStringX(m_cpa_window,2));
+
   if(param == "smart") 
     return(uintToString(m_smart_pcs));
   if(param == "pmodel_config") 
@@ -237,6 +249,26 @@ void BNG_IPFViewer::resetIPF()
 }
 
 // ----------------------------------------------------------
+// Procedure: setCPAWindow()
+
+void BNG_IPFViewer::setCPAWindow(double val)
+{
+  if(val < 0)
+    val = 0;
+  m_cpa_window = val;
+  m_refresh_quadset_ipf_pending = true;
+}
+
+// ----------------------------------------------------------
+// Procedure: modCPAWindow()
+
+void BNG_IPFViewer::modCPAWindow(double val)
+{
+  setCPAWindow(m_cpa_window + val);
+}
+
+
+// ----------------------------------------------------------
 // Procedure: setMinUtilCPA()
 
 void BNG_IPFViewer::setMinUtilCPA(double val)
@@ -277,6 +309,49 @@ void BNG_IPFViewer::modMinUtilCPA(double val)
 void BNG_IPFViewer::modMaxUtilCPA(double val)
 {
   setMaxUtilCPA(m_maxutil_cpa + val);
+}
+
+// ----------------------------------------------------------
+// Procedure: setMinUtilETA()
+
+void BNG_IPFViewer::setMinUtilETA(double val)
+{
+  if(val < 0)
+    val = 0;
+  if(val > m_maxutil_eta)
+    val = m_maxutil_eta;
+  m_minutil_eta = val;
+  m_refresh_quadset_ipf_pending = true;
+}
+
+
+// ----------------------------------------------------------
+// Procedure: setMaxUtilETA()
+
+void BNG_IPFViewer::setMaxUtilETA(double val)
+{
+  if(val < 0)
+    val = 0;
+  if(val < m_minutil_eta)
+    val = m_minutil_eta;
+  m_maxutil_eta = val;
+  m_refresh_quadset_ipf_pending = true;
+}
+
+// ----------------------------------------------------------
+// Procedure: modMinUtilETA()
+
+void BNG_IPFViewer::modMinUtilETA(double val)
+{
+  setMinUtilETA(m_minutil_eta + val);
+}
+
+// ----------------------------------------------------------
+// Procedure: modMaxUtilETA()
+
+void BNG_IPFViewer::modMaxUtilETA(double val)
+{
+  setMaxUtilETA(m_maxutil_eta + val);
 }
 
 // ----------------------------------------------------------
@@ -390,8 +465,17 @@ IvPFunction *BNG_IPFViewer::buildIPF_OpRegion()
   ok = ok && m_bhv->setParam("build_info", "uniform_piece=" + piece);
   ok = ok && m_bhv->setParam("build_info", "uniform_grid=" + piece);
 
-  ok = ok && m_bhv->setParam("min_util_eta", "10");
-  ok = ok && m_bhv->setParam("max_util_eta", "30");
+  string s_minutil_eta = doubleToStringX(m_minutil_eta,2);
+  string s_maxutil_eta = doubleToStringX(m_maxutil_eta,2);
+  string s_minutil_cpa = doubleToStringX(m_minutil_cpa,2);
+  string s_maxutil_cpa = doubleToStringX(m_maxutil_cpa,2);
+  string s_cpa_window  = doubleToStringX(m_cpa_window,2);
+
+  ok = ok && m_bhv->setParam("min_util_eta", s_minutil_eta);
+  ok = ok && m_bhv->setParam("max_util_eta", s_maxutil_eta);
+  ok = ok && m_bhv->setParam("min_util_cpa", s_minutil_cpa);
+  ok = ok && m_bhv->setParam("max_util_cpa", s_maxutil_cpa);
+  ok = ok && m_bhv->setParam("cpa_window", s_cpa_window);
   
   if(m_use_smart_pcs) {
     string str = uintToString(m_smart_pcs);
@@ -409,6 +493,7 @@ IvPFunction *BNG_IPFViewer::buildIPF_OpRegion()
   IvPFunction *ipf = m_bhv->onRunState();
   if(!ipf)
     cout << "BHV_OpRegionV26: Null IvP Function!!!" << endl;
+
   return(ipf);
 }
 

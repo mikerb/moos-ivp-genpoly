@@ -56,8 +56,16 @@ class BNG_IPFViewer : public Common_IPFViewer
  public: // Behavior config 
   void   setMinUtilCPA(double);
   void   setMaxUtilCPA(double);  
+  void   setCPAWindow(double);
   void   modMinUtilCPA(double);
   void   modMaxUtilCPA(double);
+  void   modCPAWindow(double);
+
+  void   setMinUtilETA(double);
+  void   setMaxUtilETA(double);  
+  void   modMinUtilETA(double);
+  void   modMaxUtilETA(double);
+
   bool   setUsePlatModel(std::string);
   bool   getUsePlatModel() const {return(m_use_plat_model);}
 
@@ -104,8 +112,12 @@ private: // Behavior Config
   std::string   m_bhv_type;
   std::string   m_plat_model_config;
   bool          m_use_plat_model;
+
+  double        m_minutil_eta;
+  double        m_maxutil_eta;
   double        m_minutil_cpa;
   double        m_maxutil_cpa;
+  double        m_cpa_window;
   
 private: // IPF config params
   unsigned int  m_hdg_edge_size;

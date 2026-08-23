@@ -48,11 +48,11 @@ void BNG_IPF_GUI::initWidgets()
   m_fld_minutil_eta1->color(fcolor_beige);
   
   m_but_minutil_etap1 = new Fl_Button(0, 0, 1, 1, "+");
-  m_but_minutil_etap1->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButMinUtilAdd1);
+  m_but_minutil_etap1->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButMinUtilETAAdd1);
   m_but_minutil_etap1->clear_visible_focus();
   
   m_but_minutil_etas1 = new Fl_Button(0, 0, 1, 1, "-");
-  m_but_minutil_etas1->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButMinUtilSub1);
+  m_but_minutil_etas1->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButMinUtilETASub1);
   m_but_minutil_etas1->clear_visible_focus();
   
   // Viewer 2
@@ -69,11 +69,11 @@ void BNG_IPF_GUI::initWidgets()
   m_fld_minutil_eta2->color(fcolor_beige);
   
   m_but_minutil_etap2 = new Fl_Button(0, 0, 1, 1, "+");
-  m_but_minutil_etap2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButMinUtilAdd1);
+  m_but_minutil_etap2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButMinUtilETAAdd2);
   m_but_minutil_etap2->clear_visible_focus();
   
   m_but_minutil_etas2 = new Fl_Button(0, 0, 1, 1, "-");
-  m_but_minutil_etas2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButMinUtilSub1);
+  m_but_minutil_etas2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButMinUtilETASub2);
   m_but_minutil_etas2->clear_visible_focus();
   
 
@@ -104,11 +104,11 @@ void BNG_IPF_GUI::initWidgets()
   m_fld_maxutil_eta1->color(fcolor_beige);
   
   m_but_maxutil_etap1 = new Fl_Button(0, 0, 1, 1, "+");
-  m_but_maxutil_etap1->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButMinUtilAdd1);
+  m_but_maxutil_etap1->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButMaxUtilETAAdd1);
   m_but_maxutil_etap1->clear_visible_focus();
   
   m_but_maxutil_etas1 = new Fl_Button(0, 0, 1, 1, "-");
-  m_but_maxutil_etas1->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButMinUtilSub1);
+  m_but_maxutil_etas1->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButMaxUtilETASub1);
   m_but_maxutil_etas1->clear_visible_focus();
   
 
@@ -129,16 +129,16 @@ void BNG_IPF_GUI::initWidgets()
   m_but_smart_sub2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButSmartSub2);
   m_but_smart_sub2->clear_visible_focus();
   
-  m_fld_maxutil_eta2 = new Fl_Output(0, 0, 1, 1, "min_util_eta:");
+  m_fld_maxutil_eta2 = new Fl_Output(0, 0, 1, 1, "max_util_eta:");
   m_fld_maxutil_eta2->clear_visible_focus();
   m_fld_maxutil_eta2->color(fcolor_beige);
   
   m_but_maxutil_etap2 = new Fl_Button(0, 0, 1, 1, "+");
-  m_but_maxutil_etap2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButMinUtilAdd1);
+  m_but_maxutil_etap2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButMaxUtilETAAdd2);
   m_but_maxutil_etap2->clear_visible_focus();
   
   m_but_maxutil_etas2 = new Fl_Button(0, 0, 1, 1, "-");
-  m_but_maxutil_etas2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButMinUtilSub1);
+  m_but_maxutil_etas2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ButMaxUtilETASub2);
   m_but_maxutil_etas2->clear_visible_focus();
   
   //============================================================

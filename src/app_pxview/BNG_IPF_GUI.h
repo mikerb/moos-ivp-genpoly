@@ -161,18 +161,13 @@ public:
   inline void cb_PadIPF_i(int);
   static void cb_PadIPF(Fl_Widget*, int);
 
-  // Row 1 -------------------------------------
-  inline void cb_ButToggleModeBrowser_i();
-  static void cb_ButToggleModeBrowser(Fl_Widget*);
-
   inline void cb_BehaviorType_i(int vix, int val);
   static void cb_BehaviorType1(Fl_Widget*, int);
   static void cb_BehaviorType2(Fl_Widget*, int);
   static void cb_BehaviorType12(Fl_Widget*, int);
 
-  inline void cb_ToggleRefineryAct_i(int);
-  static void cb_ToggleRefineryAct(Fl_Widget*, int);
 
+  // Row 1 -------------------------------------
   inline void cb_ToggleAutoTOL_i(int);
   static void cb_ToggleAutoTOL(Fl_Widget*, int);
 
@@ -181,6 +176,12 @@ public:
   static void cb_ButTOLSub1(Fl_Widget*);
   static void cb_ButTOLAdd2(Fl_Widget*);
   static void cb_ButTOLSub2(Fl_Widget*);
+
+  inline void cb_ButMinUtilETAMod_i(int, int);
+  static void cb_ButMinUtilETAAdd1(Fl_Widget*);
+  static void cb_ButMinUtilETASub1(Fl_Widget*);
+  static void cb_ButMinUtilETAAdd2(Fl_Widget*);
+  static void cb_ButMinUtilETASub2(Fl_Widget*);
 
   // Row 2 -------------------------------------
   inline void cb_ToggleDrawPcsAct_i(int);
@@ -194,6 +195,12 @@ public:
   static void cb_ButSmartSub1(Fl_Widget*);
   static void cb_ButSmartAdd2(Fl_Widget*);
   static void cb_ButSmartSub2(Fl_Widget*);
+
+  inline void cb_ButMaxUtilETAMod_i(int, int);
+  static void cb_ButMaxUtilETAAdd1(Fl_Widget*);
+  static void cb_ButMaxUtilETASub1(Fl_Widget*);
+  static void cb_ButMaxUtilETAAdd2(Fl_Widget*);
+  static void cb_ButMaxUtilETASub2(Fl_Widget*);
 
   // Row 3 -------------------------------------
   inline void cb_HeadingEdgeMod_i(int, int);

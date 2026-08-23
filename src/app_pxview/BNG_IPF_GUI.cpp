@@ -788,6 +788,72 @@ void BNG_IPF_GUI::cb_ButMaxUtilSub2(Fl_Widget* o) {
 }
 
 
+//----------------------------------------- CB_ButMinUtilETAMod
+inline void BNG_IPF_GUI::cb_ButMinUtilETAMod_i(int vix, int delta)
+{
+  if(vix == 1) {
+    if(!m_ipf_viewer1)
+      return;
+    m_ipf_viewer1->modMinUtilETA((double)(delta));
+    m_ipf_viewer1->draw();
+  }
+  else if(vix == 2) {
+    if(!m_ipf_viewer2)
+      return;
+    m_ipf_viewer2->modMinUtilETA((double)(delta));
+    m_ipf_viewer2->draw();
+  }
+  else 
+    return;
+  updateXY();
+}
+void BNG_IPF_GUI::cb_ButMinUtilETAAdd1(Fl_Widget* o) {
+  ((BNG_IPF_GUI*)(o->parent()->user_data()))->cb_ButMinUtilETAMod_i(1,1);
+}
+void BNG_IPF_GUI::cb_ButMinUtilETASub1(Fl_Widget* o) {
+  ((BNG_IPF_GUI*)(o->parent()->user_data()))->cb_ButMinUtilETAMod_i(1,-1);
+}
+void BNG_IPF_GUI::cb_ButMinUtilETAAdd2(Fl_Widget* o) {
+  ((BNG_IPF_GUI*)(o->parent()->user_data()))->cb_ButMinUtilETAMod_i(2,1);
+}
+void BNG_IPF_GUI::cb_ButMinUtilETASub2(Fl_Widget* o) {
+  ((BNG_IPF_GUI*)(o->parent()->user_data()))->cb_ButMinUtilETAMod_i(2,-1);
+}
+
+
+//----------------------------------------- CB_ButMaxUtilETAMod
+inline void BNG_IPF_GUI::cb_ButMaxUtilETAMod_i(int vix, int delta)
+{
+  if(vix == 1) {
+    if(!m_ipf_viewer1)
+      return;
+    m_ipf_viewer1->modMaxUtilETA((double)(delta));
+    m_ipf_viewer1->draw();
+  }
+  else if(vix == 2) {
+    if(!m_ipf_viewer2)
+      return;
+    m_ipf_viewer2->modMaxUtilETA((double)(delta));
+    m_ipf_viewer2->draw();
+  }
+  else
+    return;
+  updateXY();
+}
+void BNG_IPF_GUI::cb_ButMaxUtilETAAdd1(Fl_Widget* o) {
+  ((BNG_IPF_GUI*)(o->parent()->user_data()))->cb_ButMaxUtilETAMod_i(1,1);
+}
+void BNG_IPF_GUI::cb_ButMaxUtilETASub1(Fl_Widget* o) {
+  ((BNG_IPF_GUI*)(o->parent()->user_data()))->cb_ButMaxUtilETAMod_i(1,-1);
+}
+void BNG_IPF_GUI::cb_ButMaxUtilETAAdd2(Fl_Widget* o) {
+  ((BNG_IPF_GUI*)(o->parent()->user_data()))->cb_ButMaxUtilETAMod_i(2,1);
+}
+void BNG_IPF_GUI::cb_ButMaxUtilETASub2(Fl_Widget* o) {
+  ((BNG_IPF_GUI*)(o->parent()->user_data()))->cb_ButMaxUtilETAMod_i(2,-1);
+}
+
+
 //------------------------------------------ CB_TogglePlatModel
 
 inline void BNG_IPF_GUI::cb_TogglePlatModel_i(int vix)
@@ -870,25 +936,26 @@ void BNG_IPF_GUI::cb_ToggleUseSmartPcs(Fl_Widget* o, int val) {
 void BNG_IPF_GUI::updateXY() 
 {
   if(m_ipf_viewer1) {
-    // Row 1
-    bool pmo = m_ipf_viewer1->getUsePlatModel();
-    m_but_platmod1->value((int)(pmo));
 
-    string tol = m_ipf_viewer1->getInfo("time_on_leg");
-    m_fld_tol1->value(tol.c_str());
+    // Row 1  -------------
+    bool pc1 = m_ipf_viewer1->getShowPieces();
+    m_but_show_pcs1->value((int)(pc1));
 
-    // Row 2  -------------
     string pcs = m_ipf_viewer1->getInfo("pieces");
     m_fld_pieces1->value(pcs.c_str());
 
-    bool pc1 = m_ipf_viewer1->getShowPieces();
-    m_but_show_pcs1->value((int)(pc1));
+    string min_eta = m_ipf_viewer1->getInfo("minutil_eta");
+    m_fld_minutil_eta1->value(min_eta.c_str());
+
+    // Row 2 --------------
+    bool sm1 = m_ipf_viewer1->getUseSmartPcs();
+    m_but_smart1->value((int)(sm1));
 
     string smart = m_ipf_viewer1->getInfo("smart");
     m_fld_smart1->value(smart.c_str());
 
-    bool sm1 = m_ipf_viewer1->getUseSmartPcs();
-    m_but_smart1->value((int)(sm1));
+    string max_eta = m_ipf_viewer1->getInfo("maxutil_eta");
+    m_fld_maxutil_eta1->value(max_eta.c_str());
 
     // Row 3  -------------
     string hdg_size = m_ipf_viewer1->getInfo("hdg_size");
@@ -903,31 +970,45 @@ void BNG_IPF_GUI::updateXY()
 
     string maxutil_cpa1 = m_ipf_viewer1->getInfo("maxutil_cpa");
     m_fld_maxutil_cpa1->value(maxutil_cpa1.c_str());  
+
+    // Row 5
+    string pmod1 = m_ipf_viewer1->getInfo("pmodel_config");
+    m_fld_plat_model1->value(pmod1.c_str());  
+
+    string tol = m_ipf_viewer1->getInfo("time_on_leg");
+    m_fld_tol1->value(tol.c_str());
+
+    // Row 6
+    bool pmo = m_ipf_viewer1->getUsePlatModel();
+    m_but_platmod1->value((int)(pmo));
+
+    string debug1 = m_ipf_viewer1->getInfo("debug1");
+    m_fld_bhv_debug1->value(debug1.c_str());  
   }
 
-  
+  //============================================================
   if(m_ipf_viewer2) {
     // Row 1  -------------
-    bool pmo = m_ipf_viewer2->getUsePlatModel();
-    m_but_platmod2->value((int)(pmo));
-
-    string tol = m_ipf_viewer2->getInfo("time_on_leg");
-    m_fld_tol2->value(tol.c_str());
-
-    // Row 2  -------------
-    string pcs = m_ipf_viewer2->getInfo("pieces");
-    m_fld_pieces2->value(pcs.c_str());
-
     bool pc2 = m_ipf_viewer2->getShowPieces();
     m_but_show_pcs2->value((int)(pc2));
 
-    string smart = m_ipf_viewer2->getInfo("smart");
-    m_fld_smart2->value(smart.c_str());
+    string pcs = m_ipf_viewer2->getInfo("pieces");
+    m_fld_pieces2->value(pcs.c_str());
 
+    string min_eta = m_ipf_viewer2->getInfo("minutil_eta");
+    m_fld_minutil_eta2->value(min_eta.c_str());
+
+    // Row 2  -------------
     bool sm2 = m_ipf_viewer2->getUseSmartPcs();
     m_but_smart2->value((int)(sm2));
 
-    // Row 3
+    string smart = m_ipf_viewer2->getInfo("smart");
+    m_fld_smart2->value(smart.c_str());
+    
+    string max_eta = m_ipf_viewer2->getInfo("maxutil_eta");
+    m_fld_maxutil_eta2->value(max_eta.c_str());
+
+    // Row 3  -------------
     string hdg_size = m_ipf_viewer2->getInfo("hdg_size");
     m_fld_hdg_size2->value(hdg_size.c_str());  
   
@@ -940,25 +1021,21 @@ void BNG_IPF_GUI::updateXY()
 
     string maxutil_cpa2 = m_ipf_viewer2->getInfo("maxutil_cpa");
     m_fld_maxutil_cpa2->value(maxutil_cpa2.c_str());  
+
+    // Row 5  -------------
+    string pmod2 = m_ipf_viewer2->getInfo("pmodel_config");
+    m_fld_plat_model2->value(pmod2.c_str());  
+
+    string tol = m_ipf_viewer2->getInfo("time_on_leg");
+    m_fld_tol2->value(tol.c_str());
+
+    // Row 6  -------------
+    bool pmo = m_ipf_viewer2->getUsePlatModel();
+    m_but_platmod2->value((int)(pmo));
+
+    string debug2 = m_ipf_viewer2->getInfo("debug1");
+    m_fld_bhv_debug2->value(debug2.c_str());  
   }
-
-  //-------------------------------------------------------
-  // Row 3
-  //-------------------------------------------------------
-  string pmod1 = m_ipf_viewer1->getInfo("pmodel_config");
-  m_fld_plat_model1->value(pmod1.c_str());  
-  
-  string pmod2 = m_ipf_viewer2->getInfo("pmodel_config");
-  m_fld_plat_model2->value(pmod2.c_str());  
-  
-  //-------------------------------------------------------
-  // Row 4
-  //-------------------------------------------------------
-  string debug1 = m_ipf_viewer1->getInfo("debug1");
-  m_fld_bhv_debug1->value(debug1.c_str());  
-
-  string debug2 = m_ipf_viewer1->getInfo("debug1");
-  m_fld_bhv_debug2->value(debug2.c_str());  
 }
 
 
