@@ -13,7 +13,8 @@
   |                            |    +--v---------------------------------+ 
   |                  m_xmodel------>| XModel                             |
   |                            |    |                                    |
-  |                            |    |  m_des_hdg                         |
+  |                            |    |  m_des_hdg    (only really needed  |
+  |                            |    |  m_des_spd     by the PolyViewer)  |
   |                            |    |                                    |
   |                            |    |  m_plat_model    m_gen_poly        |
   |                            |    |  +------------+  +--------------+  | 

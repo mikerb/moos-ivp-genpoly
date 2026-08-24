@@ -29,7 +29,7 @@ POLY_GUI::POLY_GUI(int wid, int hgt, const char *label)
   m_start_hgt = hgt;
   m_start_wid = wid;
   
-  pviewer   = new PolyViewer(0, 30, wid, hgt-190);
+  pviewer   = new PolyViewer(0, 30, wid, hgt-250);
   m_mviewer = pviewer;
   pviewer->setXModel(&m_xmodel);
   
@@ -132,10 +132,6 @@ void POLY_GUI::augmentMenu()
 		 (Fl_Callback*)POLY_GUI::cb_OwnshipRad, (void*)1);
   m_menubar->add("Ownship/Radius--", 'r',
 		 (Fl_Callback*)POLY_GUI::cb_OwnshipRad, (void*)-1);
-  m_menubar->add("Ownship/Turn++", 'T',
-		 (Fl_Callback*)POLY_GUI::cb_OwnshipTurn, (void*)1);
-  m_menubar->add("Ownship/Turn--", 't',
-		 (Fl_Callback*)POLY_GUI::cb_OwnshipTurn, (void*)-1);
 
   m_menubar->add("Ownship/DesHdg++", FL_CTRL+'m',
 		 (Fl_Callback*)POLY_GUI::cb_OwnshipDesHdg, (void*)1);
@@ -376,16 +372,6 @@ void POLY_GUI::cb_OwnshipRad(Fl_Widget* o, int i) {
   ((POLY_GUI*)(o->parent()->user_data()))->cb_OwnshipRad_i(i);
 }
   
-//----------------------------------------- OwnshipTurn
-void POLY_GUI::cb_OwnshipTurn_i(int val) {
-  pviewer->setParam("turn", (double)(val));
-  pviewer->redraw();
-  updateXY();
-}
-void POLY_GUI::cb_OwnshipTurn(Fl_Widget* o, int i) {
-  ((POLY_GUI*)(o->parent()->user_data()))->cb_OwnshipTurn_i(i);
-}
-  
 //----------------------------------------- IPF_GUI1
 inline void POLY_GUI::cb_IPF_GUI_i()
 {
@@ -455,9 +441,27 @@ void POLY_GUI::updateXY()
   sval = doubleToStringX(dval,2);
   m_fld_des_hdg->value(sval.c_str());
 
+  dval = m_xmodel.getDesSpd();
+  sval = doubleToStringX(dval,2);
+  m_fld_des_spd->value(sval.c_str());
 
+  dval = m_xmodel.getTurnRad();
+  sval = doubleToStringX(dval,2);
+  m_fld_trad->value(sval.c_str());
+
+  dval = m_xmodel.getSpokeDegs();
+  sval = doubleToStringX(dval,2);
+  m_fld_degs->value(sval.c_str());
+
+  dval = 16;
+  sval = doubleToStringX(dval,2);
+  m_fld_turn_eta->value(sval.c_str());
   
-  // Row 3:  SegList string
+  dval = 17;
+  sval = doubleToStringX(dval,2);
+  m_fld_turn_cpa->value(sval.c_str());
+  
+    // Row 3:  SegList string
   string str = pviewer->getBorderSpec();
   m_fld_segl->value(str.c_str());
 
@@ -465,7 +469,15 @@ void POLY_GUI::updateXY()
   str = pviewer->getGPolySpec();
   m_fld_gpoly->value(str.c_str());
 
-  // Row 5:  
+  // Row 5:  Seglr string
+  str = pviewer->getSeglrSpec();
+  m_fld_seglr->value(str.c_str());
+
+  // Row 6:  Segl Base string
+  str = pviewer->getSeglBaseSpec();
+  m_fld_segl_base->value(str.c_str());
+
+  // Row 7:  
   dval = pviewer->getSeglrDistToExit();
   sval = doubleToStringX(dval,3);
   m_fld_seglr_dist->value(sval.c_str());

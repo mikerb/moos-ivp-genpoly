@@ -85,6 +85,10 @@ protected:
   // Column 11
   Fl_Output  *m_fld_des_hdg;
   Fl_Output  *m_fld_des_spd;
+  Fl_Output  *m_fld_trad;
+  Fl_Output  *m_fld_degs;
+  Fl_Output  *m_fld_turn_eta;
+  Fl_Output  *m_fld_turn_cpa;
   
   // Row 3
   Fl_Output  *m_fld_segl;
@@ -93,6 +97,12 @@ protected:
   Fl_Output  *m_fld_gpoly;
 
   // Row 5
+  Fl_Output  *m_fld_seglr;
+
+  // Row 6
+  Fl_Output  *m_fld_segl_base;
+
+  // Row 7
   Fl_Output  *m_fld_seglr_dist;
   Fl_Output  *m_fld_osh_dist;  
   Fl_Output  *m_fld_seg_dist;
@@ -173,9 +183,6 @@ private:
 
   inline void cb_OwnshipRad_i(int);
   static void cb_OwnshipRad(Fl_Widget*, int);
-
-  inline void cb_OwnshipTurn_i(int);
-  static void cb_OwnshipTurn(Fl_Widget*, int);
 
   // ------------------------------------------
   inline void cb_IPF_GUI_i();

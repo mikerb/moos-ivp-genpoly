@@ -36,10 +36,10 @@ class PolyViewer : public MarineViewer
 public:
   std::string getBorderSpec();
   std::string getGPolySpec();
+  std::string getSeglrSpec() const {return(m_seglr_spec);}
+  std::string getSeglBaseSpec() const {return(m_segl_base_spec);}
 
   void   setXModel(XModel* xmo) {m_xmodel=xmo;}
-
-  
   bool   getVerbose() const {return(m_verbose);}
   
   void   reApplySnapToCurrent();   
@@ -79,7 +79,14 @@ private: // Config vars
 private:
   XModel*  m_xmodel;
   XYSegList m_segl;
+  
+  std::string m_seglr_spec;
+  std::string m_segl_base_spec;
 
+  double  m_seglr_eta;
+  double  m_seglr_cpa;
+  double  m_seglr_cpa_window;
+  
   double  m_seglr_dist_to_exit;
   double  m_osh_dist_to_exit;
   double  m_seg_dist_to_exit;

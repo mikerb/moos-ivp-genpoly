@@ -23,6 +23,8 @@ using namespace std;
 XModel::XModel()
 {
   m_des_hdg = 90;
+  m_des_spd = 1;
+
   m_osx = 0;
   m_osy = -50;
   m_osh = 45;
@@ -46,6 +48,22 @@ void XModel::setDesHdg(double dval)
 void XModel::modDesHdg(double dval)
 {
   m_des_hdg = angle360(m_des_hdg + dval);
+}
+
+//-------------------------------------------------------------------
+// Procedure: setDesSpd()
+
+void XModel::setDesSpd(double dval)
+{
+  m_des_spd = dval;
+}
+
+//-------------------------------------------------------------------
+// Procedure: modDesSpd()
+
+void XModel::modDesSpd(double dval)
+{
+  m_des_spd = m_des_spd + dval;
 }
 
 //-------------------------------------------------------------------
@@ -90,6 +108,22 @@ void XModel::modSpokeDegs(double dval)
   double new_degs = curr_degs + dval;
   
   m_pmgen.setParam("spoke_degs", doubleToString(new_degs));
+}
+
+//-------------------------------------------------------------------
+// Procedure: getTurnRad()
+
+double XModel::getTurnRad() const
+{
+  return(m_pmgen.getParamDbl("radius"));
+}
+
+//-------------------------------------------------------------------
+// Procedure: getSpokeDegs()
+
+double XModel::getSpokeDegs() const
+{
+  return(m_pmgen.getParamDbl("degs"));
 }
 
 //-------------------------------------------------------------------

@@ -47,6 +47,11 @@ PolyViewer::PolyViewer(int x, int y, int w, int h, const char *l)
   m_xmodel = 0;
   m_solve_time = 0;
 
+
+  m_seglr_eta = -1;
+  m_seglr_cpa = -1;
+  m_seglr_cpa_window = 10;
+   
   m_seglr_dist_to_exit = -1;
   m_osh_dist_to_exit = -1;
   m_seg_dist_to_exit = -1;
@@ -592,7 +597,8 @@ void PolyViewer::updateSeglr()
   double osh = m_xmodel->getOSH();
   
   XYSeglr seglr = m_xmodel->getTurnSeglr();
- 
+  m_seglr_spec = seglr.get_spec();
+  
   double rx = seglr.getRayBaseX();
   double ry = seglr.getRayBaseY();
   double ray_angle = seglr.getRayAngle();
@@ -605,7 +611,8 @@ void PolyViewer::updateSeglr()
   m_osh_dist_to_exit = gen_poly.distRayToExitGP(osx,osy,osh); 
 
   XYSegList m_base = seglr.getBaseSegList();
-
+  m_segl_base_spec = m_base.get_spec();
+  
   //cout << "base size:" << m_base.size() << endl;
 
   bool exited = false;
@@ -616,5 +623,10 @@ void PolyViewer::updateSeglr()
   if(!exited)
     //m_ray_dist_to_exit = m_gen_poly.distRayToExitGP(rx,ry,ray_angle); 
     m_ray_dist_to_exit = gen_poly.distRayToExitGP(rx,ry,ray_angle); 
+
+  // Part 2: calculate the ETA/CPA componentns
+
+  
+
 }
  

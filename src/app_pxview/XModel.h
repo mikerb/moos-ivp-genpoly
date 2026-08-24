@@ -25,6 +25,10 @@ public:
   void setDesHdg(double);
   void modDesHdg(double);
 
+  // Set Desired Speed
+  void setDesSpd(double);
+  void modDesSpd(double);
+
   // Setters for PMGen_Dubins
   void setTurnRad(double);
   void setSpokeDegs(double);
@@ -48,16 +52,21 @@ public:
   XYGenPolygon getGenPoly() const {return(m_gen_poly);}
 
   double getDesHdg() const {return(m_des_hdg);}
+  double getDesSpd() const {return(m_des_spd);}
   double getOSX() const    {return(m_osx);}
   double getOSY() const    {return(m_osy);}
   double getOSH() const    {return(m_osh);}
   double getOSV() const    {return(m_osv);}
 
+  double getTurnRad() const;
+  double getSpokeDegs() const;
+  
   PlatModel  getPlatModel();
   XYSeglr    getTurnSeglr();
 
 protected:
   double       m_des_hdg;
+  double       m_des_spd;
 
   double       m_osx;
   double       m_osy;

@@ -136,15 +136,40 @@ void POLY_GUI::initWidgets()
   m_fld_des_spd->color(fcolor_beige);
   m_fld_des_spd->clear_visible_focus();
 
-  
-  //----------------------------------------------------------
-  m_fld_segl = new Fl_Output(0, 0, 1, 1, "seglist:"); 
+  m_fld_trad = new Fl_Output(0, 0, 1, 1, "radius:");
+  m_fld_trad->color(fcolor_beige);
+  m_fld_trad->clear_visible_focus();
+
+  m_fld_degs = new Fl_Output(0, 0, 1, 1, "spk_degs:");
+  m_fld_degs->color(fcolor_beige);
+  m_fld_degs->clear_visible_focus();
+
+  m_fld_turn_eta = new Fl_Output(0, 0, 1, 1, "turn_eta:");
+  m_fld_turn_eta->color(fcolor_beige);
+  m_fld_turn_eta->clear_visible_focus();
+
+  m_fld_turn_cpa = new Fl_Output(0, 0, 1, 1, "turn_cpa:");
+  m_fld_turn_cpa->color(fcolor_beige);
+  m_fld_turn_cpa->clear_visible_focus();
+
+
+  // Row 3 ---------------------------------------------------
+  m_fld_segl = new Fl_Output(0, 0, 1, 1, "border_gpoly:"); 
   m_fld_segl->set_output();
 
+  // Row 4 ---------------------------------------------------
   m_fld_gpoly = new Fl_Output(0, 0, 1, 1, "gpoly:"); 
   m_fld_gpoly->set_output();
 
-  //----------------------------------------------------------
+  // Row 5 ---------------------------------------------------
+  m_fld_seglr = new Fl_Output(0, 0, 1, 1, "seglr:"); 
+  m_fld_seglr->set_output();
+
+  // Row 6 ---------------------------------------------------
+  m_fld_segl_base = new Fl_Output(0, 0, 1, 1, "segl_base:"); 
+  m_fld_segl_base->set_output();
+
+  // Row 7 ---------------------------------------------------
   m_fld_seglr_dist = new Fl_Output(0, 0, 1, 1, "seglr_dist:"); 
   m_fld_seglr_dist->set_output();
 
@@ -168,11 +193,13 @@ void POLY_GUI::resizeWidgetsShape()
     extra_wid = 0;
   int field_hgt = 20;
 
-  int row1 = h() - 150;
+  int row1 = h() - 210;
   int row2 = row1 + 30;
   int row3 = row2 + 30;
   int row4 = row3 + 30;
   int row5 = row4 + 30;
+  int row6 = row5 + 30;
+  int row7 = row6 + 30;
 
   int wid1 = 70;
   int wid2 = 80;
@@ -198,7 +225,7 @@ void POLY_GUI::resizeWidgetsShape()
   int col8 = col7 + wid7 + sep + 10;
   int col9 = col8 + wid8 + sep + 30;
   int colA = col9 + wid9 + sep + 20;
-  int colB = colA + widA + sep + 60;
+  int colB = colA + widA + sep + 65;
 
   //-------------------- Column 1
   int pts_x = col1;
@@ -321,40 +348,82 @@ void POLY_GUI::resizeWidgetsShape()
   int dspd_wid = widB;
   m_fld_des_spd->resize(dspd_x, dspd_y, dspd_wid, field_hgt);
   
+  int rad_x = colB;
+  int rad_y = row3;
+  int rad_wid = widB;
+  m_fld_trad->resize(rad_x, rad_y, rad_wid, field_hgt);
+  
+  int spk_x = colB;
+  int spk_y = row4;
+  int spk_wid = widB;
+  m_fld_degs->resize(spk_x, spk_y, spk_wid, field_hgt);
+  
+  int teta_x = colB;
+  int teta_y = row5;
+  int teta_wid = widB;
+  m_fld_turn_eta->resize(teta_x, teta_y, teta_wid, field_hgt);
+  
+  int tcpa_x = colB;
+  int tcpa_y = row6;
+  int tcpa_wid = widB;
+  m_fld_turn_cpa->resize(tcpa_x, tcpa_y, tcpa_wid, field_hgt);
+  
   //---------------------------------------------------------
-  // Bottom Long format ROWS
+  // Row 3
   //---------------------------------------------------------
-  int lst_x = 80;
+  int lst_x = col2;
   int lst_y = row3;
-  int lst_wid = w()-90;
+  //int lst_wid = w()-90;
+  int lst_wid = (osh_x + osh_wid) - 80;
   m_fld_segl->resize(lst_x, lst_y, lst_wid, field_hgt);
 
   //---------------------------------------------------------
-  int gps_x = 80;
+  // Row 4
+  //---------------------------------------------------------
+  int gps_x = col2;
   int gps_y = row4;
-  int gps_wid = w()-90;
+  //int gps_wid = w()-90;
+  int gps_wid = (osh_x + osh_wid) - 80;
   m_fld_gpoly->resize(gps_x, gps_y, gps_wid, field_hgt);
   
   //---------------------------------------------------------
+  // Row 5
+  //---------------------------------------------------------
+  int sglr_x = col2;
+  int sglr_y = row5;
+  //int lst_wid = w()-90;
+  int sglr_wid = (osh_x + osh_wid) - 80;
+  m_fld_seglr->resize(sglr_x, sglr_y, sglr_wid, field_hgt);
+
+  //---------------------------------------------------------
+  // Row 6
+  //---------------------------------------------------------
+  int sgb_x = col2;
+  int sgb_y = row6;
+  //int lst_wid = w()-90;
+  int sgb_wid = (osh_x + osh_wid) - 80;
+  m_fld_segl_base->resize(sgb_x, sgb_y, sgb_wid, field_hgt);
+
+  //---------------------------------------------------------
   // Bottom ROW
   //---------------------------------------------------------
-  int sde_x = 80;
-  int sde_y = row5;
+  int sde_x = col2;
+  int sde_y = row7;
   int sde_wid = 50;
   m_fld_seglr_dist->resize(sde_x, sde_y, sde_wid, field_hgt);
 
   int ode_x = sde_x + sde_wid + 60;
-  int ode_y = row5;
+  int ode_y = row7;
   int ode_wid = 50;
   m_fld_osh_dist->resize(ode_x, ode_y, ode_wid, field_hgt);
 
   int sgg_x = ode_x + ode_wid + 60;
-  int sgg_y = row5;
+  int sgg_y = row7;
   int sgg_wid = 50;
   m_fld_seg_dist->resize(sgg_x, sgg_y, sgg_wid, field_hgt);
 
   int ray_x = sgg_x + sgg_wid + 60;
-  int ray_y = row5;
+  int ray_y = row7;
   int ray_wid = 50;
   m_fld_ray_dist->resize(ray_x, ray_y, ray_wid, field_hgt);
 
@@ -432,7 +501,19 @@ void POLY_GUI::resizeWidgetsText()
   m_fld_des_spd->textsize(text_size);
   m_fld_des_spd->labelsize(label_size);
 
-  // Row 3
+  m_fld_trad->textsize(text_size);
+  m_fld_trad->labelsize(label_size);
+
+  m_fld_degs->textsize(text_size);
+  m_fld_degs->labelsize(label_size);
+
+  m_fld_turn_eta->textsize(text_size);
+  m_fld_turn_eta->labelsize(label_size);
+
+  m_fld_turn_cpa->textsize(text_size);
+  m_fld_turn_cpa->labelsize(label_size);
+
+  // Row 3 
   m_fld_segl->textsize(text_size);
   m_fld_segl->labelsize(label_size);
 
@@ -440,7 +521,15 @@ void POLY_GUI::resizeWidgetsText()
   m_fld_gpoly->textsize(text_size);
   m_fld_gpoly->labelsize(label_size);
 
-  // Row 4
+  // Row 5 
+  m_fld_seglr->textsize(text_size);
+  m_fld_seglr->labelsize(label_size);
+
+  // Row 6
+  m_fld_segl_base->textsize(text_size);
+  m_fld_segl_base->labelsize(label_size);
+
+  // Row 6
   m_fld_seglr_dist->textsize(text_size);
   m_fld_seglr_dist->labelsize(label_size);
 
@@ -452,6 +541,5 @@ void POLY_GUI::resizeWidgetsText()
 
   m_fld_ray_dist->textsize(text_size);
   m_fld_ray_dist->labelsize(label_size);
-
 }
 
