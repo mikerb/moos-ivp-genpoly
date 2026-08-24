@@ -152,6 +152,10 @@ void POLY_GUI::initWidgets()
   m_fld_turn_cpa->color(fcolor_beige);
   m_fld_turn_cpa->clear_visible_focus();
 
+  m_fld_cpa_window = new Fl_Output(0, 0, 1, 1, "cpa_win:");
+  m_fld_cpa_window->color(fcolor_beige);
+  m_fld_cpa_window->clear_visible_focus();
+
 
   // Row 3 ---------------------------------------------------
   m_fld_segl = new Fl_Output(0, 0, 1, 1, "border_gpoly:"); 
@@ -211,7 +215,7 @@ void POLY_GUI::resizeWidgetsShape()
   int wid8 = 60;
   int wid9 = 45;
   int widA = 45;
-  int widB = 45;
+  int widB = 40;
 
   int sep = 5;
 
@@ -224,7 +228,7 @@ void POLY_GUI::resizeWidgetsShape()
   int col7 = col6 + wid6 + sep + 10;
   int col8 = col7 + wid7 + sep + 10;
   int col9 = col8 + wid8 + sep + 30;
-  int colA = col9 + wid9 + sep + 20;
+  int colA = col9 + wid9 + sep + 25;
   int colB = colA + widA + sep + 65;
 
   //-------------------- Column 1
@@ -367,6 +371,11 @@ void POLY_GUI::resizeWidgetsShape()
   int tcpa_y = row6;
   int tcpa_wid = widB;
   m_fld_turn_cpa->resize(tcpa_x, tcpa_y, tcpa_wid, field_hgt);
+
+  int wcpa_x = colB;
+  int wcpa_y = row7;
+  int wcpa_wid = widB;
+  m_fld_cpa_window->resize(wcpa_x, wcpa_y, wcpa_wid, field_hgt);
   
   //---------------------------------------------------------
   // Row 3
@@ -374,7 +383,7 @@ void POLY_GUI::resizeWidgetsShape()
   int lst_x = col2;
   int lst_y = row3;
   //int lst_wid = w()-90;
-  int lst_wid = (osh_x + osh_wid) - 80;
+  int lst_wid = (osh_x + osh_wid) - 85;
   m_fld_segl->resize(lst_x, lst_y, lst_wid, field_hgt);
 
   //---------------------------------------------------------
@@ -383,7 +392,7 @@ void POLY_GUI::resizeWidgetsShape()
   int gps_x = col2;
   int gps_y = row4;
   //int gps_wid = w()-90;
-  int gps_wid = (osh_x + osh_wid) - 80;
+  int gps_wid = (osh_x + osh_wid) - 85;
   m_fld_gpoly->resize(gps_x, gps_y, gps_wid, field_hgt);
   
   //---------------------------------------------------------
@@ -392,7 +401,7 @@ void POLY_GUI::resizeWidgetsShape()
   int sglr_x = col2;
   int sglr_y = row5;
   //int lst_wid = w()-90;
-  int sglr_wid = (osh_x + osh_wid) - 80;
+  int sglr_wid = (osh_x + osh_wid) - 85;
   m_fld_seglr->resize(sglr_x, sglr_y, sglr_wid, field_hgt);
 
   //---------------------------------------------------------
@@ -401,7 +410,7 @@ void POLY_GUI::resizeWidgetsShape()
   int sgb_x = col2;
   int sgb_y = row6;
   //int lst_wid = w()-90;
-  int sgb_wid = (osh_x + osh_wid) - 80;
+  int sgb_wid = (osh_x + osh_wid) - 85;
   m_fld_segl_base->resize(sgb_x, sgb_y, sgb_wid, field_hgt);
 
   //---------------------------------------------------------
@@ -512,6 +521,9 @@ void POLY_GUI::resizeWidgetsText()
 
   m_fld_turn_cpa->textsize(text_size);
   m_fld_turn_cpa->labelsize(label_size);
+
+  m_fld_cpa_window->textsize(text_size);
+  m_fld_cpa_window->labelsize(label_size);
 
   // Row 3 
   m_fld_segl->textsize(text_size);

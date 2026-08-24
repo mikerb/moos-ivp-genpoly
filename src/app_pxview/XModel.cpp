@@ -24,7 +24,8 @@ XModel::XModel()
 {
   m_des_hdg = 90;
   m_des_spd = 1;
-
+  m_cpa_win = 21;
+  
   m_osx = 0;
   m_osy = -50;
   m_osh = 45;
@@ -56,6 +57,8 @@ void XModel::modDesHdg(double dval)
 void XModel::setDesSpd(double dval)
 {
   m_des_spd = dval;
+  if(m_des_spd < 0)
+    m_des_spd = 0;
 }
 
 //-------------------------------------------------------------------
@@ -64,6 +67,24 @@ void XModel::setDesSpd(double dval)
 void XModel::modDesSpd(double dval)
 {
   m_des_spd = m_des_spd + dval;
+}
+
+//-------------------------------------------------------------------
+// Procedure: setCPAWin()
+
+void XModel::setCPAWin(double dval)
+{
+  m_cpa_win = dval;
+  if(m_cpa_win < 0)
+    m_cpa_win = 0;
+}
+
+//-------------------------------------------------------------------
+// Procedure: modCPAWin()
+
+void XModel::modCPAWin(double dval)
+{
+  m_cpa_win = m_cpa_win + dval;
 }
 
 //-------------------------------------------------------------------

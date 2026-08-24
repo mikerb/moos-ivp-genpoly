@@ -342,6 +342,10 @@ bool PolyViewer::setParam(string param, double pval)
     m_xmodel->modDesHdg(pval);
     // updateGenPoly();
   } 
+  else if(param == "cpa_win") {
+    m_xmodel->modCPAWin(pval);
+    // updateGenPoly();
+  } 
   else if(param == "rad") {
     m_xmodel->modTurnRad(pval);
     updateGenPoly();
@@ -612,6 +616,8 @@ void PolyViewer::updateSeglr()
 
   XYSegList m_base = seglr.getBaseSegList();
   m_segl_base_spec = m_base.get_spec();
+
+  
   
   //cout << "base size:" << m_base.size() << endl;
 

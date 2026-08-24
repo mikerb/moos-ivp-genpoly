@@ -29,6 +29,10 @@ public:
   void setDesSpd(double);
   void modDesSpd(double);
 
+  // Set CPA Window
+  void setCPAWin(double);
+  void modCPAWin(double);
+
   // Setters for PMGen_Dubins
   void setTurnRad(double);
   void setSpokeDegs(double);
@@ -53,6 +57,7 @@ public:
 
   double getDesHdg() const {return(m_des_hdg);}
   double getDesSpd() const {return(m_des_spd);}
+  double getCPAWin() const {return(m_cpa_win);}
   double getOSX() const    {return(m_osx);}
   double getOSY() const    {return(m_osy);}
   double getOSH() const    {return(m_osh);}
@@ -68,6 +73,8 @@ protected:
   double       m_des_hdg;
   double       m_des_spd;
 
+  double       m_cpa_win;
+  
   double       m_osx;
   double       m_osy;
   double       m_osh;

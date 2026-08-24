@@ -89,6 +89,7 @@ protected:
   Fl_Output  *m_fld_degs;
   Fl_Output  *m_fld_turn_eta;
   Fl_Output  *m_fld_turn_cpa;
+  Fl_Output  *m_fld_cpa_window;
   
   // Row 3
   Fl_Output  *m_fld_segl;
@@ -183,6 +184,9 @@ private:
 
   inline void cb_OwnshipRad_i(int);
   static void cb_OwnshipRad(Fl_Widget*, int);
+
+  inline void cb_OwnshipCPAWin_i(int);
+  static void cb_OwnshipCPAWin(Fl_Widget*, int);
 
   // ------------------------------------------
   inline void cb_IPF_GUI_i();

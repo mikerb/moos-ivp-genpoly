@@ -132,6 +132,10 @@ void POLY_GUI::augmentMenu()
 		 (Fl_Callback*)POLY_GUI::cb_OwnshipRad, (void*)1);
   m_menubar->add("Ownship/Radius--", 'r',
 		 (Fl_Callback*)POLY_GUI::cb_OwnshipRad, (void*)-1);
+  m_menubar->add("Ownship/CPAWindow++", ')',
+		 (Fl_Callback*)POLY_GUI::cb_OwnshipCPAWin, (void*)1);
+  m_menubar->add("Ownship/CPAWindow--", '(',
+		 (Fl_Callback*)POLY_GUI::cb_OwnshipCPAWin, (void*)-1);
 
   m_menubar->add("Ownship/DesHdg++", FL_CTRL+'m',
 		 (Fl_Callback*)POLY_GUI::cb_OwnshipDesHdg, (void*)1);
@@ -372,6 +376,16 @@ void POLY_GUI::cb_OwnshipRad(Fl_Widget* o, int i) {
   ((POLY_GUI*)(o->parent()->user_data()))->cb_OwnshipRad_i(i);
 }
   
+//----------------------------------------- OwnshipCPAWin
+void POLY_GUI::cb_OwnshipCPAWin_i(int val) {
+  pviewer->setParam("cpa_win", (double)(val));
+  pviewer->redraw();
+  updateXY();
+}
+void POLY_GUI::cb_OwnshipCPAWin(Fl_Widget* o, int i) {
+  ((POLY_GUI*)(o->parent()->user_data()))->cb_OwnshipCPAWin_i(i);
+}
+  
 //----------------------------------------- IPF_GUI1
 inline void POLY_GUI::cb_IPF_GUI_i()
 {
@@ -460,6 +474,10 @@ void POLY_GUI::updateXY()
   dval = 17;
   sval = doubleToStringX(dval,2);
   m_fld_turn_cpa->value(sval.c_str());
+  
+  dval = m_xmodel.getCPAWin();
+  sval = doubleToStringX(dval,2);
+  m_fld_cpa_window->value(sval.c_str());
   
     // Row 3:  SegList string
   string str = pviewer->getBorderSpec();
