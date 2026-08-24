@@ -223,8 +223,8 @@ void BNG_IPF_GUI::setXModel(XModel *xmo)
 
 void BNG_IPF_GUI::updatedXModel()
 {
-  if(m_ipf_viewer1) 
-    m_ipf_viewer1->resetIPF();
+  //if(m_ipf_viewer1) 
+  //  m_ipf_viewer1->resetIPF();
   if(m_ipf_viewer2)
     m_ipf_viewer2->resetIPF();
   updateXY();
@@ -497,14 +497,14 @@ inline void BNG_IPF_GUI::cb_ButTOLMod_i(int vix, int delta) {
   if(vix == 1) {
     if(!m_ipf_viewer1)
       return;
-    m_ipf_viewer1->modTOL(delta);
+    m_ipf_viewer1->modCPAWindow(delta);
     m_ipf_viewer1->resetIPF();
     m_ipf_viewer1->redraw();
   }
   else if(vix == 2) {
     if(!m_ipf_viewer2)
       return;
-    m_ipf_viewer2->modTOL(delta);
+    m_ipf_viewer2->modCPAWindow(delta);
     m_ipf_viewer2->resetIPF();
     m_ipf_viewer2->redraw();
   }
@@ -1026,7 +1026,7 @@ void BNG_IPF_GUI::updateXY()
     string pmod1 = m_ipf_viewer1->getInfo("pmodel_config");
     m_fld_plat_model1->value(pmod1.c_str());  
 
-    string tol = m_ipf_viewer1->getInfo("time_on_leg");
+    string tol = m_ipf_viewer1->getInfo("cpa_window");
     m_fld_tol1->value(tol.c_str());
 
     // Row 6
@@ -1083,7 +1083,7 @@ void BNG_IPF_GUI::updateXY()
     string pmod2 = m_ipf_viewer2->getInfo("pmodel_config");
     m_fld_plat_model2->value(pmod2.c_str());  
 
-    string tol = m_ipf_viewer2->getInfo("time_on_leg");
+    string tol = m_ipf_viewer2->getInfo("cpa_window");
     m_fld_tol2->value(tol.c_str());
 
     // Row 6  -------------

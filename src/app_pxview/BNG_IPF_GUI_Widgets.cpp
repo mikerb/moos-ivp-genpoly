@@ -208,7 +208,7 @@ void BNG_IPF_GUI::initWidgets()
   m_but_minutil_sub2->clear_visible_focus();
   
   m_but_tol2 = new Fl_Check_Button(0, 0, 1, 1, "");
-  m_but_tol2->clear_visible_focus();
+  m_but_tol2->clear_visible_focus(); 
   m_but_tol2->callback((Fl_Callback*)BNG_IPF_GUI::cb_ToggleUseCPA,
 			   (void*)2);  
 

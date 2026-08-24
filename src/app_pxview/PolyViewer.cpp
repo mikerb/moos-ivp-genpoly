@@ -181,7 +181,7 @@ void PolyViewer::draw()
   double osy = m_xmodel->getOSY();
   double osh = m_xmodel->getOSH();
   double osv = m_xmodel->getOSV();
-  XYVector vect(osx, osy, osv*4, osh);
+  XYVector vect(osx, osy, 14, osh);
 
   vect.setHeadSize(2);
   vect.set_edge_color("gray70");
@@ -332,6 +332,10 @@ bool PolyViewer::setParam(string param, double pval)
   else if(param == "osh") {
     m_xmodel->modOSH(pval);
     updateGenPoly();
+  } 
+  else if(param == "des_hdg") {
+    m_xmodel->modDesHdg(pval);
+    // updateGenPoly();
   } 
   else if(param == "rad") {
     m_xmodel->modTurnRad(pval);

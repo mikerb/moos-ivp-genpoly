@@ -132,7 +132,6 @@ private: // IPF config params
   unsigned int  m_spd_edge_size;
   unsigned int  m_smart_pcs;
   bool          m_use_smart_pcs;
-  double        m_time_on_leg;
   
 private: // Rendering config params
   double        m_polar_pad;

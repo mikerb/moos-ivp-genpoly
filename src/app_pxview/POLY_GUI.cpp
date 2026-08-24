@@ -136,6 +136,12 @@ void POLY_GUI::augmentMenu()
 		 (Fl_Callback*)POLY_GUI::cb_OwnshipTurn, (void*)1);
   m_menubar->add("Ownship/Turn--", 't',
 		 (Fl_Callback*)POLY_GUI::cb_OwnshipTurn, (void*)-1);
+
+  m_menubar->add("Ownship/DesHdg++", FL_CTRL+'m',
+		 (Fl_Callback*)POLY_GUI::cb_OwnshipDesHdg, (void*)1);
+  m_menubar->add("Ownship/DesHdg--", FL_CTRL+'n',
+		 (Fl_Callback*)POLY_GUI::cb_OwnshipDesHdg, (void*)-1);
+
 }
 
 //----------------------------------------------------------
@@ -350,6 +356,16 @@ void POLY_GUI::cb_OwnshipHdg(Fl_Widget* o, int i) {
   ((POLY_GUI*)(o->parent()->user_data()))->cb_OwnshipHdg_i(i);
 }
   
+//----------------------------------------- OwnshipDesHdg
+void POLY_GUI::cb_OwnshipDesHdg_i(int val) {
+  pviewer->setParam("des_hdg", (double)(val));
+  pviewer->redraw();
+  updateXY();
+}
+void POLY_GUI::cb_OwnshipDesHdg(Fl_Widget* o, int i) {
+  ((POLY_GUI*)(o->parent()->user_data()))->cb_OwnshipDesHdg_i(i);
+}
+  
 //----------------------------------------- OwnshipRad
 void POLY_GUI::cb_OwnshipRad_i(int val) {
   pviewer->setParam("rad", (double)(val));
@@ -388,36 +404,35 @@ void POLY_GUI::cb_IPF_GUI(Fl_Widget* o) {
 //----------------------------------------- UpdateXY
 void POLY_GUI::updateXY()
 { 
-  // Snap Value
+  // Column 3: Snap Value
   double dval = pviewer->getSnap();
   string sval = doubleToStringX(dval);
   m_fld_snap->value(sval.c_str());
 
-  // Poly Count
   unsigned int ival = pviewer->getPolyCount();
   sval = uintToString(ival);
   m_fld_polys->value(sval.c_str());
 
-  // Solve Time
+  // Column 4:  Solve Time
   dval = pviewer->getSolveTime();
   sval = doubleToString(dval,2);
   m_fld_solve->value(sval.c_str());
 
-  // Solve Method
+  // Column 5:  Solve Method
   sval = pviewer->getSolveMethod();
   m_fld_method->value(sval.c_str());
 
-  // Solve Collap
+  // Column 6:  Solve Collap
   bool bval = pviewer->getSolveCollap();
   sval = boolToString(bval);
   m_fld_collap->value(sval.c_str());
 
-  // Verbosity
+  // Column 7:  Verbosity
   bval = pviewer->getVerbose();
   sval = boolToString(bval);
   m_fld_verbose->value(sval.c_str());
 
-  // OSX, OSY, OSH, OSV
+  // Column 9:  OSX, OSY
   dval = m_xmodel.getOSX();
   sval = doubleToStringX(dval,2);
   m_fld_osx->value(sval.c_str());
@@ -426,6 +441,7 @@ void POLY_GUI::updateXY()
   sval = doubleToStringX(dval,2);
   m_fld_osy->value(sval.c_str());
   
+  // Column 10:  OSH, OSV
   dval = m_xmodel.getOSH();
   sval = doubleToStringX(dval,2);
   m_fld_osh->value(sval.c_str());
@@ -433,31 +449,35 @@ void POLY_GUI::updateXY()
   dval = m_xmodel.getOSV();
   sval = doubleToStringX(dval,2);
   m_fld_osv->value(sval.c_str());
+
+  // Column 11:  DesHdg
+  dval = m_xmodel.getDesHdg();
+  sval = doubleToStringX(dval,2);
+  m_fld_des_hdg->value(sval.c_str());
+
+
   
-  // SegList string
+  // Row 3:  SegList string
   string str = pviewer->getBorderSpec();
   m_fld_segl->value(str.c_str());
 
-  // GenPoly string
+  // Row 4:  GenPoly string
   str = pviewer->getGPolySpec();
   m_fld_gpoly->value(str.c_str());
 
-  // Seglr dist_to_exit string
+  // Row 5:  
   dval = pviewer->getSeglrDistToExit();
   sval = doubleToStringX(dval,3);
   m_fld_seglr_dist->value(sval.c_str());
 
-  // osh dist_to_exit string
   dval = pviewer->getOSHDistToExit();
   sval = doubleToStringX(dval,3);
   m_fld_osh_dist->value(sval.c_str());
 
-  // osh seg_to_exit string
   dval = pviewer->getSegDistToExit();
   sval = doubleToStringX(dval,3);
   m_fld_seg_dist->value(sval.c_str());
 
-  // osh ray_to_exit string
   dval = pviewer->getRayDistToExit();
   sval = doubleToStringX(dval,3);
   m_fld_ray_dist->value(sval.c_str());

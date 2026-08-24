@@ -11,9 +11,7 @@
 
 #include <iostream>
 #include "MBUtils.h"
-#include "ACTable.h"
 #include "PlatModelGenerator.h"
-#include "FunctionEncoder.h"
 #include "BFactoryStatic.h"
 #include "BFactoryDynamic.h"
 #include "BNG_IPFViewer.h"
@@ -55,9 +53,9 @@ BNG_IPFViewer::BNG_IPFViewer(int x, int y, int w, int h, const char *label)
 
   m_minutil_eta  = 11;
   m_maxutil_eta  = 29;
-  m_minutil_cpa  = 4;
+  m_minutil_cpa  = 1;
   m_maxutil_cpa  = 10;
-  m_cpa_window   = 15.5;
+  m_cpa_window   = 5.5;
 
   m_eta_factored = true;
   m_cpa_factored = true;
@@ -67,7 +65,6 @@ BNG_IPFViewer::BNG_IPFViewer(int x, int y, int w, int h, const char *label)
   m_spd_edge_size = 4;
   m_smart_pcs     = 20;
   m_use_smart_pcs = true;
-  m_time_on_leg   = 20;
   
   // Rendering config params
   m_polar_pad  = 0.42;
@@ -159,10 +156,10 @@ void BNG_IPFViewer::draw()
 
   ColorPack cpack4("light_blue");
   drawText2(10, 10, "bhv="+m_bhv_type, cpack4, 12);
-  
+   
   glFlush(); 
-} 
-
+}  
+ 
 // ----------------------------------------------------------
 // Procedure: getInfo()
 
@@ -192,8 +189,6 @@ string BNG_IPFViewer::getInfo(string param)
     return(uintToString(m_smart_pcs));
   if(param == "pmodel_config") 
     return(m_plat_model_config);
-  if(param == "time_on_leg") 
-    return(doubleToStringX(m_time_on_leg));
   if(param == "debug1") 
     return(m_debug1);
   
@@ -403,16 +398,6 @@ bool BNG_IPFViewer::setUsePlatModel(string str)
 bool BNG_IPFViewer::setUseSmartPcs(string str)
 {
   return(setBooleanOnString(m_use_smart_pcs, str));
-}
-
-// ----------------------------------------------------------
-// Procedure: modTOL()
-
-void BNG_IPFViewer::modTOL(double delta)
-{
-  m_time_on_leg += delta;
-  if(m_time_on_leg < 0)
-    m_time_on_leg = 0;
 }
 
 // ----------------------------------------------------------

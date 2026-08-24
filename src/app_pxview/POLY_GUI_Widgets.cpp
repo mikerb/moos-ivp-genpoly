@@ -22,23 +22,9 @@ using namespace std;
 void POLY_GUI::initWidgets()
 {
   Fl_Color fcolor_blue  = fl_rgb_color(140, 140, 220);
+  Fl_Color fcolor_beige = fl_rgb_color(223, 219, 191);
   
-  m_fld_osx = new Fl_Output(0, 0, 1, 1, "osx:");
-  m_fld_osx->color(fcolor_blue);
-  m_fld_osx->clear_visible_focus();
-
-  m_fld_osy = new Fl_Output(0, 0, 1, 1, "osy:");
-  m_fld_osy->color(fcolor_blue);
-  m_fld_osy->clear_visible_focus();
-
-  m_fld_osh = new Fl_Output(0, 0, 1, 1, "osh:");
-  m_fld_osh->color(fcolor_blue);
-  m_fld_osh->clear_visible_focus();
-
-  m_fld_osv = new Fl_Output(0, 0, 1, 1, "osv:");
-  m_fld_osv->color(fcolor_blue);
-  m_fld_osv->clear_visible_focus();
-
+  // Column 1
   m_but_draw_pts = new Fl_Button(0, 0, 1, 1, "Draw Pts");
   m_but_draw_pts->clear_visible_focus();
   m_but_draw_pts->callback((Fl_Callback*)POLY_GUI::cb_DrawPts);
@@ -51,6 +37,7 @@ void POLY_GUI::initWidgets()
   m_but_draw_segl->shortcut('p');
   m_but_draw_segl->tooltip("Shortcut key is 's'");
 
+  // Column 2
   m_but_draw_hull = new Fl_Button(0, 0, 1, 1, "Draw Hull");
   m_but_draw_hull->clear_visible_focus();
   m_but_draw_hull->callback((Fl_Callback*)POLY_GUI::cb_DrawHull);
@@ -62,35 +49,59 @@ void POLY_GUI::initWidgets()
   m_but_draw_gpoly->callback((Fl_Callback*)POLY_GUI::cb_DrawGPoly);
   m_but_draw_gpoly->shortcut('g');
   m_but_draw_gpoly->tooltip("Shortcut key is 'g'");
-  
+
+  // Column 3
+  m_fld_snap = new Fl_Output(0, 0, 1, 1, "snap:"); 
+  m_fld_snap->set_output();
+
+  m_fld_polys = new Fl_Output(0, 0, 1, 1, "polys:"); 
+  m_fld_polys->set_output();
+
+
+  // Column 4
   m_but_resolve = new Fl_Button(0, 0, 1, 1, "Resolve");
   m_but_resolve->clear_visible_focus();
   m_but_resolve->callback((Fl_Callback*)POLY_GUI::cb_Resolve);
   m_but_resolve->shortcut('s');
   m_but_resolve->tooltip("Shortcut key is 's'");
   
+  m_fld_solve = new Fl_Output(0, 0, 1, 1, ""); 
+  m_fld_solve->set_output();
+
+  // Column 5
   m_but_method = new Fl_Button(0, 0, 1, 1, "Method");
   m_but_method->clear_visible_focus();
   m_but_method->callback((Fl_Callback*)POLY_GUI::cb_MethodToggle);
   m_but_method->shortcut('d');
   m_but_method->tooltip("Shortcut key is 'd'");
   
+  m_fld_method = new Fl_Output(0, 0, 1, 1, ""); 
+  m_fld_method->set_output();
+
+  // Column 6
   m_but_collapse = new Fl_Button(0, 0, 1, 1, "Collapse");
   m_but_collapse->clear_visible_focus();
   m_but_collapse->callback((Fl_Callback*)POLY_GUI::cb_CollapseToggle);
   m_but_collapse->shortcut('c');
   m_but_collapse->tooltip("Shortcut key is 'c'");
   
+  m_fld_collap = new Fl_Output(0, 0, 1, 1, ""); 
+  m_fld_collap->set_output();
+
+  // Column 7
   m_but_verbose = new Fl_Button(0, 0, 1, 1, "Verbose");
   m_but_verbose->clear_visible_focus();
   m_but_verbose->callback((Fl_Callback*)POLY_GUI::cb_VerboseToggle);
   m_but_verbose->shortcut('v');
   m_but_verbose->tooltip("Shortcut key is 'v'");
   
+  m_fld_verbose = new Fl_Output(0, 0, 1, 1, ""); 
+  m_fld_verbose->set_output();
+
+  // Column 8
   m_but_clear = new Fl_Button(0, 0, 1, 1, "Clear");
   m_but_clear->clear_visible_focus();
   m_but_clear->callback((Fl_Callback*)POLY_GUI::cb_Clear);
-
 
   m_but_ipf_gui = new Fl_Button(0, 0, 1, 1, "IPF GUI");
   m_but_ipf_gui->clear_visible_focus();
@@ -98,24 +109,34 @@ void POLY_GUI::initWidgets()
   m_but_ipf_gui->shortcut('g');
   m_but_ipf_gui->tooltip("Shortcut key is 'g'");
   
-  m_fld_snap = new Fl_Output(0, 0, 1, 1, "snap:"); 
-  m_fld_snap->set_output();
+  // Column 9
+  m_fld_osx = new Fl_Output(0, 0, 1, 1, "osx:");
+  m_fld_osx->color(fcolor_blue);
+  m_fld_osx->clear_visible_focus();
 
-  m_fld_polys = new Fl_Output(0, 0, 1, 1, "polys:"); 
-  m_fld_polys->set_output();
+  m_fld_osy = new Fl_Output(0, 0, 1, 1, "osy:");
+  m_fld_osy->color(fcolor_blue);
+  m_fld_osy->clear_visible_focus();
 
-  m_fld_solve = new Fl_Output(0, 0, 1, 1, ""); 
-  m_fld_solve->set_output();
+  // Column 10
+  m_fld_osh = new Fl_Output(0, 0, 1, 1, "osh:");
+  m_fld_osh->color(fcolor_blue);
+  m_fld_osh->clear_visible_focus();
 
-  m_fld_method = new Fl_Output(0, 0, 1, 1, ""); 
-  m_fld_method->set_output();
+  m_fld_osv = new Fl_Output(0, 0, 1, 1, "osv:");
+  m_fld_osv->color(fcolor_blue);
+  m_fld_osv->clear_visible_focus();
 
-  m_fld_collap = new Fl_Output(0, 0, 1, 1, ""); 
-  m_fld_collap->set_output();
+  // Column 11
+  m_fld_des_hdg = new Fl_Output(0, 0, 1, 1, "des_hdg:");
+  m_fld_des_hdg->color(fcolor_beige);
+  m_fld_des_hdg->clear_visible_focus();
 
-  m_fld_verbose = new Fl_Output(0, 0, 1, 1, ""); 
-  m_fld_verbose->set_output();
+  m_fld_des_spd = new Fl_Output(0, 0, 1, 1, "des_spd:");
+  m_fld_des_spd->color(fcolor_beige);
+  m_fld_des_spd->clear_visible_focus();
 
+  
   //----------------------------------------------------------
   m_fld_segl = new Fl_Output(0, 0, 1, 1, "seglist:"); 
   m_fld_segl->set_output();
@@ -153,8 +174,8 @@ void POLY_GUI::resizeWidgetsShape()
   int row4 = row3 + 30;
   int row5 = row4 + 30;
 
-  int wid1 = 80;
-  int wid2 = 90;
+  int wid1 = 70;
+  int wid2 = 80;
   int wid3 = 40;
   int wid4 = 60;
   int wid5 = 60;
@@ -163,8 +184,9 @@ void POLY_GUI::resizeWidgetsShape()
   int wid8 = 60;
   int wid9 = 45;
   int widA = 45;
+  int widB = 45;
 
-  int sep = 10;
+  int sep = 5;
 
   int col1 = 10;
   int col2 = col1 + wid1 + sep;
@@ -176,6 +198,7 @@ void POLY_GUI::resizeWidgetsShape()
   int col8 = col7 + wid7 + sep + 10;
   int col9 = col8 + wid8 + sep + 30;
   int colA = col9 + wid9 + sep + 20;
+  int colB = colA + widA + sep + 60;
 
   //-------------------- Column 1
   int pts_x = col1;
@@ -276,7 +299,7 @@ void POLY_GUI::resizeWidgetsShape()
   int osy_wid = wid9;
   m_fld_osy->resize(osy_x, osy_y, osy_wid, field_hgt);
   
-  //-------------------- Column 9
+  //-------------------- Column 10
   int osh_x = colA;
   int osh_y = row1;
   int osh_wid = widA;
@@ -287,8 +310,17 @@ void POLY_GUI::resizeWidgetsShape()
   int osv_wid = widA;
   m_fld_osv->resize(osv_x, osv_y, osv_wid, field_hgt);
   
-
-
+  //-------------------- Column 11
+  int dhdg_x = colB;
+  int dhdg_y = row1;
+  int dhdg_wid = widB;
+  m_fld_des_hdg->resize(dhdg_x, dhdg_y, dhdg_wid, field_hgt);
+  
+  int dspd_x = colB;
+  int dspd_y = row2;
+  int dspd_wid = widB;
+  m_fld_des_spd->resize(dspd_x, dspd_y, dspd_wid, field_hgt);
+  
   //---------------------------------------------------------
   // Bottom Long format ROWS
   //---------------------------------------------------------
@@ -336,54 +368,79 @@ void POLY_GUI::resizeWidgetsText()
   int text_size  = 12;
   int label_size = 12;
 
-  m_fld_osx->textsize(text_size);
-  m_fld_osx->labelsize(label_size);
-  
-  m_fld_osy->textsize(text_size);
-  m_fld_osy->labelsize(label_size);
- 
-  m_fld_osh->textsize(text_size);
-  m_fld_osh->labelsize(label_size);
- 
-  m_fld_osv->textsize(text_size);
-  m_fld_osv->labelsize(label_size);
- 
+  // Column 1
   m_but_draw_pts->labelsize(label_size);
-  m_but_draw_segl->labelsize(label_size);
   m_but_draw_hull->labelsize(label_size);
+
+  // Column 2
+  m_but_draw_segl->labelsize(label_size);
   m_but_draw_gpoly->labelsize(label_size);
 
-  m_but_resolve->labelsize(label_size);
-  m_but_method->labelsize(label_size);
-  m_but_collapse->labelsize(label_size);
-  m_but_verbose->labelsize(label_size);
-  m_but_clear->labelsize(label_size);
-  m_but_ipf_gui->labelsize(label_size);
-  
+  // Column 3
   m_fld_snap->textsize(text_size);
   m_fld_snap->labelsize(label_size);
 
   m_fld_polys->textsize(text_size);
   m_fld_polys->labelsize(label_size);
 
+  // Column 4
+  m_but_resolve->labelsize(label_size);
+
   m_fld_solve->textsize(text_size);
   m_fld_solve->labelsize(label_size);
 
+  // Column 5
+  m_but_method->labelsize(label_size);
+
   m_fld_method->textsize(text_size);
   m_fld_method->labelsize(label_size);
+  
+  // Column 6
+  m_but_collapse->labelsize(label_size);
 
   m_fld_collap->textsize(text_size);
   m_fld_collap->labelsize(label_size);
 
+  // Column 7
+  m_but_verbose->labelsize(label_size);
+
   m_fld_verbose->textsize(text_size);
   m_fld_verbose->labelsize(label_size);
 
+  // Column 8
+  m_but_clear->labelsize(label_size);
+  m_but_ipf_gui->labelsize(label_size);
+  
+  // Column 9
+  m_fld_osx->textsize(text_size);
+  m_fld_osx->labelsize(label_size);
+  
+  m_fld_osy->textsize(text_size);
+  m_fld_osy->labelsize(label_size);
+ 
+  // Column 10
+  m_fld_osh->textsize(text_size);
+  m_fld_osh->labelsize(label_size);
+ 
+  m_fld_osv->textsize(text_size);
+  m_fld_osv->labelsize(label_size);
+ 
+  // Column 11
+  m_fld_des_hdg->textsize(text_size);
+  m_fld_des_hdg->labelsize(label_size);
+ 
+  m_fld_des_spd->textsize(text_size);
+  m_fld_des_spd->labelsize(label_size);
+
+  // Row 3
   m_fld_segl->textsize(text_size);
   m_fld_segl->labelsize(label_size);
 
+  // Row 4
   m_fld_gpoly->textsize(text_size);
   m_fld_gpoly->labelsize(label_size);
 
+  // Row 4
   m_fld_seglr_dist->textsize(text_size);
   m_fld_seglr_dist->labelsize(label_size);
 
@@ -395,5 +452,6 @@ void POLY_GUI::resizeWidgetsText()
 
   m_fld_ray_dist->textsize(text_size);
   m_fld_ray_dist->labelsize(label_size);
+
 }
 

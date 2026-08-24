@@ -42,40 +42,62 @@ public:
   XModel      m_xmodel;
   
 protected:
-  Fl_Output  *m_fld_osx;
-  Fl_Output  *m_fld_osy;
-  Fl_Output  *m_fld_osh;
-  Fl_Output  *m_fld_osv;
-
+  // Column 1
   Fl_Button  *m_but_draw_pts;
   Fl_Button  *m_but_draw_segl;
+
+  // Column 2
   Fl_Button  *m_but_draw_hull;
   Fl_Button  *m_but_draw_gpoly;
 
-  Fl_Button  *m_but_resolve;
-  Fl_Button  *m_but_method;
-  Fl_Button  *m_but_collapse;
-  Fl_Button  *m_but_clear;
-  Fl_Button  *m_but_verbose;
-
+  // Column 3
   Fl_Output  *m_fld_snap;
   Fl_Output  *m_fld_polys;
+
+  // Column 4
+  Fl_Button  *m_but_resolve;
   Fl_Output  *m_fld_solve;
 
+  // Column 5  
+  Fl_Button  *m_but_method;
   Fl_Output  *m_fld_method;
+
+  // Column 6
+  Fl_Button  *m_but_collapse;
   Fl_Output  *m_fld_collap;
+
+  // Column 7
+  Fl_Button  *m_but_verbose;
   Fl_Output  *m_fld_verbose;
 
+  // Column 8
+  Fl_Button  *m_but_clear;
+  Fl_Button  *m_but_ipf_gui;
+
+  // Column 9
+  Fl_Output  *m_fld_osx;
+  Fl_Output  *m_fld_osy;
+
+  // Column 10
+  Fl_Output  *m_fld_osh;
+  Fl_Output  *m_fld_osv;
+
+  // Column 11
+  Fl_Output  *m_fld_des_hdg;
+  Fl_Output  *m_fld_des_spd;
+  
+  // Row 3
   Fl_Output  *m_fld_segl;
+
+  // Row 4
   Fl_Output  *m_fld_gpoly;
 
+  // Row 5
   Fl_Output  *m_fld_seglr_dist;
-  Fl_Output  *m_fld_osh_dist;
-  
+  Fl_Output  *m_fld_osh_dist;  
   Fl_Output  *m_fld_seg_dist;
   Fl_Output  *m_fld_ray_dist;
 
-  Fl_Button  *m_but_ipf_gui;
   
   int m_start_hgt;
   int m_start_wid;
@@ -145,6 +167,9 @@ private:
 
   inline void cb_OwnshipHdg_i(int);
   static void cb_OwnshipHdg(Fl_Widget*, int);
+
+  inline void cb_OwnshipDesHdg_i(int);
+  static void cb_OwnshipDesHdg(Fl_Widget*, int);
 
   inline void cb_OwnshipRad_i(int);
   static void cb_OwnshipRad(Fl_Widget*, int);
