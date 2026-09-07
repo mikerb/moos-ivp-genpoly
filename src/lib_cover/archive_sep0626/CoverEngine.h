@@ -30,15 +30,28 @@ class CoverEngine {
   void   setVerbose(bool v)      {m_verbose = v;}
   
   XYGenPolygon getGenPoly();
+
   
- protected: 
+  
+ protected: // The two primary solve methods
   std::vector<XYPolygon> coverRecursive(std::vector<double>,
 					std::vector<double>,
-					int level);
-  
+					std::string,
+					unsigned int,
+					unsigned int&); 
+
+  std::vector<XYPolygon> coverRecursive2(std::vector<double>,
+					 std::vector<double>,
+					 std::string,
+					 unsigned int,
+					 unsigned int&); 
+
 protected: // Utility methods in support of solve methods
   bool okTermIX(std::vector<double>, std::vector<double>, unsigned int);
+  bool okTermIXB(std::vector<double>, std::vector<double>, unsigned int);
 
+  unsigned int zagCount(std::vector<double>, std::vector<double>);
+  
   XYPolygon carvePoly(std::vector<double>&, std::vector<double>&, unsigned int);
   
  protected: // Methods for post-solve merging of neighbors
@@ -46,8 +59,6 @@ protected: // Utility methods in support of solve methods
 		       const XYPolygon& poly2);
 
   void collapseNeighbors(std::vector<XYPolygon>&);  
-
-  void setWindingClockwise();
   
 protected: // state vars
   std::vector<double> m_vx;

@@ -5,10 +5,12 @@
 
 SET(SRC
   CoverEngine.cpp
+  CoverUtils.cpp
 )
 
 SET(HEADERS
   CoverEngine.h
+  CoverUtils.h
 )
 
 # Build Library

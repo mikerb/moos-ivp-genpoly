@@ -86,13 +86,38 @@ void CoverEngine::setSolveMethod(string method)
 
 //---------------------------------------------------------------
 // Procedure: getGenPoly()
-  
+
 XYGenPolygon CoverEngine::getGenPoly()
 {
   //-------------------------------------------------
   // Part 1: Determine the cover polygons
   //-------------------------------------------------
-  vector<XYPolygon> cover_polys = coverRecursive(m_vx, m_vy, 0);
+  string gap;
+#if 0
+  vector<XYPolygon> cover_polys;
+  unsigned int poly_count = 0;
+  unsigned int min_so_far = 0;
+#endif
+
+#if 1
+  vector<XYPolygon> cover_polys = coverRecursive2(m_vx, m_vy, gap);
+  unsigned int poly_count = cover_polys.size();
+  unsigned int min_so_far = 0;
+#endif
+
+  cout << "CoverEngine::getGenPoly() method=" << m_method << endl;
+  cout << "CoverEngine::getGenPoly() seed=" << cover_polys.size() << endl;
+  
+  if(m_method != "basic") {
+    vector<XYPolygon> new_cover_polys;
+    new_cover_polys = coverRecursive(m_vx, m_vy, gap, poly_count, min_so_far);
+    if(new_cover_polys.size() != 0)
+      cover_polys = new_cover_polys;
+  }
+  else if(cover_polys.size() == 0)
+    cover_polys = coverRecursive2(m_vx, m_vy, gap);
+    
+    
     
   if(m_collapse)
     collapseNeighbors(cover_polys);
@@ -119,22 +144,127 @@ XYGenPolygon CoverEngine::getGenPoly()
 
 vector<XYPolygon> CoverEngine::coverRecursive(vector<double> vx,
 					      vector<double> vy,
-					      int level)
+					      string gap, 
+					      unsigned int poly_count, 
+					      unsigned int& min_so_far)
 {
-  string indent(level, ' ');
+  gap = gap + "  ";
   if(m_verbose) {
-    cout << indent << "Vertices left: " << vx.size() << endl;
+    cout << gap << "S-Count:" << poly_count << ", min_so_far: "; 
+    cout << min_so_far << "----------- verts:" << vx.size() << endl;
   }
-
-  // Vector of Return Polys is initially empty
+  
+  // cout << "In coverRecursive(" << vx.size() << ")" << endl;
   vector<XYPolygon> cover_polys;
-  if(level > 2000)
-    return(cover_polys);
-
-
   if((vx.size() != vy.size()) || (vx.size() < 3)) {
     if(m_verbose)
-      cout << indent << "END ++++++" << endl;
+      cout << gap << "END ++++++" << endl;
+    return(cover_polys);
+  }
+
+  bool all_thru = false;
+  for(unsigned int i=0; (i<vx.size() && !all_thru); i++) {
+    vector<XYPolygon> cover_polys_i;
+    if(!okTermIXB(vx, vy, 2)) {
+      shiftVertices(vx, vy);
+      continue;
+    }
+
+    vector<double> nvx = vx;
+    vector<double> nvy = vy;
+    
+    all_thru = true;
+    for(unsigned int j=3; j<vx.size(); j++) {
+      if(!okTermIX(vx, vy, j)) {
+	all_thru = false;
+	XYPolygon new_poly = carvePoly(nvx, nvy, j-1);
+	cover_polys_i.push_back(new_poly);
+	break;
+      }
+    }
+    
+    bool found_solution = true;
+    if(all_thru) {
+      XYPolygon new_poly = carvePoly(nvx, nvy, nvx.size()-1); 
+      if(new_poly.size() != 0) {
+	cover_polys_i.push_back(new_poly);
+      }
+    }
+    else {
+      unsigned int zag_uint_count = zagCount(nvx, nvy);
+      int zag_int_count = (int)((zag_uint_count + 1)/2);
+
+      int thresh = 2;
+      if(m_method == "deep")
+	thresh = 1;
+      if(m_method == "deepest")
+	thresh = 0;
+
+      unsigned int new_count = poly_count + thresh + zag_int_count;
+      if((min_so_far == 0) || (new_count < min_so_far)) {
+	// Make recursive call
+	vector<XYPolygon> polys;
+	polys = coverRecursive(nvx, nvy, gap, new_count, min_so_far); 
+	if(polys.size() == 0)
+	  found_solution = false;
+	if(m_verbose) 
+	  cout << gap << "PR poly_count:" << poly_count << ", polys.size(): " <<
+	    polys.size();
+
+	cover_polys_i.insert(cover_polys_i.end(), polys.begin(), polys.end());
+
+	if(m_verbose)
+	  cout << ", polys_i.size():" << cover_polys_i.size() << endl;
+      }
+      else
+	found_solution = false;
+    }
+
+    if((cover_polys_i.size() > 0) && found_solution) {
+      if((cover_polys.size() == 0) || (cover_polys_i.size() < cover_polys.size())) {
+	cover_polys = cover_polys_i;
+
+	if((min_so_far == 0) ||
+	   ((cover_polys.size() + poly_count) < min_so_far)) {
+
+	  min_so_far = cover_polys.size() + poly_count;
+	  if(m_verbose) {
+	    cout << gap << "J-Count:" << poly_count;
+	    cout << ", glm:" << min_so_far << endl;
+	  }
+	}
+
+      }
+    }
+
+    shiftVertices(vx, vy);
+  }
+
+  if(m_verbose)
+    cout << gap << "E-Count:" << poly_count << ", cover_polys.size():" <<
+      cover_polys.size() << ", glm:" << min_so_far << endl;
+  
+  return(cover_polys);
+}
+  
+
+//---------------------------------------------------------------
+// Procedure: coverRecursive2()
+
+vector<XYPolygon> CoverEngine::coverRecursive2(vector<double> vx,
+					       vector<double> vy,
+					       string gap)
+{
+  gap = gap + "  ";
+  if(m_verbose) {
+    cout << gap << "Vertices left: " << vx.size() << endl;
+  }
+  
+  // Vector of Return Polys is initially empty
+  vector<XYPolygon> cover_polys;
+  if((vx.size() != vy.size()) || (vx.size() < 3)) {
+    if(m_verbose)
+      cout << gap << "END ++++++" << endl;
     return(cover_polys);
   }
 
@@ -145,16 +275,15 @@ vector<XYPolygon> CoverEngine::coverRecursive(vector<double> vx,
 
   poly.determine_convexity();
   if(poly.is_convex()) {
-    poly.set_label(intToString(level));
     cover_polys.push_back(poly);
     if(m_verbose)
-      cout << indent << "SOLVED: Last Poly Size: " << poly.size() << endl;
+      cout << gap << "SOLVED: Last Poly Size: " << poly.size() << endl;
     return(cover_polys);
   }
     
   for(unsigned int i=0; i<vx.size(); i++) {
 
-    if(!okTermIX(vx, vy, 2)) {
+    if(!okTermIXB(vx, vy, 2)) {
       shiftVertices(vx, vy);      
       continue;
     }
@@ -165,14 +294,10 @@ vector<XYPolygon> CoverEngine::coverRecursive(vector<double> vx,
     for(unsigned int j=3; j<vx.size(); j++) {
       if(!okTermIX(vx, vy, j)) {
 	XYPolygon carved_poly = carvePoly(nvx, nvy, j-1);
-	carved_poly.set_label(intToString(level));
 	cover_polys.push_back(carved_poly);
-	vector<XYPolygon> remaining_polys = coverRecursive(nvx, nvy, level+1);
-	for(unsigned int k=0; k<remaining_polys.size(); k++) {
-	  XYPolygon rpoly = remaining_polys[k];
-	  //  rpoly.set_label(intToString(level+k));
-	  cover_polys.push_back(rpoly);
-	}
+	vector<XYPolygon> remaining_polys = coverRecursive2(nvx, nvy, gap);
+	for(unsigned int k=0; k<remaining_polys.size(); k++)
+	  cover_polys.push_back(remaining_polys[k]);
 	return(cover_polys);
       }
     }
@@ -261,6 +386,7 @@ void CoverEngine::collapseNeighbors(vector<XYPolygon>& polys)
   }
 }
     
+  
 
 //---------------------------------------------------------------
 // Procedure: okTermIX()
@@ -289,11 +415,10 @@ bool CoverEngine::okTermIX(vector<double> vx, vector<double> vy, unsigned int ix
     return(false);
   
   // For initial 3 vertex poly, make sure it is a left turn
-  if(ix == 2) {
-    bool turns_left = threePointTurnLeft(vx[0],vy[0], vx[1],vy[1], vx[2],vy[2]);
-    if(!turns_left) 
+  if(ix == 2)
+    if(!threePointTurnLeft(vx[0],vy[0], vx[1],vy[1], vx[2],vy[2])) 
       return(false);
-  }
+  
   
   // Part 1: Build a poly from verts [0...ix], check for convexity
   XYPolygon poly;
@@ -304,6 +429,35 @@ bool CoverEngine::okTermIX(vector<double> vx, vector<double> vy, unsigned int ix
   if(!poly.is_convex()) 
     return(false);
 
+  // Part 2: Check that no remaining verts are within the poly
+  for(unsigned int i=ix+1; i<vx.size(); i++)
+    if(poly.contains(vx[i], vy[i]))
+      return(false);
+  
+  return(true);
+}
+
+bool CoverEngine::okTermIXB(vector<double> vx, vector<double> vy, unsigned int ix)
+{
+  // Sanity check
+  if(ix >= vx.size())
+    return(false);
+  
+  // For initial 3 vertex poly, make sure it is a left turn
+  if(ix == 2) 
+    if(!threePointTurnLeft(vx[0],vy[0], vx[1],vy[1], vx[2],vy[2]))
+      return(false);
+  
+
+  // Part 1: Build a poly from verts [0...ix], check for convexity
+  XYPolygon poly;
+  for(unsigned int i=0; i<=ix; i++)
+    poly.add_vertex(vx[i], vy[i]);
+   
+  poly.determine_convexity();
+  if(!poly.is_convex())
+    return(false);
+  
   // Part 2: Check that no remaining verts are within the poly
   for(unsigned int i=ix+1; i<vx.size(); i++)
     if(poly.contains(vx[i], vy[i]))
@@ -351,6 +505,8 @@ bool CoverEngine::okTermIX(vector<double> vx, vector<double> vy, unsigned int ix
 //  v4              v0            v0     v1
 
 
+
+
 XYPolygon CoverEngine::carvePoly(vector<double>& vx, vector<double>& vy, unsigned ix)
 {
   XYPolygon null_poly;
@@ -381,3 +537,48 @@ XYPolygon CoverEngine::carvePoly(vector<double>& vx, vector<double>& vy, unsigne
 
   return(new_poly);
 }
+
+//---------------------------------------------------------------
+// Procedure: zagCount()
+//      Note: A zag is a righthand turn that followed a non-righthand turn
+//            An approximation of polys needed to cover
+
+unsigned int CoverEngine::zagCount(vector<double> vx, vector<double> vy)
+{
+  // Sanity checks
+  if((vx.size() != vy.size()) || (vx.size() < 4))
+    return(0);
+  
+  unsigned int zags = 0;
+  
+  bool prev_turn_left = false;
+  for(unsigned int i=0; i<=vx.size(); i++) {
+    unsigned int ix1 = i;
+    unsigned int ix2 = i + 1;
+    unsigned int ix3 = i + 2;
+    
+    if(i == (vx.size()-2))
+      ix3 = 0;
+    else if(i == (vx.size()-1)) {
+      ix2 = 0;
+      ix3 = 1;
+    }
+    else if(i == vx.size()) {
+      ix1 = 0;
+      ix2 = 1;
+      ix3 = 2;
+    }
+    
+    bool is_left = threePointTurnLeft(vx[ix1],vy[ix1], vx[ix2],vy[ix2], vx[ix3],vy[ix3]);
+    if(is_left)
+      prev_turn_left = true;
+    else {
+      if(prev_turn_left == true)
+	zags++;
+      prev_turn_left = false;
+    }
+  }
+  
+  return(zags);
+}
+
