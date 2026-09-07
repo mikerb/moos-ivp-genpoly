@@ -18,6 +18,7 @@ ADD_SUBDIRECTORY(lib_cover)
 ADD_SUBDIRECTORY(app_polyview)
 ADD_SUBDIRECTORY(app_pxview)
 ADD_SUBDIRECTORY(app_epath)
+ADD_SUBDIRECTORY(app_polygen)
 
 ##############################################################################
 #                           END of CMakeLists.txt

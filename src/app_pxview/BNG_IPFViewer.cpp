@@ -55,7 +55,6 @@ BNG_IPFViewer::BNG_IPFViewer(int x, int y, int w, int h, const char *label)
   m_maxutil_eta  = 29;
   m_minutil_cpa  = 1;
   m_maxutil_cpa  = 10;
-  m_cpa_window   = 5.5;
 
   m_eta_factored = true;
   m_cpa_factored = true;
@@ -182,9 +181,12 @@ string BNG_IPFViewer::getInfo(string param)
     return(doubleToStringX(m_minutil_cpa,2));
   if(param == "maxutil_cpa") 
     return(doubleToStringX(m_maxutil_cpa,2));
-  if(param == "cpa_window") 
-    return(doubleToStringX(m_cpa_window,2));
-
+  if(param == "cpa_window") {
+    double cpa_win = 0;
+    if(m_xmodel)
+      cpa_win = m_xmodel->getCPAWin();
+    return(doubleToStringX(cpa_win,2));
+  }
   if(param == "smart") 
     return(uintToString(m_smart_pcs));
   if(param == "pmodel_config") 
@@ -229,7 +231,6 @@ void BNG_IPFViewer::resetIPF()
 
   updateInfoBuffer();  
   IvPFunction *ipf = 0;
-  cout << "Dbb 4: BNG_IPFViewer -- bhv_type = [" << m_bhv_type << "]" << endl;
   if(m_bhv_type == "opreg26")
     ipf = buildIPF_OpRegion();
 
@@ -238,7 +239,7 @@ void BNG_IPFViewer::resetIPF()
     m_quadset_ipf = null_quadset;
     m_ipf_pieces = 0;
     redraw();
-    return;
+    return; 
   }
 
   bool ipf_valid = ipf->valid();
@@ -274,9 +275,11 @@ void BNG_IPFViewer::resetIPF()
 
 void BNG_IPFViewer::setCPAWindow(double val)
 {
+  if(!m_xmodel)
+    return;
   if(val < 0)
     val = 0;
-  m_cpa_window = val;
+  m_xmodel->setCPAWin(val);
   m_refresh_quadset_ipf_pending = true;
 }
 
@@ -285,7 +288,10 @@ void BNG_IPFViewer::setCPAWindow(double val)
 
 void BNG_IPFViewer::modCPAWindow(double val)
 {
-  setCPAWindow(m_cpa_window + val);
+  if(!m_xmodel)
+    return;
+  double curr_cpa_win = m_xmodel->getCPAWin();
+  setCPAWindow(curr_cpa_win + val);
 }
 
 
@@ -476,16 +482,16 @@ IvPFunction *BNG_IPFViewer::buildIPF_OpRegion()
   ok = ok && m_bhv->setParam("build_info", "uniform_piece=" + piece);
   ok = ok && m_bhv->setParam("build_info", "uniform_grid=" + piece);
 
+  double cpa_win = m_xmodel->getCPAWin();
+   
   string s_minutil_eta  = doubleToStringX(m_minutil_eta,2);
   string s_maxutil_eta  = doubleToStringX(m_maxutil_eta,2);
   string s_minutil_cpa  = doubleToStringX(m_minutil_cpa,2);
   string s_maxutil_cpa  = doubleToStringX(m_maxutil_cpa,2); 
-  string s_cpa_window   = doubleToStringX(m_cpa_window,2);
+  string s_cpa_window   = doubleToStringX(cpa_win,2);
   string s_eta_factored = boolToString(m_eta_factored);
   string s_cpa_factored = boolToString(m_cpa_factored);
 
-  cout << "ETA Factored:" << s_eta_factored << endl;
-  
   ok = ok && m_bhv->setParam("min_util_eta", s_minutil_eta);
   ok = ok && m_bhv->setParam("max_util_eta", s_maxutil_eta);
   ok = ok && m_bhv->setParam("min_util_cpa", s_minutil_cpa);
@@ -558,20 +564,18 @@ void BNG_IPFViewer::modHdgEdgeSize(int val)
 
 void BNG_IPFViewer::setSpdEdgeSize(unsigned int val)
 {
-  //cout << "SetSpdEdgeSize() " << val << endl;
   m_spd_edge_size = val;
   if(m_spd_edge_size < 1)
     m_spd_edge_size = 1;
   if(m_spd_edge_size > 25)
     m_spd_edge_size = 25;
 }
-
+ 
 // ----------------------------------------------------------
 // Procedure: modSpdEdgeSize()
 
 void BNG_IPFViewer::modSpdEdgeSize(int val)
 {
-  //cout << "modSpdEdgeSize() " << val << endl;
   setSpdEdgeSize(m_spd_edge_size + val);
 }
 

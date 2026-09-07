@@ -42,27 +42,26 @@ protected:
   Fl_Button  *m_but_draw_hull;
   Fl_Button  *m_but_draw_gpoly;
 
+  Fl_Output  *m_fld_snap;
   Fl_Button  *m_but_resolve;
   Fl_Button  *m_but_method;
   Fl_Button  *m_but_collapse;
-  Fl_Button  *m_but_clear;
   Fl_Button  *m_but_verbose;
+  Fl_Button  *m_but_clear;
 
-  Fl_Output  *m_fld_snap;
   Fl_Output  *m_fld_polys;
   Fl_Output  *m_fld_solve;
-
   Fl_Output  *m_fld_method;
   Fl_Output  *m_fld_collap;
   Fl_Output  *m_fld_verbose;
+  Fl_Button  *m_but_autogen;
 
   Fl_Output  *m_fld_segl;
   Fl_Output  *m_fld_gpoly;
 
   Fl_Output  *m_fld_seglr_dist;
   Fl_Output  *m_fld_osh_dist;
-  
-  Fl_Output  *m_fld_seg_dist;
+    Fl_Output  *m_fld_seg_dist;
   Fl_Output  *m_fld_ray_dist;
   
   int m_start_hgt;
@@ -95,6 +94,9 @@ private:
 
   inline void cb_Clear_i();
   static void cb_Clear(Fl_Widget*);
+
+  inline void cb_AutoGen_i();
+  static void cb_AutoGen(Fl_Widget*);
 
   inline void cb_VerboseToggle_i();
   static void cb_VerboseToggle(Fl_Widget*);

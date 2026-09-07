@@ -86,7 +86,6 @@ XYGenPolygon CoverEngine::getGenPoly()
   if(m_collapse)
     collapseNeighbors(cover_polys);
 
-  
   //-------------------------------------------------
   // Part 2: Create the XYGenPolygon (segl + polys)
   //-------------------------------------------------

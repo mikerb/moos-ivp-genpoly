@@ -22,17 +22,17 @@ using namespace std;
 
 XModel::XModel()
 {
-  m_des_hdg = 90;
+  m_des_hdg = 30;
   m_des_spd = 1;
   m_cpa_win = 21;
   
-  m_osx = 0;
-  m_osy = -50;
-  m_osh = 45;
-  m_osh = 2.5;
+  m_osx = 39;
+  m_osy = -75;
+  m_osh = 7;
+  m_osv = 0.8;
 
-  m_pmgen.setParam("radius", "15");
-  m_pmgen.setParam("spoke_degs", "12");
+  m_pmgen_dubins.setParam("radius", "15");
+  m_pmgen_dubins.setParam("spoke_degs", "12");
 }
 
 //-------------------------------------------------------------------
@@ -95,7 +95,7 @@ void XModel::setTurnRad(double dval)
   if(dval < 0)
     return;
   
-  m_pmgen.setParam("radius", doubleToString(dval));
+  m_pmgen_dubins.setParam("radius", doubleToString(dval));
 }
 
 //-------------------------------------------------------------------
@@ -106,7 +106,7 @@ void XModel::setSpokeDegs(double dval)
   if(dval < 1)
     return;
   
-  m_pmgen.setParam("spoke_degs", doubleToString(dval));
+  m_pmgen_dubins.setParam("spoke_degs", doubleToString(dval));
 }
 
 //-------------------------------------------------------------------
@@ -114,10 +114,10 @@ void XModel::setSpokeDegs(double dval)
 
 void XModel::modTurnRad(double dval)
 {
-  double curr_turn_rad = m_pmgen.getParamDbl("radius");
+  double curr_turn_rad = m_pmgen_dubins.getParamDbl("radius");
   double new_turn_rad = curr_turn_rad + dval;
   
-  m_pmgen.setParam("radius", doubleToString(new_turn_rad));
+  m_pmgen_dubins.setParam("radius", doubleToString(new_turn_rad));
 }
 
 //-------------------------------------------------------------------
@@ -125,10 +125,10 @@ void XModel::modTurnRad(double dval)
 
 void XModel::modSpokeDegs(double dval)
 {
-  double curr_degs = m_pmgen.getParamDbl("spoke_degs");
+  double curr_degs = m_pmgen_dubins.getParamDbl("spoke_degs");
   double new_degs = curr_degs + dval;
   
-  m_pmgen.setParam("spoke_degs", doubleToString(new_degs));
+  m_pmgen_dubins.setParam("spoke_degs", doubleToString(new_degs));
 }
 
 //-------------------------------------------------------------------
@@ -136,7 +136,7 @@ void XModel::modSpokeDegs(double dval)
 
 double XModel::getTurnRad() const
 {
-  return(m_pmgen.getParamDbl("radius"));
+  return(m_pmgen_dubins.getParamDbl("radius"));
 }
 
 //-------------------------------------------------------------------
@@ -144,7 +144,7 @@ double XModel::getTurnRad() const
 
 double XModel::getSpokeDegs() const
 {
-  return(m_pmgen.getParamDbl("degs"));
+  return(m_pmgen_dubins.getParamDbl("degs"));
 }
 
 //-------------------------------------------------------------------
@@ -152,7 +152,7 @@ double XModel::getSpokeDegs() const
 
 PlatModel XModel::getPlatModel()
 {
-  PlatModel plat_model = m_pmgen.generate(m_osx, m_osy, m_osh, m_osv);
+  PlatModel plat_model = m_pmgen_dubins.generate(m_osx, m_osy, m_osh, m_osv);
   return(plat_model);
 }
 

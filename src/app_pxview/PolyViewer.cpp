@@ -206,6 +206,21 @@ void PolyViewer::draw()
   seglr.set_edge_color("yellow");
   seglr.set_vertex_color("white");
   drawSeglr(seglr);  
+
+  // ------------------------------------------------------
+  // Draw segl_base endpt
+  // ------------------------------------------------------
+  double cpa_window = m_xmodel->getCPAWin();
+  double dist = osv * cpa_window;
+
+  XYSegList dist_segl = getDistSegList(seglr, dist);  
+  XYPoint last_pt = dist_segl.get_last_point();
+  last_pt.set_vertex_size(8);
+  last_pt.set_vertex_color("lime_green");
+  last_pt.set_label("lp");
+  last_pt.set_label_color("off");
+  drawPoint(last_pt);  
+
 }
 
 //-------------------------------------------------------------
@@ -336,7 +351,11 @@ bool PolyViewer::setParam(string param, double pval)
 
   else if(param == "osh") {
     m_xmodel->modOSH(pval);
-    updateGenPoly();
+    //updateGenPoly();
+  } 
+  else if(param == "osv") {
+    m_xmodel->modOSV(pval);
+    //updateGenPoly();
   } 
   else if(param == "des_hdg") {
     m_xmodel->modDesHdg(pval);
@@ -348,11 +367,11 @@ bool PolyViewer::setParam(string param, double pval)
   } 
   else if(param == "rad") {
     m_xmodel->modTurnRad(pval);
-    updateGenPoly();
+    //updateGenPoly();
   }    
   else if(param == "turn") {
     m_xmodel->modDesHdg(pval);
-    updateGenPoly();
+    //updateGenPoly();
   }
     
   else if((param == "start") && (pval == 1)) {
@@ -399,6 +418,11 @@ bool PolyViewer::setParam(string param, double pval)
     updateGenPoly();
   }
   else if((param == "start") && (pval == 8)) {
+    string s = "pts={4,-90:62,-92:64,-76:54,-52:68,-40:70,-10:12,-12}";
+    m_segl = string2SegList(s);
+    updateGenPoly();
+  }
+  else if((param == "start") && (pval == 8)) {
     string s = "pts={74,0:82,-30:90,-68:90,-102:66,-130:38,-132:6,-118:-12,-102:";
     s += "-26,-58:-6,-24:0,-56:10,-88:32,-106:58,-112:76,-98:74,-66:66,-44:58,-28}";
     m_segl = string2SegList(s);
@@ -406,6 +430,11 @@ bool PolyViewer::setParam(string param, double pval)
   }
   else if((param == "start") && (pval == 9)) {
     string s = "pts={2,-14:-42,-74:36,-130:96,-58:24,-72}";
+    m_segl = string2SegList(s);
+    updateGenPoly();
+  }
+  else if((param == "start") && (pval == 10)) {
+    string s = "pts={4,-90:62,-92:64,-76:54,-52:68,-40:70,-10:12,-12}";
     m_segl = string2SegList(s);
     updateGenPoly();
   }
@@ -594,45 +623,48 @@ void PolyViewer::updateSeglr()
   if(!m_xmodel)
     return;
 
-  //cout  << "in updateSeglr()" << endl;
-  PlatModel plat_model = m_xmodel->getPlatModel();
+  // Part 1: Get the Seglr
+  XYSeglr seglr = m_xmodel->getTurnSeglr();
+  m_seglr_spec = seglr.get_spec();
+
+  // Part 2: Get the GenPoly
+  XYGenPolygon gen_poly = m_xmodel->getGenPoly();
+
+  // Part 3: Get the seglr dist to exit
+  m_seglr_dist_to_exit = gen_poly.distSeglrToExitGP(seglr);
+  
+  // Part 4: Get the dist to exit along ownship's curr pos/hdg
   double osx = m_xmodel->getOSX();
   double osy = m_xmodel->getOSY();
   double osh = m_xmodel->getOSH();
-  
-  XYSeglr seglr = m_xmodel->getTurnSeglr();
-  m_seglr_spec = seglr.get_spec();
-  
+  double osv = m_xmodel->getOSV();
+  m_osh_dist_to_exit = gen_poly.distRayToExitGP(osx,osy,osh); 
+
+
+  // Part 5: Get the length of the seglr base
+  XYSegList base_segl = seglr.getBaseSegList();
+  m_base_segl_spec = base_segl.get_spec();
+
+  // Part 6: get the length of the ray
   double rx = seglr.getRayBaseX();
   double ry = seglr.getRayBaseY();
   double ray_angle = seglr.getRayAngle();
 
-  XYGenPolygon gen_poly = m_xmodel->getGenPoly();
-  
-  //m_seglr_dist_to_exit = m_gen_poly.distSeglrToExitGP(m_seglr);
-  //m_osh_dist_to_exit = m_gen_poly.distRayToExitGP(m_osx,m_osy,m_osh); 
-  m_seglr_dist_to_exit = gen_poly.distSeglrToExitGP(seglr);
-  m_osh_dist_to_exit = gen_poly.distRayToExitGP(osx,osy,osh); 
-
-  XYSegList m_base = seglr.getBaseSegList();
-  m_segl_base_spec = m_base.get_spec();
-
-  
-  
-  //cout << "base size:" << m_base.size() << endl;
-
+  // Part 7A: Get segl distance to exit
   bool exited = false;
-  //m_seg_dist_to_exit = m_gen_poly.distSeglToExitGP(m_base, exited); 
-  m_seg_dist_to_exit = gen_poly.distSeglToExitGP(m_base, exited); 
+  m_seg_dist_to_exit = gen_poly.distSeglToExitGP(base_segl, exited); 
 
+  // Part 7B: If segl base does not exit, calc ray_dist to exit
   m_ray_dist_to_exit = 0;
   if(!exited)
-    //m_ray_dist_to_exit = m_gen_poly.distRayToExitGP(rx,ry,ray_angle); 
     m_ray_dist_to_exit = gen_poly.distRayToExitGP(rx,ry,ray_angle); 
 
+
   // Part 2: calculate the ETA/CPA componentns
+  double cpwin_dist = osv * m_xmodel->getCPAWin();
+  m_seglr_cpa = gen_poly.cpaSeglrToGP(seglr, cpwin_dist);
 
-  
 
+  XYSegList dist_segl = getDistSegList(seglr, cpwin_dist);
 }
  

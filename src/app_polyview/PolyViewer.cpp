@@ -21,6 +21,7 @@
 #include "ConvexHullGenerator.h"
 #include "XYGenPolygon.h"
 #include "CoverEngine.h"
+#include "CoverUtils.h"
 
 using namespace std;
 
@@ -127,7 +128,8 @@ void PolyViewer::draw()
     map<string, XYPoint> pts;
     for(unsigned int i=0; i<m_segl.size(); i++) {
       XYPoint pt = m_segl.get_point(i);
-      string label = uintToString(i);
+      string msg = pt.get_spec();
+      string label = uintToString(i) + ":" + msg;
       pt.set_vertex_size(15);
       pt.set_vertex_color("white");
       pt.set_label(label);
@@ -169,11 +171,12 @@ void PolyViewer::draw()
 
   if(m_draw_gpoly) {
     vector<XYPolygon> polys = m_gen_poly.getCoverPolys();
-    //cout << "total polys:" << polys.size() << endl;
     for(unsigned int i=0; i<polys.size(); i++) {
       XYPolygon poly = polys[i];
       poly.set_color("edge", "gray80");
       poly.set_color("fill", "gray50");
+      poly.set_transparency(0.2);
+      poly.set_color("label", "light_greeen");
       drawPolygon(poly);
     }
   }
@@ -283,14 +286,13 @@ bool PolyViewer::setParam(string param, string value)
   else if(param == "verbose") 
     setBooleanOnString(m_verbose, value);
   else if(param == "method") {
-    if(value == "shallow")
-      m_solve_method = value;
-    else if(value == "deep")
-      m_solve_method = value;
-    else if(value == "deepest")
+    if((value == "shallow") || (value == "deep") ||
+       (value == "deepest") || (value == "basic"))
       m_solve_method = value;
     else if(value == "toggle") {
       if(m_solve_method == "shallow")
+	m_solve_method = "basic";
+      else if(m_solve_method == "basic")
 	m_solve_method = "deep";
       else if(m_solve_method == "deep")
 	m_solve_method = "deepest";
@@ -384,6 +386,12 @@ bool PolyViewer::setParam(string param, double pval)
     updateConvexHull();
     updateGenPoly();
   }
+  else if((param == "start") && (pval == 9)) {
+    string s = "pts={24,-12:-42,-102:106,-130:126,-48:100,-78:84,-84}";
+    m_segl = string2SegList(s);
+    updateConvexHull();
+    updateGenPoly();
+  }
   
   
   else if(param == "snap") {
@@ -397,7 +405,7 @@ bool PolyViewer::setParam(string param, double pval)
 }
 
 // ----------------------------------------------------------
-// Procedure: clear()
+// Procedure: autogen()
 
 void PolyViewer::clear()
 {  
@@ -405,6 +413,16 @@ void PolyViewer::clear()
   m_hull_poly.clear();
   m_gen_poly.clear();
   m_solve_time = 0;
+}
+
+// ----------------------------------------------------------
+// Procedure: autogen()
+
+void PolyViewer::autogen()
+{  
+  m_segl = genPolygonGP(0, -50, 195, 150);
+  updateConvexHull();
+  updateGenPoly();
 }
 
 // ----------------------------------------------------------

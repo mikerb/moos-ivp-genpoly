@@ -35,6 +35,7 @@ protected:
   void initWidgets();
   void resizeWidgetsShape();
   void resizeWidgetsText();
+  void updatedXModel() {if(m_ipf_gui) m_ipf_gui->updatedXModel();}
   
 public: 
   PolyViewer *pviewer;
@@ -179,6 +180,9 @@ private:
   inline void cb_OwnshipHdg_i(int);
   static void cb_OwnshipHdg(Fl_Widget*, int);
 
+  inline void cb_OwnshipSpd_i(int);
+  static void cb_OwnshipSpd(Fl_Widget*, int);
+
   inline void cb_OwnshipDesHdg_i(int);
   static void cb_OwnshipDesHdg(Fl_Widget*, int);
 
@@ -191,8 +195,5 @@ private:
   // ------------------------------------------
   inline void cb_IPF_GUI_i();
   static void cb_IPF_GUI(Fl_Widget*);
-
-
-  
 };
 #endif

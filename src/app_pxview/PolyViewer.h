@@ -37,7 +37,8 @@ public:
   std::string getBorderSpec();
   std::string getGPolySpec();
   std::string getSeglrSpec() const {return(m_seglr_spec);}
-  std::string getSeglBaseSpec() const {return(m_segl_base_spec);}
+  std::string getBaseSeglSpec() const {return(m_base_segl_spec);}
+  std::string getDistSeglSpec() const {return(m_dist_segl_spec);}
 
   void   setXModel(XModel* xmo) {m_xmodel=xmo;}
   bool   getVerbose() const {return(m_verbose);}
@@ -65,6 +66,9 @@ public:
   XYPolygon getConvexHull();
   void      updateGenPoly();
   void      updateSeglr();
+
+  double getTurnETA() const {return(m_seglr_eta);}
+  double getTurnCPA() const {return(m_seglr_cpa);}
   
 private: // Config vars
   bool   m_draw_pts;
@@ -77,11 +81,12 @@ private: // Config vars
   std::string m_solve_method;
   
 private:
-  XModel*  m_xmodel;
-  XYSegList m_segl;
+  XModel*   m_xmodel;
+  XYSegList m_segl;   // border of the gen_poly 
   
   std::string m_seglr_spec;
-  std::string m_segl_base_spec;
+  std::string m_base_segl_spec;
+  std::string m_dist_segl_spec;
 
   double  m_seglr_eta;
   double  m_seglr_cpa;

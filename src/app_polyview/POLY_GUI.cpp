@@ -120,6 +120,8 @@ void POLY_GUI::augmentMenu()
 		 (Fl_Callback*)POLY_GUI::cb_StartPoints, (void*)7);
   m_menubar->add("Starts/Start8", '8',
 		 (Fl_Callback*)POLY_GUI::cb_StartPoints, (void*)8);
+  m_menubar->add("Starts/Start8", '9',
+		 (Fl_Callback*)POLY_GUI::cb_StartPoints, (void*)9);
 
   m_menubar->add("Ownship/Hdg++", 'm',
 		 (Fl_Callback*)POLY_GUI::cb_OwnshipHdg, (void*)1);
@@ -325,6 +327,16 @@ void POLY_GUI::cb_Clear_i() {
 }
 void POLY_GUI::cb_Clear(Fl_Widget* o) {
   ((POLY_GUI*)(o->parent()->user_data()))->cb_Clear_i();
+}
+
+//----------------------------------------- AutoGen
+void POLY_GUI::cb_AutoGen_i() {
+  pviewer->autogen();
+  pviewer->redraw();
+  updateXY();
+}
+void POLY_GUI::cb_AutoGen(Fl_Widget* o) {
+  ((POLY_GUI*)(o->parent()->user_data()))->cb_AutoGen_i();
 }
 
 //----------------------------------------- StartPoints

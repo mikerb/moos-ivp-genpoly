@@ -13,6 +13,7 @@
 #define XMODEL_HEADER
 
 #include "PMGen_Dubins.h"
+#include "PMGen_Holonomic.h"
 #include "PlatModel.h"
 #include "XYGenPolygon.h"
 
@@ -80,7 +81,8 @@ protected:
   double       m_osh;
   double       m_osv;
 
-  PMGen_Dubins m_pmgen;
+  PMGen_Dubins    m_pmgen_dubins;
+  PMGen_Holonomic m_pmgen_holo;
 
   XYGenPolygon m_gen_poly;
 };

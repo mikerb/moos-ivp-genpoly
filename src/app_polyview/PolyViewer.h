@@ -32,6 +32,7 @@ class PolyViewer : public MarineViewer
   bool  setParam(std::string param, std::string value);
   bool  setParam(std::string param, double value);
   void  clear();
+  void  autogen();
   
 public:
   std::string getBorderSpec();

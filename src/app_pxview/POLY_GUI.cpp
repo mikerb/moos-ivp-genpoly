@@ -128,6 +128,11 @@ void POLY_GUI::augmentMenu()
 		 (Fl_Callback*)POLY_GUI::cb_OwnshipHdg, (void*)1);
   m_menubar->add("Ownship/Hdg--", 'n',
 		 (Fl_Callback*)POLY_GUI::cb_OwnshipHdg, (void*)-1);
+  m_menubar->add("Ownship/Spd++", 'a',
+		 (Fl_Callback*)POLY_GUI::cb_OwnshipSpd, (void*)1);
+  m_menubar->add("Ownship/Spd--", 'z',
+		 (Fl_Callback*)POLY_GUI::cb_OwnshipSpd, (void*)-1);
+
   m_menubar->add("Ownship/Radius++", 'R',
 		 (Fl_Callback*)POLY_GUI::cb_OwnshipRad, (void*)1);
   m_menubar->add("Ownship/Radius--", 'r',
@@ -339,7 +344,9 @@ void POLY_GUI::cb_Clear(Fl_Widget* o) {
 //----------------------------------------- StartPoints
 void POLY_GUI::cb_StartPoints_i(int val) {
   pviewer->setParam("start", (double)(val));
+  pviewer->updateSeglr();
   pviewer->redraw();
+  updatedXModel();
   updateXY();
 }
 void POLY_GUI::cb_StartPoints(Fl_Widget* o, int i) {
@@ -349,16 +356,31 @@ void POLY_GUI::cb_StartPoints(Fl_Widget* o, int i) {
 //----------------------------------------- OwnshipHdg
 void POLY_GUI::cb_OwnshipHdg_i(int val) {
   pviewer->setParam("osh", (double)(val));
-  pviewer->redraw();
+  pviewer->updateSeglr();
+  pviewer->redraw();  
+  updatedXModel();
   updateXY();
 }
 void POLY_GUI::cb_OwnshipHdg(Fl_Widget* o, int i) {
   ((POLY_GUI*)(o->parent()->user_data()))->cb_OwnshipHdg_i(i);
 }
   
+//----------------------------------------- OwnshipSpd
+void POLY_GUI::cb_OwnshipSpd_i(int val) {
+  pviewer->setParam("osv", (double)(val)/10);
+  pviewer->updateSeglr();
+  pviewer->redraw();
+  updatedXModel();
+  updateXY();
+}
+void POLY_GUI::cb_OwnshipSpd(Fl_Widget* o, int i) {
+  ((POLY_GUI*)(o->parent()->user_data()))->cb_OwnshipSpd_i(i);
+}
+  
 //----------------------------------------- OwnshipDesHdg
 void POLY_GUI::cb_OwnshipDesHdg_i(int val) {
   pviewer->setParam("des_hdg", (double)(val));
+  pviewer->updateSeglr();
   pviewer->redraw();
   updateXY();
 }
@@ -369,7 +391,9 @@ void POLY_GUI::cb_OwnshipDesHdg(Fl_Widget* o, int i) {
 //----------------------------------------- OwnshipRad
 void POLY_GUI::cb_OwnshipRad_i(int val) {
   pviewer->setParam("rad", (double)(val));
+  pviewer->updateSeglr();
   pviewer->redraw();
+  updatedXModel();
   updateXY();
 }
 void POLY_GUI::cb_OwnshipRad(Fl_Widget* o, int i) {
@@ -379,7 +403,9 @@ void POLY_GUI::cb_OwnshipRad(Fl_Widget* o, int i) {
 //----------------------------------------- OwnshipCPAWin
 void POLY_GUI::cb_OwnshipCPAWin_i(int val) {
   pviewer->setParam("cpa_win", (double)(val));
+  pviewer->updateSeglr();
   pviewer->redraw();
+  updatedXModel();
   updateXY();
 }
 void POLY_GUI::cb_OwnshipCPAWin(Fl_Widget* o, int i) {
@@ -471,7 +497,7 @@ void POLY_GUI::updateXY()
   sval = doubleToStringX(dval,2);
   m_fld_turn_eta->value(sval.c_str());
   
-  dval = 17;
+  dval = pviewer->getTurnCPA();
   sval = doubleToStringX(dval,2);
   m_fld_turn_cpa->value(sval.c_str());
   
@@ -492,7 +518,7 @@ void POLY_GUI::updateXY()
   m_fld_seglr->value(str.c_str());
 
   // Row 6:  Segl Base string
-  str = pviewer->getSeglBaseSpec();
+  str = pviewer->getBaseSeglSpec();
   m_fld_segl_base->value(str.c_str());
 
   // Row 7:  

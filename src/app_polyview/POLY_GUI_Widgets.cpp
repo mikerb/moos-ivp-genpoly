@@ -44,7 +44,11 @@ void POLY_GUI::initWidgets()
   m_but_draw_gpoly->callback((Fl_Callback*)POLY_GUI::cb_DrawGPoly);
   m_but_draw_gpoly->shortcut('g');
   m_but_draw_gpoly->tooltip("Shortcut key is 'g'");
+
   
+  m_fld_snap = new Fl_Output(0, 0, 1, 1, "snap:"); 
+  m_fld_snap->set_output();
+
   m_but_resolve = new Fl_Button(0, 0, 1, 1, "Resolve");
   m_but_resolve->clear_visible_focus();
   m_but_resolve->callback((Fl_Callback*)POLY_GUI::cb_Resolve);
@@ -73,8 +77,6 @@ void POLY_GUI::initWidgets()
   m_but_clear->clear_visible_focus();
   m_but_clear->callback((Fl_Callback*)POLY_GUI::cb_Clear);
 
-  m_fld_snap = new Fl_Output(0, 0, 1, 1, "snap:"); 
-  m_fld_snap->set_output();
 
   m_fld_polys = new Fl_Output(0, 0, 1, 1, "polys:"); 
   m_fld_polys->set_output();
@@ -90,6 +92,10 @@ void POLY_GUI::initWidgets()
 
   m_fld_verbose = new Fl_Output(0, 0, 1, 1, "verbose:"); 
   m_fld_verbose->set_output();
+
+  m_but_autogen = new Fl_Button(0, 0, 1, 1, "AutoGen");
+  m_but_autogen->clear_visible_focus();
+  m_but_autogen->callback((Fl_Callback*)POLY_GUI::cb_AutoGen);
 
   //----------------------------------------------------------
   m_fld_segl = new Fl_Output(0, 0, 1, 1, "seglist:"); 
@@ -231,6 +237,12 @@ void POLY_GUI::resizeWidgetsShape()
   int cle_wid = wid8;
   m_but_clear->resize(cle_x, cle_y, cle_wid, field_hgt);
 
+  //-------------------- Column 8
+  int ag_x = col8;
+  int ag_y = row2;
+  int ag_wid = wid8;
+  m_but_autogen->resize(ag_x, ag_y, ag_wid, field_hgt);
+
   //---------------------------------------------------------
   // Bottom Long format ROWS
   //---------------------------------------------------------
@@ -306,6 +318,8 @@ void POLY_GUI::resizeWidgetsText()
 
   m_fld_verbose->textsize(text_size);
   m_fld_verbose->labelsize(label_size);
+
+  m_but_autogen->labelsize(label_size);
 
   m_fld_segl->textsize(text_size);
   m_fld_segl->labelsize(label_size);

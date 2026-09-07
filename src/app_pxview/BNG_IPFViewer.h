@@ -122,7 +122,6 @@ private: // Behavior Config
   double        m_maxutil_eta;
   double        m_minutil_cpa;
   double        m_maxutil_cpa;
-  double        m_cpa_window;
 
   bool          m_eta_factored;
   bool          m_cpa_factored;

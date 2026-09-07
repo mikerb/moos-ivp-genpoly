@@ -223,8 +223,8 @@ void BNG_IPF_GUI::setXModel(XModel *xmo)
 
 void BNG_IPF_GUI::updatedXModel()
 {
-  //if(m_ipf_viewer1) 
-  //  m_ipf_viewer1->resetIPF();
+  if(m_ipf_viewer1) 
+    m_ipf_viewer1->resetIPF();
   if(m_ipf_viewer2)
     m_ipf_viewer2->resetIPF();
   updateXY();
