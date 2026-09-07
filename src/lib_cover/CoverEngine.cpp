@@ -23,7 +23,6 @@ using namespace std;
 
 CoverEngine::CoverEngine()
 {
-  m_method   = "shallow";
   m_collapse = true;
   m_verbose  = false;
 }
@@ -72,16 +71,6 @@ void CoverEngine::clear()
 {
   m_vx.clear();
   m_vy.clear();
-}
-
-//---------------------------------------------------------------
-// Procedure: setSolveMethod()
-
-void CoverEngine::setSolveMethod(string method)
-{
-  if((method == "shallow") || (method == "deep") ||
-     (method == "deepest") || (method == "basic"))
-    m_method = method;
 }
 
 //---------------------------------------------------------------
