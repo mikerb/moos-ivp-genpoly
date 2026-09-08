@@ -41,7 +41,6 @@ PolyViewer::PolyViewer(int x, int y, int w, int h, const char *l)
   m_draw_gpoly   = true;
   m_snap_val     = 2.0;
   m_solve_collap = true;
-  m_solve_method = "shallow"; 
   
   // State vars init
   m_xmodel = 0;
@@ -315,22 +314,6 @@ bool PolyViewer::setParam(string param, string value)
     setBooleanOnString(m_solve_collap, value);
   else if(param == "verbose") 
     setBooleanOnString(m_verbose, value);
-  else if(param == "method") {
-    if(value == "shallow")
-      m_solve_method = value;
-    else if(value == "deep")
-      m_solve_method = value;
-    else if(value == "deepest")
-      m_solve_method = value;
-    else if(value == "toggle") {
-      if(m_solve_method == "shallow")
-	m_solve_method = "deep";
-      else if(m_solve_method == "deep")
-	m_solve_method = "deepest";
-      else if(m_solve_method == "deepest")
-	m_solve_method = "shallow";
-    }
-  }
   
   else
     handled = handled || m_vehi_settings.setParam(param, value);
@@ -598,7 +581,6 @@ void PolyViewer::updateGenPoly()
     return;
 
   engine.setPostCollapse(m_solve_collap);
-  engine.setSolveMethod(m_solve_method);
   engine.setVerbose(m_verbose);
 
   MBTimer timer;

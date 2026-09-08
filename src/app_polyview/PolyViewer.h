@@ -54,7 +54,6 @@ public:
 
   unsigned int getPolyCount() const   {return(m_gen_poly.getPolyCount());}
   double       getSolveTime() const   {return(m_solve_time);}
-  std::string  getSolveMethod() const {return(m_solve_method);}
   bool         getSolveCollap() const {return(m_solve_collap);}
 
   double getSeglrDistToExit() const   {return(m_seglr_dist_to_exit);}
@@ -72,9 +71,7 @@ private: // Config vars
   bool   m_draw_hull;
   bool   m_draw_gpoly;
   double m_snap_val;
-
-  bool        m_solve_collap;
-  std::string m_solve_method;
+  bool   m_solve_collap;
   
 private:
   XYSegList m_segl;

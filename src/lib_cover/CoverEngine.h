@@ -55,7 +55,7 @@ protected: // state vars
   std::vector<double> m_vy;
 
 protected: // Config vars
-  bool        m_collapse;a
+  bool        m_collapse;
   bool        m_verbose;
 };
 

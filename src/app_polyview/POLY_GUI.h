@@ -44,14 +44,12 @@ protected:
 
   Fl_Output  *m_fld_snap;
   Fl_Button  *m_but_resolve;
-  Fl_Button  *m_but_method;
   Fl_Button  *m_but_collapse;
   Fl_Button  *m_but_verbose;
   Fl_Button  *m_but_clear;
 
   Fl_Output  *m_fld_polys;
   Fl_Output  *m_fld_solve;
-  Fl_Output  *m_fld_method;
   Fl_Output  *m_fld_collap;
   Fl_Output  *m_fld_verbose;
   Fl_Button  *m_but_autogen;
@@ -85,9 +83,6 @@ private:
 
   inline void cb_Resolve_i();
   static void cb_Resolve(Fl_Widget*);
-
-  inline void cb_MethodToggle_i();
-  static void cb_MethodToggle(Fl_Widget*);
 
   inline void cb_CollapseToggle_i();
   static void cb_CollapseToggle(Fl_Widget*);

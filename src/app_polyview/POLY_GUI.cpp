@@ -286,17 +286,6 @@ void POLY_GUI::cb_Resolve(Fl_Widget* o) {
   ((POLY_GUI*)(o->parent()->user_data()))->cb_Resolve_i();
 }
 
-//----------------------------------------- MethodToggle
-void POLY_GUI::cb_MethodToggle_i() {
-  pviewer->setParam("method", "toggle");
-  pviewer->updateGenPoly();  
-  pviewer->redraw();
-  updateXY();
-}
-void POLY_GUI::cb_MethodToggle(Fl_Widget* o) {
-  ((POLY_GUI*)(o->parent()->user_data()))->cb_MethodToggle_i();
-}
-
 //----------------------------------------- CollapseToggle
 void POLY_GUI::cb_CollapseToggle_i() {
   pviewer->setParam("collapse", "toggle");
@@ -396,10 +385,6 @@ void POLY_GUI::updateXY()
   dval = pviewer->getSolveTime();
   sval = doubleToString(dval,2);
   m_fld_solve->value(sval.c_str());
-
-  // Solve Method
-  sval = pviewer->getSolveMethod();
-  m_fld_method->value(sval.c_str());
 
   // Solve Collap
   bool bval = pviewer->getSolveCollap();

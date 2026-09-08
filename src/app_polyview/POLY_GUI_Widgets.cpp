@@ -55,12 +55,6 @@ void POLY_GUI::initWidgets()
   m_but_resolve->shortcut('s');
   m_but_resolve->tooltip("Shortcut key is 's'");
   
-  m_but_method = new Fl_Button(0, 0, 1, 1, "Method");
-  m_but_method->clear_visible_focus();
-  m_but_method->callback((Fl_Callback*)POLY_GUI::cb_MethodToggle);
-  m_but_method->shortcut('d');
-  m_but_method->tooltip("Shortcut key is 'd'");
-  
   m_but_collapse = new Fl_Button(0, 0, 1, 1, "Collapse");
   m_but_collapse->clear_visible_focus();
   m_but_collapse->callback((Fl_Callback*)POLY_GUI::cb_CollapseToggle);
@@ -83,9 +77,6 @@ void POLY_GUI::initWidgets()
 
   m_fld_solve = new Fl_Output(0, 0, 1, 1, "solve:"); 
   m_fld_solve->set_output();
-
-  m_fld_method = new Fl_Output(0, 0, 1, 1, "method:"); 
-  m_fld_method->set_output();
 
   m_fld_collap = new Fl_Output(0, 0, 1, 1, "collaps:"); 
   m_fld_collap->set_output();
@@ -199,15 +190,6 @@ void POLY_GUI::resizeWidgetsShape()
   m_fld_solve->resize(sot_x, sot_y, sot_wid, field_hgt);
 
   //-------------------- Column 5
-  int bme_x = col5;
-  int bme_y = row1;
-  int bme_wid = wid5;
-  m_but_method->resize(bme_x, bme_y, bme_wid, field_hgt);
-
-  int met_x = col5;
-  int met_y = row2;
-  int met_wid = wid5;
-  m_fld_method->resize(met_x, met_y, met_wid, field_hgt);
 
   //-------------------- Column 6
   int bco_x = col6;
@@ -296,7 +278,6 @@ void POLY_GUI::resizeWidgetsText()
   m_but_draw_gpoly->labelsize(label_size);
 
   m_but_resolve->labelsize(label_size);
-  m_but_method->labelsize(label_size);
   m_but_collapse->labelsize(label_size);
   m_but_verbose->labelsize(label_size);
   m_but_clear->labelsize(label_size);
@@ -309,9 +290,6 @@ void POLY_GUI::resizeWidgetsText()
 
   m_fld_solve->textsize(text_size);
   m_fld_solve->labelsize(label_size);
-
-  m_fld_method->textsize(text_size);
-  m_fld_method->labelsize(label_size);
 
   m_fld_collap->textsize(text_size);
   m_fld_collap->labelsize(label_size);

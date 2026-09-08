@@ -60,9 +60,6 @@ protected:
   Fl_Output  *m_fld_solve;
 
   // Column 5  
-  Fl_Button  *m_but_method;
-  Fl_Output  *m_fld_method;
-
   // Column 6
   Fl_Button  *m_but_collapse;
   Fl_Output  *m_fld_collap;
@@ -132,9 +129,6 @@ private:
 
   inline void cb_Resolve_i();
   static void cb_Resolve(Fl_Widget*);
-
-  inline void cb_MethodToggle_i();
-  static void cb_MethodToggle(Fl_Widget*);
 
   inline void cb_CollapseToggle_i();
   static void cb_CollapseToggle(Fl_Widget*);

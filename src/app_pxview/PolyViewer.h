@@ -55,7 +55,6 @@ public:
 
   unsigned int getPolyCount() const;
   double       getSolveTime() const   {return(m_solve_time);}
-  std::string  getSolveMethod() const {return(m_solve_method);}
   bool         getSolveCollap() const {return(m_solve_collap);}
 
   double getSeglrDistToExit() const   {return(m_seglr_dist_to_exit);}
@@ -78,7 +77,6 @@ private: // Config vars
   double m_snap_val;
 
   bool        m_solve_collap;
-  std::string m_solve_method;
   
 private:
   XModel*   m_xmodel;
