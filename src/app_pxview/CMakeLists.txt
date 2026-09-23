@@ -17,7 +17,7 @@ SET(SRC
   BNG_IPF_GUI.cpp
   BNG_IPF_GUI_Widgets.cpp
   BNG_IPFViewer.cpp
- XModel.cpp
+  XModelPV.cpp
  main.cpp
 )
 

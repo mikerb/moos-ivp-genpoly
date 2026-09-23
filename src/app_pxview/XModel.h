@@ -1,7 +1,7 @@
 /*****************************************************************/
 /*    NAME: Michael Benjamin                                     */
 /*    ORGN: Dept of Mechanical Engineering, MIT, Cambridge MA    */
-/*    FILE: POLY_GUI.h                                           */
+/*    FILE: XModelPV.h                                           */
 /*    DATE: Aug 16th, 2026                                       */
 /*                                                               */
 /* This is unreleased BETA code. No permission is granted or     */
@@ -9,18 +9,18 @@
 /* except by the author(s), or those designated by the author.   */
 /*****************************************************************/
 
-#ifndef XMODEL_HEADER
-#define XMODEL_HEADER
+#ifndef XMODELPV_HEADER
+#define XMODELV_HEADER
 
 #include "PMGen_Dubins.h"
 #include "PMGen_Holonomic.h"
 #include "PlatModel.h"
 #include "XYGenPolygon.h"
 
-class XModel {
+class XModelPV {
 public:
-  XModel();
-  ~XModel() {}
+  XModelPV();
+  ~XModelPV() {}
 
   // Set Desired Heading
   void setDesHdg(double);

@@ -23,7 +23,7 @@
 #include "IvPDomain.h"
 #include "BNG_IPFViewer.h"
 #include "Common_IPF_GUI.h"
-#include "XModel.h"
+#include "XModelPV.h"
 
 class POLY_GUI;
 
@@ -38,7 +38,7 @@ public:
   int  handle(int);
   void clearBehaviorModes();
   void setDomain(IvPDomain);
-  void setXModel(XModel*);
+  void setXModel(XModelPV*);
   void updatedXModel();
   
  protected:

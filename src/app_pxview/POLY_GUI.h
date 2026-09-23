@@ -40,7 +40,7 @@ protected:
 public: 
   PolyViewer *pviewer;
   BNG_IPF_GUI *m_ipf_gui;
-  XModel      m_xmodel;
+  XModelPV     m_xmodel;
   
 protected:
   // Column 1

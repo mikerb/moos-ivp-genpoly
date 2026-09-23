@@ -28,6 +28,7 @@ POLY_GUI::POLY_GUI(int wid, int hgt, const char *label)
 
   m_start_hgt = hgt;
   m_start_wid = wid;
+  m_ipf_gui   = 0;
   
   pviewer   = new PolyViewer(0, 30, wid, hgt-250);
   m_mviewer = pviewer;

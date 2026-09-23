@@ -69,31 +69,36 @@ int PolyViewer::handle(int event)
     vy = h() - Fl::event_y();
     if(Fl_Window::handle(event) != 1) {
 
+      // Handle Add Vertex LEFT-MOUSE (No Alt/Shift/Ctr)
       if((Fl::event_button() == FL_LEFT_MOUSE) &&
-	 (Fl::event_state(FL_CTRL))) {
-	cout << "Ownship!!" << endl;
-	handle_left_ownship(vx, vy);
-      }
-
+	 (!Fl::event_state(FL_CTRL)) &&
+	 (!Fl::event_state(FL_ALT)) &&
+	 (!Fl::event_state(FL_SHIFT)))
+	handle_mouse(vx, vy, "add_vertex");
+      
+      // Handle Insert Vertex ALT-LEFT-MOUSE
       else if((Fl::event_button() == FL_LEFT_MOUSE) &&
 	 (Fl::event_state(FL_ALT))) {
-	cout << "Insert!!" << endl;
-	handle_left_mouse(vx, vy, false);
+	handle_mouse(vx, vy, "insert_vertex");
       }
 
+      // Handle Delete Vertex SHIFT-LEFT-MOUSE
       else if((Fl::event_button() == FL_LEFT_MOUSE) &&
-	 (!Fl::event_state(FL_CTRL)) &&
-	 (!Fl::event_state(FL_SHIFT)))
-	handle_left_mouse(vx, vy);
-      
+	 (Fl::event_state(FL_SHIFT))) {
+	handle_mouse(vx, vy, "delete_vertex");
+      }
+
+      // Handle Move Ownship (1) RIGHT-MOUSE
       else if(Fl::event_button() == FL_RIGHT_MOUSE) {
-	handle_right_mouse(vx, vy);
+	handle_mouse(vx, vy, "move_ownship");
       }
       
-      else if((Fl::event_button() == FL_LEFT_MOUSE) &&
+      // Handle Move Ownship (2) CTRL-LEFT-MOUSE
+      if((Fl::event_button() == FL_LEFT_MOUSE) &&
 	 (Fl::event_state(FL_CTRL))) {
-	handle_right_mouse(vx, vy);
+	handle_mouse(vx, vy, "move_ownship");
       }
+
 
     }
     return(1);
@@ -151,6 +156,18 @@ void PolyViewer::draw()
   if(!m_xmodel)
     return;
 
+  if(m_draw_gpoly) {
+    XYGenPolygon gen_poly = m_xmodel->getGenPoly();
+    vector<XYPolygon> polys = gen_poly.getCoverPolys();
+    //cout << "total polys:" << polys.size() << endl;
+    for(unsigned int i=0; i<polys.size(); i++) {
+      XYPolygon poly = polys[i];
+      poly.set_color("edge", "gray80");
+      poly.set_color("fill", "gray50");
+      drawPolygon(poly);
+    }
+  }
+
   // ------------------------------------------------------
   // Draw ConvexHull
   // ------------------------------------------------------
@@ -163,18 +180,6 @@ void PolyViewer::draw()
       hull_poly.set_label_color("off");
       hull_poly.set_edge_color("dodger_blue");
       drawPolygon(hull_poly);
-    }
-  }
-
-  if(m_draw_gpoly) {
-    XYGenPolygon gen_poly = m_xmodel->getGenPoly();
-    vector<XYPolygon> polys = gen_poly.getCoverPolys();
-    //cout << "total polys:" << polys.size() << endl;
-    for(unsigned int i=0; i<polys.size(); i++) {
-      XYPolygon poly = polys[i];
-      poly.set_color("edge", "gray80");
-      poly.set_color("fill", "gray50");
-      drawPolygon(poly);
     }
   }
 
@@ -223,9 +228,9 @@ void PolyViewer::draw()
 }
 
 //-------------------------------------------------------------
-// Procedure: handle_left_mouse()
+// Procedure: handle_mouse()
 
-void PolyViewer::handle_left_mouse(int vx, int vy, bool add_point)
+void PolyViewer::handle_mouse(int vx, int vy, string action)
 {
   double ix = view2img('x', vx);
   double iy = view2img('y', vy);
@@ -234,51 +239,25 @@ void PolyViewer::handle_left_mouse(int vx, int vy, bool add_point)
   double sx = snapToStep(mx, m_snap_val);
   double sy = snapToStep(my, m_snap_val);
 
-  if(add_point)
+  if(action == "add_vertex")
     m_segl.add_vertex(sx, sy);
-  else
+  else if(action == "insert_vertex")
     m_segl.insert_vertex(sx, sy);
+  else if(action == "delete_vertex")
+    m_segl.delete_vertex(mx, my);
+  else if(action == "move_ownship") {
+    // Sanity check
+    if(!m_xmodel) {
+      cout << "Mouse click ignored: No xmodel." << endl;
+      return;
+    }
+    m_xmodel->setOSX(mx);
+    m_xmodel->setOSY(my);
+  }
 
   updateGenPoly();
   redraw();
 }
-
-//-------------------------------------------------------------
-// Procedure: handle_right_mouse()
-
-void PolyViewer::handle_right_mouse(int vx, int vy)
-{
-  double ix = view2img('x', vx);
-  double iy = view2img('y', vy);
-  double mx = img2meters('x', ix);
-  double my = img2meters('y', iy);
-  m_segl.delete_vertex(mx, my);
-
-  updateGenPoly();
-  redraw();
-}
-
-//-------------------------------------------------------------
-// Procedure: handle_left_ownship()
-
-void PolyViewer::handle_left_ownship(int vx, int vy)
-{
-  // Sanity check
-  if(!m_xmodel)
-    return;
-
-  double ix = view2img('x', vx);
-  double iy = view2img('y', vy);
-  double mx = img2meters('x', ix);
-  double my = img2meters('y', iy);
-
-  m_xmodel->setOSX(mx);
-  m_xmodel->setOSY(my);
-  
-  updateGenPoly();
-  redraw();
-}
-
 
 //-------------------------------------------------------------
 // Procedure: setParam()

@@ -1,7 +1,7 @@
 /*****************************************************************/
 /*    NAME: Michael Benjamin                                     */
 /*    ORGN: Dept of Mechanical Engineering, MIT, Cambridge MA    */
-/*    FILE: POLY_GUI.cpp                                          */
+/*    FILE: POLY_GUI.cpp                                         */
 /*    DATE: Nov 22nd, 2025                                       */
 /*                                                               */
 /* This is unreleased BETA code. No permission is granted or     */
@@ -16,7 +16,7 @@
 
 using namespace std;
 
-//--------------------------------------------------------------------------- 
+//----------------------------------------------------------------
 // Procedure: initWidgets()     
 
 void POLY_GUI::initWidgets()

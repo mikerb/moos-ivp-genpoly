@@ -28,7 +28,7 @@ void idleProc(void *);
 void showHelpAndExit();
 
 //--------------------------------------------------------
-// Procedure: idleProc
+// Procedure: idleProc()
 
 void idleProc(void *)
 {
@@ -37,7 +37,7 @@ void idleProc(void *)
 }
 
 //--------------------------------------------------------
-// Procedure: main
+// Procedure: main()
 
 int main(int argc, char *argv[])
 {
@@ -53,19 +53,17 @@ int main(int argc, char *argv[])
       showHelpAndExit();
     
     else if((argi == "-v") || (argi == "--version")) {
-      showReleaseInfo("polyview", "gpl");
+      showReleaseInfo("pxview", "gpl");
       return(0);
-    }
-    
+    }    
     else if(strEnds(argi, ".tif"))
-      tif_file = argi;
-    
+      tif_file = argi;    
     else if(strEnds(argi, ".txt"))
       border_file = argi;    
   }
 
   Fl::add_idle(idleProc);
-  POLY_GUI* gui = new POLY_GUI(900, 800, "polyview");
+  POLY_GUI* gui = new POLY_GUI(900, 800, "pxview MIT 2026");
   gui->size_range(700,600, 0,0);
   
   gui->pviewer->setParam("tiff_file", tif_file);  

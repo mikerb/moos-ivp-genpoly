@@ -194,7 +194,7 @@ BNG_IPF_GUI::~BNG_IPF_GUI()
 }
 
 
-//--------------------------------------------------------------------------- 
+//------------------------------------------------------------ 
 // Procedure: setDomain()
 
 void BNG_IPF_GUI::setDomain(IvPDomain domain)
@@ -206,7 +206,7 @@ void BNG_IPF_GUI::setDomain(IvPDomain domain)
   updateXY();
 }
 
-//--------------------------------------------------------------------------- 
+//------------------------------------------------------------
 // Procedure: setXModel()
 
 void BNG_IPF_GUI::setXModel(XModel *xmo)
@@ -218,7 +218,7 @@ void BNG_IPF_GUI::setXModel(XModel *xmo)
   updateXY();
 }
 
-//--------------------------------------------------------------------------- 
+//------------------------------------------------------------ 
 // Procedure: updatedXModel()
 
 void BNG_IPF_GUI::updatedXModel()

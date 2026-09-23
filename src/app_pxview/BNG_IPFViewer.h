@@ -19,7 +19,7 @@
 #include "PlatModel.h"
 #include "LedgerSnap.h"
 #include "Common_IPFViewer.h"
-#include "XModel.h"
+#include "XModelPV.h"
 
 class BNG_IPFViewer : public Common_IPFViewer
 {
@@ -31,7 +31,7 @@ class BNG_IPFViewer : public Common_IPFViewer
   void   resetIPF();
   void   resetIPFX();
   void   updateXY();
-  void   setXModel(XModel*);
+  void   setXModel(XModelPV*);
   
  public: // Helm/behavior mechanics
   bool   setBehaviorType(std::string);
@@ -105,7 +105,7 @@ private: // Helm/Behavior mechanics
   IvPDomain     m_domain;
   InfoBuffer   *m_info_buffer;
   LedgerSnap   *m_ledger_snap;
-  XModel       *m_xmodel;
+  XModelPV     *m_xmodel;
   
 private: // Analysis of behavior and built IPF
   unsigned int  m_ipf_pieces;

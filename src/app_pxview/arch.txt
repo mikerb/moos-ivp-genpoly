@@ -9,9 +9,9 @@
   |                            |    |  m_xmodel                      |       
   |                            |    |  |                             |
   |                            |    +--|-----------------------------+
-  |                            |       |    
+  |                  m_segl    |       |    
   |                            |    +--v---------------------------------+ 
-  |                  m_xmodel------>| XModel                             |
+  |          m_xmodel---has-------->| XModelPV                           |
   |                            |    |                                    |
   |                            |    |  m_des_hdg    (only really needed  |
   |                            |    |  m_des_spd     by the PolyViewer)  |

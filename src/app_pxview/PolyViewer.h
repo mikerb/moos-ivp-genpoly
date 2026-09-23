@@ -26,9 +26,7 @@ class PolyViewer : public MarineViewer
   // Virtual defined
   void  draw();
   int   handle(int);
-  void  handle_left_mouse(int, int, bool add=true);
-  void  handle_left_ownship(int, int);
-  void  handle_right_mouse(int, int);
+  void  handle_mouse(int, int, std::string action);
   bool  setParam(std::string param, std::string value);
   bool  setParam(std::string param, double value);
   void  clear();
@@ -79,7 +77,7 @@ private: // Config vars
   bool        m_solve_collap;
   
 private:
-  XModel*   m_xmodel;
+  XModelPV* m_xmodel;
   XYSegList m_segl;   // border of the gen_poly 
   
   std::string m_seglr_spec;

@@ -1,7 +1,7 @@
 /*****************************************************************/
 /*    NAME: Michael Benjamin                                     */
 /*    ORGN: Dept of Mechanical Engineering, MIT, Cambridge MA    */
-/*    FILE: XModel.cpp                                           */
+/*    FILE: XModelPV.cpp                                           */
 /*    DATE: Aug 16, 2026                                         */
 /*                                                               */
 /* This is unreleased BETA code. No permission is granted or     */
@@ -11,7 +11,7 @@
 
 #include <iostream>
 #include <cstdio>
-#include "XModel.h"
+#include "XModelPV.h"
 #include "MBUtils.h"
 #include "AngleUtils.h"
 
@@ -20,7 +20,7 @@ using namespace std;
 //-------------------------------------------------------------------
 // Constructor()
 
-XModel::XModel()
+XModelPV::XModel()
 {
   m_des_hdg = 30;
   m_des_spd = 1;
@@ -38,7 +38,7 @@ XModel::XModel()
 //-------------------------------------------------------------------
 // Procedure: setDesHdg()
 
-void XModel::setDesHdg(double dval)
+void XModelPV::setDesHdg(double dval)
 {
   m_des_hdg = angle360(dval);
 }
@@ -46,7 +46,7 @@ void XModel::setDesHdg(double dval)
 //-------------------------------------------------------------------
 // Procedure: modDesHdg()
 
-void XModel::modDesHdg(double dval)
+void XModelPV::modDesHdg(double dval)
 {
   m_des_hdg = angle360(m_des_hdg + dval);
 }
@@ -54,7 +54,7 @@ void XModel::modDesHdg(double dval)
 //-------------------------------------------------------------------
 // Procedure: setDesSpd()
 
-void XModel::setDesSpd(double dval)
+void XModelPV::setDesSpd(double dval)
 {
   m_des_spd = dval;
   if(m_des_spd < 0)
@@ -64,7 +64,7 @@ void XModel::setDesSpd(double dval)
 //-------------------------------------------------------------------
 // Procedure: modDesSpd()
 
-void XModel::modDesSpd(double dval)
+void XModelPV::modDesSpd(double dval)
 {
   m_des_spd = m_des_spd + dval;
 }
@@ -72,7 +72,7 @@ void XModel::modDesSpd(double dval)
 //-------------------------------------------------------------------
 // Procedure: setCPAWin()
 
-void XModel::setCPAWin(double dval)
+void XModelPV::setCPAWin(double dval)
 {
   m_cpa_win = dval;
   if(m_cpa_win < 0)
@@ -82,7 +82,7 @@ void XModel::setCPAWin(double dval)
 //-------------------------------------------------------------------
 // Procedure: modCPAWin()
 
-void XModel::modCPAWin(double dval)
+void XModelPV::modCPAWin(double dval)
 {
   m_cpa_win = m_cpa_win + dval;
 }
@@ -90,7 +90,7 @@ void XModel::modCPAWin(double dval)
 //-------------------------------------------------------------------
 // Procedure: setTurnRad()
 
-void XModel::setTurnRad(double dval)
+void XModelPV::setTurnRad(double dval)
 {
   if(dval < 0)
     return;
@@ -101,7 +101,7 @@ void XModel::setTurnRad(double dval)
 //-------------------------------------------------------------------
 // Procedure: setSpokeDegs()
 
-void XModel::setSpokeDegs(double dval)
+void XModelPV::setSpokeDegs(double dval)
 {
   if(dval < 1)
     return;
@@ -112,7 +112,7 @@ void XModel::setSpokeDegs(double dval)
 //-------------------------------------------------------------------
 // Procedure: modTurnRad()
 
-void XModel::modTurnRad(double dval)
+void XModelPV::modTurnRad(double dval)
 {
   double curr_turn_rad = m_pmgen_dubins.getParamDbl("radius");
   double new_turn_rad = curr_turn_rad + dval;
@@ -123,7 +123,7 @@ void XModel::modTurnRad(double dval)
 //-------------------------------------------------------------------
 // Procedure: modSpokeDegs()
 
-void XModel::modSpokeDegs(double dval)
+void XModelPV::modSpokeDegs(double dval)
 {
   double curr_degs = m_pmgen_dubins.getParamDbl("spoke_degs");
   double new_degs = curr_degs + dval;
@@ -134,7 +134,7 @@ void XModel::modSpokeDegs(double dval)
 //-------------------------------------------------------------------
 // Procedure: getTurnRad()
 
-double XModel::getTurnRad() const
+double XModelPV::getTurnRad() const
 {
   return(m_pmgen_dubins.getParamDbl("radius"));
 }
@@ -142,7 +142,7 @@ double XModel::getTurnRad() const
 //-------------------------------------------------------------------
 // Procedure: getSpokeDegs()
 
-double XModel::getSpokeDegs() const
+double XModelPV::getSpokeDegs() const
 {
   return(m_pmgen_dubins.getParamDbl("degs"));
 }
@@ -150,7 +150,7 @@ double XModel::getSpokeDegs() const
 //-------------------------------------------------------------------
 // Procedure: getPlatModel()
 
-PlatModel XModel::getPlatModel()
+PlatModel XModelPV::getPlatModel()
 {
   PlatModel plat_model = m_pmgen_dubins.generate(m_osx, m_osy, m_osh, m_osv);
   return(plat_model);
@@ -159,7 +159,7 @@ PlatModel XModel::getPlatModel()
 //-------------------------------------------------------------------
 // Procedure: getTurnSeglr()
 
-XYSeglr XModel::getTurnSeglr()
+XYSeglr XModelPV::getTurnSeglr()
 {
   PlatModel plat_model = getPlatModel();
   XYSeglr seglr = plat_model.getTurnSeglr(m_des_hdg);
